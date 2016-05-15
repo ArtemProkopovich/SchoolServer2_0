@@ -1,0 +1,29 @@
+[
+	{
+		"number": "1",
+		"timerange": "8:00-8:45",
+		"subject": "Mathematics",
+		"auditorium": "210",
+		"teacher": "Shadrakov R.N.",
+		"homework": "Paragraph 2, #12 a), b), c), #14 d)",
+		"mark": "9"
+	},
+	{
+		"number": "2",
+		"timerange": "9:00-9:45",
+		"subject": "English",
+		"auditorium": "109",
+		"teacher": "Teseiko M.P.",
+		"homework": "Read O'Henry story, short retelling",
+		"mark": "absent"
+	},
+	{
+		"number": "4",
+		"timerange": "11:00-11:45",
+		"subject": "Russian literature",
+		"auditorium": "109",
+		"teacher": "Sergushov N.O.",
+		"homework": "",
+		"mark": ""
+	}
+]
