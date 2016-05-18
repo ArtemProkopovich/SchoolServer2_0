@@ -3,15 +3,33 @@
 </div>
 <div class="vertcontainer" align="right">
 	<button class="button">Log out</button>
-	<button class="button">Load schedule</button>
-	<a href="#/">Читерская ссылка</a>
+	<button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
+	<a href="#/"><p>Login page</p></a>
 </div>
-<table align="center">
-	<tbody>
-		<tr ng-repeat="lesson in daySchedule">
-			<td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
-			<td><h3>{{lesson.subject}}</h3><p>{{lesson.homework}}</p></td>
-			<td align="center"><h3>{{lesson.mark}}</h3></td>
-		</tr>
-	</tbody>
-</table>
+<div align="center">
+	<div class="scrollable">
+		<table align="center">
+			<tbody>
+				<tr ng-repeat="lesson in daySchedule">
+					<td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
+					<td><h3>{{lesson.subject}}</h3><p>{{lesson.homework}}</p></td>
+					<td align="center"><h3>{{lesson.mark}}</h3></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div id="schedwindow" class="window">
+	<div class="formheader">
+		<h5>Choose format</h5>
+		<button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
+	</div>
+	<div align="center">
+		<p>
+			<input id="radioCSV" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
+			<input id="radioXLS" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
+			<input id="radioPDF" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
+		</p>
+		<button class="button">Download</button>
+	</div>
+</div>

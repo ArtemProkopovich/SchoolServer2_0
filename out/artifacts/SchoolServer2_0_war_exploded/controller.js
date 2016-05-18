@@ -14,6 +14,14 @@ schoolApp.config(function($routeProvider) {
             templateUrl : 'pages/pupil.html',
             controller : 'pupilController'
         })
+        .when ('/teacher', {
+            templateUrl : 'pages/teacher.html',
+            controller : 'teacherController'
+        })
+        .when ('/admin', {
+            templateUrl : 'pages/admin.html',
+            controller : 'adminController'
+        })
         .otherwise({redirectTo: '/'});
 });
 
@@ -46,3 +54,46 @@ schoolApp.controller('pupilController', function($scope, PupilScheduleService) {
         console.log($scope.daySchedule);
     });
 });
+schoolApp.controller('teacherController', function($scope) {
+    $scope.pageClass = 'page-app';
+});
+schoolApp.controller('adminController', function($scope) {
+    $scope.pageClass = 'page-app';
+});
+function openAdminTab(event, tabName, tabIndex) {
+    // Declare all variables
+    var i, tabcontent, tablinks, prevTabIndex;
+
+    prevTabIndex=0;
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        if (tabcontent[i].style.animation == "slideInLeft 1s ease-in both" || tabcontent[i].style.animation == "slideInRight 1s ease-in both") {
+            prevTabIndex = i;
+            console.log (prevTabIndex);
+            break;
+        }
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tabcontent.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    if (tabIndex>prevTabIndex) {
+        tabcontent[prevTabIndex].style.animation = "slideOutLeft 1s both ease-in";
+        document.getElementById(tabName).style.animation = "slideInRight 1s both ease-in";
+    } else {
+        tabcontent[prevTabIndex].style.animation = "slideOutRight 1s both ease-in";
+        document.getElementById(tabName).style.animation = "slideInLeft 1s both ease-in";
+    }
+    event.currentTarget.className += " active";
+}
+function toggleWindow (windowId, isVisible) {
+    if (isVisible==true) {
+        document.getElementById(windowId).style.display = "block"
+    } else {
+        document.getElementById(windowId).style.display = "none";
+    }
+}

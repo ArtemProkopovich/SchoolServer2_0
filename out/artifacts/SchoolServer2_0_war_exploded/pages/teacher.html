@@ -1,0 +1,22 @@
+<div class="vertcontainer" align="left">
+    <h3>Pasechniy Alexander</h3><p>Physics</p>
+</div>
+<div class="vertcontainer" align="right">
+    <button class="button">Log out</button>
+    <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
+    <a href="#/"><p>Login page</p></a>
+</div>
+<div id="schedwindow" class="window">
+    <div class="formheader">
+        <h5>Choose format</h5>
+        <button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
+    </div>
+    <div align="center">
+        <p>
+            <input id="radioCSV" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
+            <input id="radioXLS" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
+            <input id="radioPDF" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
+        </p>
+        <button class="button">Download</button>
+    </div>
+</div>
