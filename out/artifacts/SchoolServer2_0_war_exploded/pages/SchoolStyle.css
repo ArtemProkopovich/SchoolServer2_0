@@ -99,11 +99,14 @@ tr:nth-child(even) {
 	height: 20px;
 	border-radius: 5px;
 }
-.window {
+.winlayer {
 	position: absolute;
-	display: none;
+	width: 100%;
 	top: 30%;
-	left:39%;
+}
+.window {
+	width: 300px;
+	display: none;
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 	border-radius: 5px;
 	background: white;
@@ -186,14 +189,13 @@ ul.tab {
 	overflow: hidden;
 	position: relative;
 	width: 300px;
-	left:39%;
 }
 
 /* Float the list items side by side */
 ul.tab li {float: left;}
 
 /* Style the links inside the list items */
-ul.tab li a {
+ul.tab li button {
 	display: inline-block;
 	font-family: UbuntuR;
 	text-align: center;
@@ -201,16 +203,21 @@ ul.tab li a {
 	text-decoration: none;
 	transition: 0.3s;
 	font-size: 17px;
+	border: none;
+	width:100px;
 	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	background: white;
+	color: black;
 }
 
 /* Change background color of links on hover */
-ul.tab li a:hover {
+ul.tab li button:hover {
 	color: white;
 	background-color: #cc0000;}
 
 /* Create an active/current tablink class */
-ul.tab li a:focus, .active {
+ul.tab li button:focus, .active {
 	color: white;
 	background-color: #aa0000;
 }
@@ -223,7 +230,29 @@ ul.tab li a:focus, .active {
 }
 .maintab {
 	position: absolute;
-	top: 150px;
+}
+.datecontainer {
+	display: inline-block;
+	width: 200px;
+	font-family: UbuntuR;
+}
+.navigate {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	font-family: UbuntuR;
+	font-size: 20px;
+	border: none;
+	background: #fff;
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	color: #000;
+	outline: none;
+	transition: all .1s linear;
+}
+.navigate:hover {
+	color: white;
+	background: #bb0000;
 }
 
 /*ANIMATIONS*/
