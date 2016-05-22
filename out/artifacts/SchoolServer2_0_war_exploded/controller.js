@@ -2,6 +2,7 @@
  * Created by Евгений on 04.05.2016.
  */
 var schoolApp = angular.module('schoolApp', ['ngRoute', 'ngAnimate', 'ngResource']);
+var role = null;
 
 schoolApp.config(function($routeProvider) {
     $routeProvider
@@ -26,10 +27,32 @@ schoolApp.config(function($routeProvider) {
 });
 
 // create the controller and inject Angular's $scope
-schoolApp.controller('mainController', function($scope) {
+schoolApp.controller('mainController', function($scope, $http, $location) {
 
     // create a message to display in our view
     $scope.pageClass = 'page-login';
+    $scope.submit = function() {
+        var params = {
+            "login" : $scope.login,
+            "password" : $scope.password
+        };
+
+        var data = angular.toJson(params);
+        console.log(data);
+        $http( {
+            method : 'POST',
+            url : 'login',
+            data : 'value=' + data
+        }).success(function(data) {
+            console.log(data);
+            //$location.path('/');
+            $scope.loginmsg = 'OK!';
+            document.getElementById('toast').style.display = 'block';
+            document.getElementById('toast').style.animation = 'toastanim 4s both ease-in';
+        }).error(function () {
+            console.log("Incorrect login or password.");
+        });
+    }
 });
 schoolApp.service("PupilScheduleService", function($http, $q) {
    var deferred = $q.defer();

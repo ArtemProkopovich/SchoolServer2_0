@@ -10,6 +10,7 @@
         <li><button class="tablinks" onclick="openAdminTab(event, 'pupils', 0)">pupils</button></li>
         <li><button class="tablinks" onclick="openAdminTab(event, 'teachers', 1)">teachers</button></li>
         <li><button class="tablinks" onclick="openAdminTab(event, 'schedule', 2)">schedule</button></li>
+        <li><button class="tablinks" onclick="openAdminTab(event, 'subjects', 3)">subjects</button></li>
     </ul>
 </div>
 <div class="scrollable">
@@ -26,5 +27,23 @@
     <div id="schedule" class="tabcontent maintab">
         <h3>Tokyo</h3>
         <p>Tokyo is the capital of Japan.</p>
+    </div>
+    <div id="subjects" class="tabcontent maintab">
+        <p>
+            Subjects
+            <button class="button" onclick="toggleWindow('addsubject', true)">Add</button>
+        </p>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="addsubject" class="window">
+        <div class="formheader">
+            <h5>Add teacher</h5>
+            <button class="close" onclick="toggleWindow('addsubject', false)">X</button>
+        </div>
+        <div align="center">
+            <input class="in" type="text" placeholder="name"/>
+            <button class="button">Confirm</button><div style="height: 1px;"></div>
+        </div>
     </div>
 </div>

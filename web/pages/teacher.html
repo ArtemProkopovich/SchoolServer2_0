@@ -6,6 +6,26 @@
     <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
     <a href="#/"><p>Login page</p></a>
 </div>
+<div class="scrollable">
+    <div id="schedule" class="tabcontent maintab">
+        <button class="navigate"><</button>
+        <div class="datecontainer" align="center">Monday 20.10.2016</div>
+        <button class="navigate">></button>
+        <table align="center">
+            <tbody>
+            <tr ng-repeat="lesson in daySchedule">
+                <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
+                <td><h3>{{lesson.class}}</h3><p>{{lesson.auditorium}}</p></td>
+                <td><button class="navigate">></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="lesson" class="tabcontent maintab">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p>
+    </div>
+</div>
 <div class="winlayer" align="center">
     <div id="schedwindow" class="window">
         <div class="formheader">
@@ -22,3 +42,4 @@
         </div>
     </div>
 </div>
+

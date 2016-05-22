@@ -3,11 +3,16 @@
 
 <div class="form" align="center">
 	<p>Please log in to continue</p>
-	<form action="hello.action" method="post" action="index.html">
-		<input class="in" type="text" name="login" placeholder="Login">
-		<input class="in" type="password" name="password" placeholder="Password">
+	<form name="LoginForm" ng-submit="submit()">
+		<input class="in" type="text" name="login" placeholder="Login" ng-model="login">
+		<input class="in" type="password" name="password" placeholder="Password" ng-model="password">
 		<input class="button" type="submit" name="commit" value="Go">
 	 </form>
+</div>
+<div class="toastlayer" align="center">
+	<div id="toast" class="toast">
+		{{ loginmsg }}
+	</div>
 </div>
 <a href="#/pupil"><p>Pupil page</p></a>
 <a href="#/teacher"><p>Teacher page</p></a>

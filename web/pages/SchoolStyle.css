@@ -254,6 +254,20 @@ ul.tab li button:focus, .active {
 	color: white;
 	background: #bb0000;
 }
+.toastlayer {
+	position: absolute;
+	width: 100%;
+	top: 70%;
+}
+.toast {
+	display: none;
+	border-radius: 40px;
+	height: 40px;
+	width: 150px;
+	background: #212121;
+	color: white;
+	font-family: UbuntuR;
+}
 
 /*ANIMATIONS*/
 @keyframes fadeIn {
@@ -261,6 +275,12 @@ ul.tab li button:focus, .active {
 }
 @keyframes fadeOut {
 	to {opacity: 0;}
+}
+@keyframes toastanim {
+	0% {opacity: 0;}
+	10% {opacity: 1;}
+	90% {opacity: 1;}
+	100% {opacity: 0;}
 }
 @keyframes slideInRight {
 	from {transform: translateX(100%); }
