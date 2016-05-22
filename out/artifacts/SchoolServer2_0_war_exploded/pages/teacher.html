@@ -1,0 +1,45 @@
+<div class="vertcontainer" align="left">
+    <h3>Pasechniy Alexander</h3><p>Physics</p>
+</div>
+<div class="vertcontainer" align="right">
+    <button class="button">Log out</button>
+    <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
+    <a href="#/"><p>Login page</p></a>
+</div>
+<div class="scrollable">
+    <div id="schedule" class="tabcontent maintab">
+        <button class="navigate"><</button>
+        <div class="datecontainer" align="center">Monday 20.10.2016</div>
+        <button class="navigate">></button>
+        <table align="center">
+            <tbody>
+            <tr ng-repeat="lesson in daySchedule">
+                <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
+                <td><h3>{{lesson.class}}</h3><p>{{lesson.auditorium}}</p></td>
+                <td><button class="navigate">></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="lesson" class="tabcontent maintab">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="schedwindow" class="window">
+        <div class="formheader">
+            <h5>Choose format</h5>
+            <button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+                <input id="radioCSV" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
+                <input id="radioXLS" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
+                <input id="radioPDF" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
+            </p>
+            <button class="button">Download</button><div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+

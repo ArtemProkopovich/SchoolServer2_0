@@ -1,9 +1,11 @@
 package Actions;
 
+import com.opensymphony.xwork2.ActionSupport;
+
 /**
  * Created by Евгений on 30.04.2016.
  */
-public class Test {
+public class Test extends ActionSupport {
     private String name;
 
     public String execute() throws Exception {
