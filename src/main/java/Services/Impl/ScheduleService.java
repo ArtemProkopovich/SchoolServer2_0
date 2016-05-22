@@ -35,7 +35,14 @@ public class ScheduleService implements IScheduleService {
 
     public Subject UpdateSubject(Subject subject) throws ServiceException {
         try {
-            uof.getSubjectDao().Update(subject);
+            Subject dbSubject = uof.getSubjectDao().Select(subject.getID());
+            Class dbClass = uof.getClassDao().Select(subject.getClassID());
+            Teacher dbTeacher = uof.getTeacherDao().Select(subject.getTeacherID());
+            if (dbSubject!=null && dbClass != null && dbTeacher != null) {
+                    uof.getSubjectDao().Update(subject);
+            }
+            else
+                throw new ServiceException();
             return subject;
         }
         catch (DAOException ex)
@@ -50,6 +57,24 @@ public class ScheduleService implements IScheduleService {
         }
         catch (DAOException ex)
         {
+            throw new ServiceException(ex);
+        }
+    }
+
+    public void RemoveSubject(int id) throws ServiceException {
+        try{
+            uof.getSubjectDao().Delete(id);
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
+    public List<Subject> GetSubjectList() throws ServiceException {
+        try {
+            return uof.getSubjectDao().GetSubjectList();
+        } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -72,20 +97,21 @@ public class ScheduleService implements IScheduleService {
 
     public void CreateScheduleForDay(List<Lesson> lessonList, int dayOfWeek) throws ServiceException {
         try {
-            Calendar startDate = new GregorianCalendar(2015, 9, 1);
-            while (startDate.get(Calendar.DAY_OF_WEEK) != dayOfWeek + 1)
+            Calendar startDate = new GregorianCalendar(2015, 8, 1);
+            startDate.setFirstDayOfWeek(Calendar.MONDAY);
+            while (startDate.get(Calendar.DAY_OF_WEEK) != dayOfWeek)
                 startDate.add(Calendar.DAY_OF_MONTH, 1);
             Calendar endDate = new GregorianCalendar(2016, 6, 1);
             while (startDate.before(endDate)) {
                 for (Lesson l : lessonList) {
                     l.setDate(startDate.getTime());
                     l.setHomework("");
-                    uof.getLessonDao().Insert(l);
+                    //uof.getLessonDao().Insert(l);
                 }
                 startDate.add(Calendar.WEEK_OF_YEAR, 1);
             }
         }
-        catch (DAOException ex) {
+        catch (Exception ex) {
             throw new ServiceException(ex);
         }
     }
@@ -109,7 +135,7 @@ public class ScheduleService implements IScheduleService {
 
     public List<ScheduleTeacherLesson> GetTeacherDayLessons(Teacher teacher, Date date) throws ServiceException {
         try {
-            List<Lesson> lessonList =  uof.getLessonDao().GetTeacherDayLesson(teacher.getID(),date);
+            List<Lesson> lessonList =  uof.getLessonDao().GetTeacherDayLessons(teacher.getID(),date);
             List<ScheduleTeacherLesson> resultList = new ArrayList<ScheduleTeacherLesson>();
             for(Lesson l : lessonList){
                 ScheduleTeacherLesson stl = new ScheduleTeacherLesson();

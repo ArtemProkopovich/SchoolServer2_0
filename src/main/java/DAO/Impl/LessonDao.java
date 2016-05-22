@@ -52,7 +52,7 @@ public class LessonDao implements ILessonDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(SELECT_PUPIL_DAY_LESSONS);
             st.setInt(1, pupilID);
-            st.setDate(2, (java.sql.Date) date);
+            st.setDate(2, new java.sql.Date(date.getTime()));
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()) {
@@ -78,7 +78,7 @@ public class LessonDao implements ILessonDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(SELECT_CLASS_DAY_LESSONS);
             st.setInt(1, classID);
-            st.setDate(2, (java.sql.Date) date);
+            st.setDate(2, new java.sql.Date(date.getTime()));
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()) {
@@ -98,13 +98,13 @@ public class LessonDao implements ILessonDao {
         }
     }
 
-    public List<Lesson> GetTeacherDayLesson(int teacherID, Date date) throws DAOException {
+    public List<Lesson> GetTeacherDayLessons(int teacherID, Date date) throws DAOException {
         Connection cn = null;
         try {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(SELECT_TEACHER_DAY_LESSONS);
             st.setInt(1, teacherID);
-            st.setDate(2, (java.sql.Date) date);
+            st.setDate(2, new java.sql.Date(date.getTime()));
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()) {
@@ -187,7 +187,7 @@ public class LessonDao implements ILessonDao {
             st.setInt(2,item.getScheduleNumber());
             st.setString(3,item.getHomework());
             st.setInt(4,item.getSubjectID());
-            st.executeQuery();
+            st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
             if (set.next()){
                 return set.getInt(1);
@@ -240,7 +240,6 @@ public class LessonDao implements ILessonDao {
             st.setInt(4,item.getSubjectID());
             st.setInt(5,item.getID());
             st.executeUpdate();
-            ResultSet set = st.getGeneratedKeys();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);
@@ -257,7 +256,7 @@ public class LessonDao implements ILessonDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_LESSON);
             st.setInt(1,id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);

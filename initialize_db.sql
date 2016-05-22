@@ -149,3 +149,8 @@ ALTER TABLE `users`
  ADD CONSTRAINT `FK_users_role`
 	FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE Restrict ON UPDATE Restrict
 ;
+
+INSERT INTO `school_db`.`roles` (`role_id`, `type`) VALUES ('1', 'admin');
+INSERT INTO `school_db`.`roles` (`role_id`, `type`) VALUES ('2', 'teacher');
+INSERT INTO `school_db`.`roles` (`role_id`, `type`) VALUES ('3', 'pupil');
+INSERT INTO `school_db`.`users` (`login`, `password`, `email`, `role_id`) VALUES ('admin', 'admin', 'admin@mail.com', '1');

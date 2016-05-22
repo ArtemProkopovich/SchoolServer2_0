@@ -11,7 +11,7 @@ public class MySqlConnection {
     private Connection connection;
     private String USER = "root";
     private String PASSWORD = "root";
-    private String HOST = "jdbc:mysql://localhost:3306/school_db";
+    private String HOST = "jdbc:mysql://localhost:3306/school_db?useSSL=true";
 
     public MySqlConnection(){}
     public MySqlConnection(String host, String user, String password){

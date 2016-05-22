@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by Артем on 08.05.2016.
  */
 public class Login extends ActionSupport implements SessionAware {
-    private User user;
+    public User user;
     private IUserService userService = ServiceFactory.getUserService();
     private Map session;
     private final String USER = "user";
@@ -31,6 +31,9 @@ public class Login extends ActionSupport implements SessionAware {
                 return ERROR;
         }
         catch (ServiceException ex) {
+            return ERROR;
+        }
+        catch(Exception ex) {
             return ERROR;
         }
     }

@@ -68,6 +68,16 @@ public class UserService implements IUserService {
         }
     }
 
+    public Pupil GetPupilById(int id) throws ServiceException {
+        try{
+            return uof.getPupilDao().Select(id);
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
     public void RemovePupil(Pupil pupil) throws ServiceException {
         try{
             Pupil dbPupil = uof.getPupilDao().Select(pupil.getID());
@@ -81,6 +91,22 @@ public class UserService implements IUserService {
         {
             throw new ServiceException(ex);
         }
+    }
+
+    public void RemovePupil(int id) throws ServiceException {
+        try{
+            Pupil dbPupil = uof.getPupilDao().Select(id);
+            if (dbPupil!=null)
+            {
+                uof.getPupilDao().Delete(dbPupil.getID());
+                uof.getUserDao().Delete(dbPupil.getUserID());
+            }
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+
     }
 
     public Pupil UpdatePupil(Pupil pupil) throws ServiceException {
@@ -123,9 +149,34 @@ public class UserService implements IUserService {
         }
     }
 
+    public Teacher GetTeacherById(int id) throws ServiceException {
+        try{
+            return uof.getTeacherDao().Select(id);
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
     public void RemoveTeacher(Teacher teacher) throws ServiceException {
         try{
             Teacher dbTeacher = uof.getTeacherDao().Select(teacher.getID());
+            if (dbTeacher!=null)
+            {
+                uof.getTeacherDao().Delete(dbTeacher.getID());
+                uof.getUserDao().Delete(dbTeacher.getUserID());
+            }
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
+    public void RemoveTeacher(int id) throws ServiceException {
+        try{
+            Teacher dbTeacher = uof.getTeacherDao().Select(id);
             if (dbTeacher!=null)
             {
                 uof.getTeacherDao().Delete(dbTeacher.getID());
@@ -186,9 +237,31 @@ public class UserService implements IUserService {
         }
     }
 
-    public void RemoveClass(Class cls) throws ServiceException {
+    public Class GetClassById(int id) throws ServiceException {
         try{
-            uof.getClassDao().Delete(cls.getID());
+            return uof.getClassDao().Select(id);
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
+    public void RemoveClass(Class cls) throws ServiceException {
+        try {
+            if (uof.getClassDao().Select(cls.getID()) != null)
+                uof.getClassDao().Delete(cls.getID());
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
+    public void RemoveClass(int id) throws ServiceException {
+        try {
+            if (uof.getClassDao().Select(id) != null)
+                uof.getClassDao().Delete(id);
         }
         catch (DAOException ex)
         {

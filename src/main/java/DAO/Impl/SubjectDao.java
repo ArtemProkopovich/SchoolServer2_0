@@ -28,6 +28,7 @@ public class SubjectDao implements ISubjectDao {
             "JOIN teachers ON subjects.teacher_id=teachers.teacher_id " +
             "WHERE subject_id = ?";
     private final String SELECT_SUBJECT_BY_ID = "SELECT * FROM subjects WHERE subject_id = ?";
+    private final String SELECT_SUBJECTS = "SELECT * FROM subjects";
     private final String INSERT_SUBJECT = "INSERT INTO subjects (name, lesson_count, class_id, teacher_id) VALUES (?, ?, ?, ?)";
     private final String DELETE_SUBJECT = "DELETE FROM subjects WHERE `subject_id`= ?";
     private final String UPDATE_SUBJECT = "UPDATE `subjects`" +
@@ -93,6 +94,33 @@ public class SubjectDao implements ISubjectDao {
                 connection.closeConnection();
         }
         return null;
+    }
+
+    public List<Subject> GetSubjectList() throws DAOException {
+        Connection cn = null;
+        try{
+            cn = connection.getConnection();
+            PreparedStatement st = cn.prepareStatement(SELECT_SUBJECTS);
+            ResultSet set = st.executeQuery();
+            ArrayList<Subject> result = new ArrayList<Subject>();
+            while (set.next()){
+                Subject subject = new Subject();
+                subject.setID(set.getInt("subject_id"));
+                subject.setName(set.getString("name"));
+                subject.setLessonCount(set.getInt("lesson_count"));
+                subject.setClassID(set.getInt("class_id"));
+                subject.setTeacherID(set.getInt("teacher_id"));
+                result.add(subject);
+            }
+            return result;
+        }
+        catch (SQLException ex) {
+            throw new DAOException(ex);
+        }
+        finally {
+            if (cn!=null)
+                connection.closeConnection();
+        }
     }
 
     public List<Pupil> GetSubjectPupils(int subjectID) throws DAOException {

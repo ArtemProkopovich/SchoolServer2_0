@@ -48,7 +48,7 @@ public class UserDao implements IUserDao {
             st.setString(2,password);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                return ResultSetToUser(set);
+                return Select(set.getInt("user_id"));
             }
         }
         catch (SQLException ex) {
@@ -192,7 +192,7 @@ public class UserDao implements IUserDao {
             st.setString(3, item.getEmail());
             st.setInt(4, GetRoleIdByType(item.getRole().toString().toLowerCase()));
             st.setInt(5, item.getID());
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);
@@ -209,7 +209,7 @@ public class UserDao implements IUserDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_USER);
             st.setInt(1,id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);
@@ -226,7 +226,7 @@ public class UserDao implements IUserDao {
         user.setLogin(set.getString("login"));
         user.setPassword(set.getString("password"));
         user.setEmail(set.getString("email"));
-        user.setRole(Role.valueOf(set.getString("role").toUpperCase()));
+        user.setRole(Role.valueOf(set.getString("type").toUpperCase()));
         return user;
     }
 

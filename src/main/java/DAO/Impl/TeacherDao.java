@@ -122,7 +122,7 @@ public class TeacherDao implements ITeacherDao {
             st.setString(2,item.getName());
             st.setString(3,item.getType());
             st.setInt(4,item.getUserID());
-            st.executeQuery();
+            st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
             if (set.next()){
                 return set.getInt(1);
@@ -192,7 +192,7 @@ public class TeacherDao implements ITeacherDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_TEACHER);
             st.setInt(1,id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);

@@ -17,18 +17,24 @@ public interface IUserService {
 
     List<Pupil> GetPupilList() throws ServiceException;
     Pupil AddPupil(Pupil pupil) throws ServiceException;
+    Pupil GetPupilById(int id) throws ServiceException;
     void RemovePupil(Pupil pupil) throws ServiceException;
+    void RemovePupil(int id) throws ServiceException;
     Pupil UpdatePupil(Pupil pupil) throws ServiceException;
     User CreateUserForPupil(Pupil pupil) throws ServiceException;
 
     Teacher AddTeacher(Teacher teacher) throws ServiceException;
+    Teacher GetTeacherById(int id) throws ServiceException;
     void RemoveTeacher(Teacher teacher) throws ServiceException;
+    void RemoveTeacher(int id) throws ServiceException;
     Teacher UpdateTeacher(Teacher teacher) throws ServiceException;
     List<Teacher> GetTeacherList() throws ServiceException;
     User CreateUserForTeacher(Teacher teacher) throws ServiceException;
 
     Class AddClass(Class cls) throws ServiceException;
+    Class GetClassById(int id) throws ServiceException;
     void RemoveClass(Class cls) throws ServiceException;
+    void RemoveClass(int id) throws ServiceException;
     Class UpdateClass(Class cls) throws ServiceException;
     List<Class> GetClassList() throws ServiceException;
 }

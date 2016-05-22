@@ -6,12 +6,17 @@
 
 <struts>
     <constant name="struts.devMode" value="true" />
-    <package name="account" extends="struts-default">
+    <package name="account" extends="struts-default, json-default">
         <interceptors>
             <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
         </interceptors>
         <action name ="login" class="Actions.Account.Login" method="execute">
             <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                    <param name="noCache">true</param>
+                    <param name="excludeNullProperties">true</param>
+                    <param name="root">user</param>
+            </result>
         </action>
     </package>
 </struts>

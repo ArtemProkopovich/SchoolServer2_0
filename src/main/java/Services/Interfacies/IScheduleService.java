@@ -17,6 +17,8 @@ public interface IScheduleService {
     Subject AddSubject(Subject subject) throws ServiceException;
     Subject UpdateSubject(Subject subject) throws ServiceException;
     void RemoveSubject(Subject subject) throws ServiceException;
+    void RemoveSubject(int id) throws ServiceException;
+    List<Subject> GetSubjectList() throws ServiceException;
     List<Subject> GetSubjectListForClass(Class cls) throws ServiceException;
     List<Subject> GetSubjectListForTeacher(Teacher teacher) throws ServiceException;
 

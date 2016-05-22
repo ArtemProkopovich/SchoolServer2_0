@@ -43,7 +43,7 @@ public class MarkDao implements IMarkDao {
             st.setInt(1, mark.getMark());
             st.setInt(2, mark.getPupilID());
             st.setInt(3, mark.getLessonID());
-            st.executeQuery();
+            st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
             if (set.next()){
                 return set.getInt(1);
@@ -111,7 +111,7 @@ public class MarkDao implements IMarkDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_MARK);
             st.setInt(1, id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);

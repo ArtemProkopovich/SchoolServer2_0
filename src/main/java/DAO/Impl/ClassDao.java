@@ -36,7 +36,7 @@ public class ClassDao implements IClassDao {
             PreparedStatement st = cn.prepareStatement(INSERT_CLASS,PreparedStatement.RETURN_GENERATED_KEYS);
             st.setInt(1, item.getGrade());
             st.setString(2, item.getLetter());
-            st.executeQuery();
+            st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
             if (set.next()){
                 return set.getInt(1);
@@ -102,7 +102,7 @@ public class ClassDao implements IClassDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_CLASS);
             st.setInt(1, id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);

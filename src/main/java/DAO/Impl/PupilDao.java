@@ -34,6 +34,7 @@ public class PupilDao implements IPupilDao {
     public PupilDao(MySqlConnection connection){
         this.connection = connection;
     }
+
     public User GetUserByPupilID(int pupilID) throws DAOException {
         Connection cn = null;
         try{
@@ -150,7 +151,7 @@ public class PupilDao implements IPupilDao {
             st.setString(2, item.getName());
             st.setInt(3, item.getUserID());
             st.setInt(4,item.getClassID());
-            st.executeQuery();
+            st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
             if (set.next()){
                 return set.getInt(1);
@@ -220,7 +221,7 @@ public class PupilDao implements IPupilDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_PUPIL);
             st.setInt(1, id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);
