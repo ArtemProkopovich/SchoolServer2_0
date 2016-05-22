@@ -18,5 +18,12 @@
                     <param name="root">user</param>
             </result>
         </action>
+        <action name="test" class="Actions.Test" method="execute">
+            <result name="success" type="json">
+                <param name="root">user</param>
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+            </result>
+        </action>
     </package>
 </struts>

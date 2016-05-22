@@ -41,8 +41,9 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
         console.log(data);
         $http( {
             method : 'POST',
-            url : 'login',
-            data : 'value=' + data
+            url : 'test',
+            data : 'value=' + data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function(data) {
             console.log(data);
             //$location.path('/');
