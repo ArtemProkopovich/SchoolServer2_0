@@ -1,5 +1,7 @@
 package Services.Impl;
 
+import ActionEntities.PupilDayLesson;
+import ActionEntities.TeacherDayLesson;
 import DAO.DAOException;
 import DAO.Interfacies.IUnitOfWork;
 import Entities.Class;
@@ -107,16 +109,17 @@ public class ScheduleService implements IScheduleService {
         }
     }
 
-    public List<SchedulePupilLesson> GetPupilDayLessons(int pupilID, Date date) throws ServiceException {
+    public List<PupilDayLesson> GetPupilDayLessons(int pupilID, Date date) throws ServiceException {
         try {
             List<Lesson> lessonList = uof.getLessonDao().GetPupilDayLessons(pupilID,date);
-            List<SchedulePupilLesson> resultList = new ArrayList<SchedulePupilLesson>();
-            for(Lesson l : lessonList){
+            List<PupilDayLesson> resultList = new ArrayList<PupilDayLesson>();
+            for(Lesson l : lessonList) {
                 SchedulePupilLesson spl = new SchedulePupilLesson();
                 spl.setLesson(l);
                 spl.setSubject(uof.getSubjectDao().Select(l.getSubjectID()));
                 spl.setTeacher(uof.getTeacherDao().Select(spl.getSubject().getTeacherID()));
-                resultList.add(spl);
+                Mark mark = uof.getMarkDao().GetPupilLessonMark(pupilID, l.getID());
+                resultList.add(new PupilDayLesson(spl, mark));
             }
             return resultList;
         } catch (DAOException ex) {
@@ -124,16 +127,16 @@ public class ScheduleService implements IScheduleService {
         }
     }
 
-    public List<ScheduleTeacherLesson> GetTeacherDayLessons(int teacherID, Date date) throws ServiceException {
+    public List<TeacherDayLesson> GetTeacherDayLessons(int teacherID, Date date) throws ServiceException {
         try {
             List<Lesson> lessonList =  uof.getLessonDao().GetTeacherDayLessons(teacherID,date);
-            List<ScheduleTeacherLesson> resultList = new ArrayList<ScheduleTeacherLesson>();
+            List<TeacherDayLesson> resultList = new ArrayList<TeacherDayLesson>();
             for(Lesson l : lessonList){
                 ScheduleTeacherLesson stl = new ScheduleTeacherLesson();
                 stl.setLesson(l);
                 stl.setSubject(uof.getSubjectDao().Select(l.getSubjectID()));
                 stl.setCls(uof.getClassDao().Select(stl.getSubject().getClassID()));
-                resultList.add(stl);
+                resultList.add(new TeacherDayLesson(stl));
             }
             return resultList;
         } catch (DAOException ex) {

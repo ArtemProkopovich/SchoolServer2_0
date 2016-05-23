@@ -15,7 +15,68 @@
             <result name="success" type="json">
                     <param name="noCache">true</param>
                     <param name="excludeNullProperties">true</param>
-                    <param name="root">user</param>
+                    <param name="root">userData</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+    </package>
+    <package name="teacher" extends="json-default">
+        <interceptors>
+            <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
+        </interceptors>
+        <action name ="getTeacherDay" class="Actions.Teacher.GetDaySchedule" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">lessons</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="getTeacherLesson" class="Actions.Teacher.GetLessonJournal" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">journal</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="setHomework" class="Actions.Teacher.UpdateLessonHomework" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="setMark" class="Actions.Teacher.UpdateMark" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+    </package>
+    <package name="pupil" extends="json-default">
+        <interceptors>
+            <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
+        </interceptors>
+        <action name ="getPupilDay" class="Actions.Pupil.GetDaySchedule" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">lessons</param>
             </result>
             <result name="error" type="json">
                 <param name="statusCode">500</param>

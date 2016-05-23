@@ -1,23 +1,22 @@
 package Actions.Teacher;
 
-import ActionEntities.LessonJournal;
 import Services.Interfacies.IStudyService;
 import Services.ServiceException;
 import Services.ServiceFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * Created by Артем on 08.05.2016.
+ * Created by Артем on 23.05.2016.
  */
-public class UpdateLessonHomework extends ActionSupport {
-
+public class UpdateMark extends ActionSupport {
     public int lessonID;
-    public String homework;
+    public int pupilID;
+    public int mark;
     public IStudyService studyService = ServiceFactory.getStudyService();
 
     public String execute() throws Exception {
         try {
-            studyService.UpdateLessonHomework(lessonID, homework);
+            studyService.UpdatePupilMark(lessonID, pupilID, mark);
             return SUCCESS;
         } catch (ServiceException ex) {
             return ERROR;
@@ -34,11 +33,19 @@ public class UpdateLessonHomework extends ActionSupport {
         this.lessonID = lessonID;
     }
 
-    public String getHomework() {
-        return homework;
+    public int getPupilID() {
+        return pupilID;
     }
 
-    public void setHomework(String homework) {
-        this.homework = homework;
+    public void setPupilID(int pupilID) {
+        this.pupilID = pupilID;
+    }
+
+    public int getMark() {
+        return mark;
+    }
+
+    public void setMark(int mark) {
+        this.mark = mark;
     }
 }

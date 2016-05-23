@@ -1,11 +1,10 @@
 package Services.Impl;
 
+import ActionEntities.LessonJournal;
 import DAO.DAOException;
 import DAO.Interfacies.IUnitOfWork;
-import Entities.Lesson;
-import Entities.Mark;
-import Entities.Pupil;
-import Entities.Subject;
+import Entities.*;
+import Entities.Class;
 import Services.Interfacies.IStudyService;
 import Services.ServiceException;
 
@@ -25,20 +24,17 @@ public class StudyService implements IStudyService {
         this.uof = uof;
     }
 
-    public void GetLessonPupilMarksList(int lessonID) throws ServiceException {
+    public LessonJournal GetLessonPupilMarksList(int lessonID) throws ServiceException {
         try {
             Lesson lesson = uof.getLessonDao().Select(lessonID);
+            Subject subject = uof.getSubjectDao().Select(lesson.getSubjectID());
+            Class cls = uof.getClassDao().Select(subject.getClassID());
             List<Pupil> pupilsList = uof.getSubjectDao().GetSubjectPupils(lesson.getSubjectID());
-            List<Mark> markList = uof.getLessonDao().GetLessonMarks(lesson.getID());
             Map<Pupil, Mark> pupilMarkMap = new HashMap<Pupil, Mark>();
-            for (Pupil p:pupilsList) {
-                int i = 0;
-                for (; i < markList.size(); i++) {
-                    if (markList.get(i).getPupilID() == p.getID())
-                        break;
-                }
-                if (i != markList.size())
-                    pupilMarkMap.put(p, markList.get(i));
+            for (Pupil p : pupilsList) {
+                Mark mark = uof.getMarkDao().GetPupilLessonMark(lesson.getID(), p.getID());
+                if (mark != null)
+                    pupilMarkMap.put(p, mark);
                 else {
                     Mark defMark = new Mark();
                     defMark.setLessonID(lesson.getID());
@@ -47,6 +43,7 @@ public class StudyService implements IStudyService {
                     pupilMarkMap.put(p, defMark);
                 }
             }
+            return new LessonJournal(pupilMarkMap, lesson, subject, cls);
         }
         catch (DAOException ex) {
             throw new ServiceException(ex);
@@ -120,6 +117,26 @@ public class StudyService implements IStudyService {
 
     }
 
+    public void UpdatePupilMark(int lessonID, int pupilID, int mark) throws ServiceException {
+        try {
+            Mark dbMark = uof.getMarkDao().GetPupilLessonMark(lessonID, pupilID);
+            if (dbMark != null) {
+                dbMark.setMark(mark);
+                uof.getMarkDao().Update(dbMark);
+            } else {
+                dbMark = new Mark();
+                dbMark.setMark(mark);
+                dbMark.setLessonID(lessonID);
+                dbMark.setPupilID(pupilID);
+                uof.getMarkDao().Insert(dbMark);
+            }
+        }
+        catch (DAOException ex)
+        {
+            throw new ServiceException(ex);
+        }
+    }
+
     public void AddLessonHomework(Lesson lesson) throws ServiceException {
         try {
             uof.getLessonDao().Update(lesson);
@@ -137,5 +154,20 @@ public class StudyService implements IStudyService {
             throw new ServiceException(ex);
         }
 
+    }
+
+    public void UpdateLessonHomework(int lessonID, String homework) throws ServiceException {
+        try {
+            Lesson dbLesson = uof.getLessonDao().Select(lessonID);
+            if (dbLesson!=null) {
+                dbLesson.setHomework(homework);
+                uof.getLessonDao().Update(dbLesson);
+            }
+            else
+                throw new ServiceException("Lesson not found.");
+        }
+        catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
     }
 }

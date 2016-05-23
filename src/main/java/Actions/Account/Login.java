@@ -1,5 +1,7 @@
 package Actions.Account;
 
+import ActionEntities.UserData;
+import Entities.Role;
 import Entities.User;
 import Services.Interfacies.IUserService;
 import Services.ServiceException;
@@ -14,7 +16,7 @@ import java.util.Map;
  * Created by Артем on 08.05.2016.
  */
 public class Login extends ActionSupport implements SessionAware {
-    public User user = new User();
+    public UserData userData = new UserData();
     private IUserService userService = ServiceFactory.getUserService();
     private Map session;
     private final String USER = "user";
@@ -22,14 +24,16 @@ public class Login extends ActionSupport implements SessionAware {
     @Override
     public String execute() throws Exception {
         try {
-            if ((user = userService.Login(user.getLogin(), user.getPassword()))!=null) {
+            if ((userData = userService.Login(userData.getLogin(), userData.getPassword()))!=null) {
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put(USER, user);
+                map.put(USER, userData);
                 setSession(map);
                 return SUCCESS;
             }
-            else
-                return ERROR;
+            else {
+                userData.setRole(Role.GUEST);
+                return SUCCESS;
+            }
         }
         catch (ServiceException ex) {
             return ERROR;
@@ -40,27 +44,27 @@ public class Login extends ActionSupport implements SessionAware {
     }
 
     public String getLogin() {
-        return user.getLogin();
+        return userData.getLogin();
     }
 
     public void setLogin(String login) {
-        user.setLogin(login);
+        userData.setLogin(login);
     }
 
     public String getPassword() {
-        return user.getPassword();
+        return userData.getPassword();
     }
 
     public void setPassword(String password) {
-       user.setPassword(password);
+       userData.setPassword(password);
     }
 
-    public User getUser() {
-        return user;
+    public UserData getUserData() {
+        return userData;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserData(UserData user) {
+        this.userData = userData;
     }
 
     public void setSession(Map<String, Object> map) {

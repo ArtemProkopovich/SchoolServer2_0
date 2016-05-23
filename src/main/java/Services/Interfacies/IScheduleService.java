@@ -1,5 +1,7 @@
 package Services.Interfacies;
 
+import ActionEntities.PupilDayLesson;
+import ActionEntities.TeacherDayLesson;
 import Entities.Class;
 import Entities.*;
 import ServiceEntities.SchedulePupilLesson;
@@ -23,8 +25,8 @@ public interface IScheduleService {
 
     void CreateScheduleForDay(List<Lesson> lessonList, int dayOfWeek) throws ServiceException;
 
-    List<SchedulePupilLesson> GetPupilDayLessons(int pupilID, Date date) throws ServiceException;
-    List<ScheduleTeacherLesson> GetTeacherDayLessons(int teacherID, Date date) throws ServiceException;
+    List<PupilDayLesson> GetPupilDayLessons(int pupilID, Date date) throws ServiceException;
+    List<TeacherDayLesson> GetTeacherDayLessons(int teacherID, Date date) throws ServiceException;
     List<SchedulePupilLesson> GetClassDayLessons(int classID, Date date) throws ServiceException;
     List<Lesson> GetNextLessons(int currentLessonID, int count) throws ServiceException;
 

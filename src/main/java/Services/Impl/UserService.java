@@ -1,5 +1,6 @@
 package Services.Impl;
 
+import ActionEntities.UserData;
 import DAO.DAOException;
 import DAO.Interfacies.IUnitOfWork;
 import Entities.Class;
@@ -23,7 +24,7 @@ public class UserService implements IUserService {
         this.uof = uof;
     }
 
-    public User Login(String login, String password) throws ServiceException {
+    public UserData Login(String login, String password) throws ServiceException {
         if (login==null || login.length()==0)
         {
             throw new ServiceException(new IllegalArgumentException("Login can't be a empty."));
@@ -34,8 +35,29 @@ public class UserService implements IUserService {
         }
         try {
             User user = uof.getUserDao().GetByLoginAndPassword(login, password);
-            if (user!=null)
-                return user;
+            if (user!=null) {
+                UserData userData = new UserData();
+                userData.setRole(user.getRole());
+                userData.setLogin(user.getLogin());
+                userData.setPassword(user.getPassword());
+                if (user.getRole().equals(Role.PUPIL)){
+                    Pupil pupil = uof.getUserDao().GetPupilByUserId(user.getID());
+                    userData.setSurname(pupil.getSurname());
+                    userData.setName(pupil.getName());
+                    Class cls = uof.getClassDao().Select(pupil.getClassID());
+                    userData.setClassGrade(cls.getGrade());
+                    userData.setClassLetter(cls.getLetter());
+                    userData.setEntityID(pupil.getID());
+                }
+                else if(user.getRole().equals(Role.TEACHER)) {
+                    Teacher teacher = uof.getUserDao().GetTeacherByUserId(user.getID());
+                    userData.setName(teacher.getName());
+                    userData.setSurname(teacher.getSurname());
+                    userData.setType(teacher.getType());
+                    userData.setEntityID(teacher.getID());
+                }
+                return userData;
+            }
             else
                 throw new ServiceException("The user with the login and password can not be found");
 

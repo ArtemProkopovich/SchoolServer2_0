@@ -1,5 +1,6 @@
 package Services.Interfacies;
 
+import ActionEntities.UserData;
 import Entities.Class;
 import Entities.Pupil;
 import Entities.Teacher;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface IUserService {
 
-    User Login(String login, String password) throws ServiceException;
+    UserData Login(String login, String password) throws ServiceException;
 
     List<Pupil> GetPupilList() throws ServiceException;
     Pupil AddPupil(Pupil pupil) throws ServiceException;

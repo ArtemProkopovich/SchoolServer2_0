@@ -13,5 +13,6 @@ import java.util.List;
 public interface IMarkDao extends IDao<Mark> {
     Pupil GetPupilByMarkID(int markID) throws DAOException;
     Lesson GetLessonByMarkID(int markID) throws DAOException;
+    Mark GetPupilLessonMark(int lessonID, int pupilID) throws DAOException;
     List<Mark> GetPupilMarksBySubjectID(int subjectID, int pupilID) throws DAOException;
 }

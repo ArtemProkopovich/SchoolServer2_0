@@ -23,6 +23,7 @@ public class MarkDao implements IMarkDao {
     private final String INSERT_MARK="INSERT INTO `marks` (`mark`, `pupil_id`, `lesson_id`) VALUES (?, ?, ?)";
     private final String DELETE_MARK = "DELETE FROM `marks` WHERE `mark_id`= ?";
     private final String UPDATE_MARK = "UPDATE `marks` SET `mark`=?, `pupil_id`=?, `lesson_id`=? WHERE `mark_id`=?";
+    private final String SELECT_PUPIL_LESSON_MARK = "SELECT * FROM `marks` WHERE pupil_id=? && lesson_id=? LIMIT 1";
     private final String SELECT_PUPIL_BY_MARK = "SELECT * FROM pupils WHERE pupil_id=?";
     private final String SELECT_LESSON_BY_MARK = "SELECT * FROM lessons WHERE lesson_id=?";
     private final String SELECT_PUPILS_MARKS_BY_SUBJECT = "SELECT * FROM marks " +
@@ -163,6 +164,33 @@ public class MarkDao implements IMarkDao {
                 lesson.setScheduleNumber(set.getInt("schedule_number"));
                 lesson.setSubjectID(set.getInt("subject_id"));
                 return lesson;
+            }
+        }
+        catch (SQLException ex) {
+            throw new DAOException(ex);
+        }
+        finally {
+            if (cn!=null)
+                connection.closeConnection();
+        }
+        return null;
+    }
+
+    public Mark GetPupilLessonMark(int lessonID, int pupilID) throws DAOException {
+        Connection cn = null;
+        try{
+            cn = connection.getConnection();
+            PreparedStatement st = cn.prepareStatement(SELECT_PUPIL_LESSON_MARK);
+            st.setInt(1,pupilID);
+            st.setInt(2,lessonID);
+            ResultSet set = st.executeQuery();
+            if (set.next()){
+                Mark mark = new Mark();
+                mark.setID(set.getInt("mark_id"));
+                mark.setMark(set.getInt("mark"));
+                mark.setPupilID(set.getInt("pupil_id"));
+                mark.setLessonID(set.getInt("lesson_id"));
+                return mark;
             }
         }
         catch (SQLException ex) {

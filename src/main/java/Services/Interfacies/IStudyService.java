@@ -1,5 +1,6 @@
 package Services.Interfacies;
 
+import ActionEntities.LessonJournal;
 import Entities.Lesson;
 import Entities.Mark;
 import Entities.Pupil;
@@ -13,13 +14,15 @@ import java.util.Map;
  */
 public interface IStudyService {
 
-    void GetLessonPupilMarksList(int lessonID) throws ServiceException;
+    LessonJournal GetLessonPupilMarksList(int lessonID) throws ServiceException;
     void GetPupilSubjectMarks(int subjectID, int pupilID) throws ServiceException;
 
     void UpdateLessonPupilsMarks(Map<Pupil, Mark> pupilMarkMap) throws ServiceException;
     void UpdatePupilSubjectMarks(Map<Lesson, Mark> lessonMarkMap) throws ServiceException;
+    void UpdatePupilMark(int lessonID, int pupilID, int mark) throws ServiceException;
 
     void AddLessonHomework(Lesson lesson) throws ServiceException;
     void UpdateLessonHomework(Lesson lesson) throws ServiceException;
+    void UpdateLessonHomework(int lessonID, String homework) throws ServiceException;
 
 }
