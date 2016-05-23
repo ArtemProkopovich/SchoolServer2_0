@@ -2,7 +2,7 @@
  * Created by Евгений on 04.05.2016.
  */
 var schoolApp = angular.module('schoolApp', ['ngRoute', 'ngAnimate', 'ngResource']);
-var role = null;
+var role = 'guest';
 
 schoolApp.config(function($routeProvider) {
     $routeProvider
@@ -26,11 +26,17 @@ schoolApp.config(function($routeProvider) {
         .otherwise({redirectTo: '/'});
 });
 
-// create the controller and inject Angular's $scope
+schoolApp.service("LogOut", function ($location) {
+    this.logout = function() {
+        role = 'guest';
+        $location.path('/');
+    }
+});
 schoolApp.controller('mainController', function($scope, $http, $location) {
 
     // create a message to display in our view
     $scope.pageClass = 'page-login';
+    role = 'guest';
     $scope.submit = function() {
         var params = {
             "login" : $scope.login,
@@ -46,10 +52,24 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function(data) {
             console.log(data);
-            //$location.path('/');
-            $scope.loginmsg = 'OK!';
-            document.getElementById('toast').style.display = 'block';
-            document.getElementById('toast').style.animation = 'toastanim 4s both ease-in';
+            role = data.role;
+            if (role=='pupil') {
+                $location.path('/pupil');
+                $scope.loginmsg = 'Hello, pupil!';
+            } else if (role=='teacher') {
+                $location.path('/teacher');
+                $scope.loginmsg = 'Welcome, teacher!';
+            } else if (role=='admin') {
+                $location.path('/admin');
+                $scope.loginmsg = 'Welcome, admin!';
+            } else {
+                $scope.loginmsg = 'Incorrect login or password';
+            }
+            var toast = document.getElementById('toast');
+            toast.classList.remove("toast");
+            toast.offsetWidth = toast.offsetWidth;
+            toast.classList.add("toast");
+            toast.style.display = 'block';
         }).error(function () {
             console.log("Incorrect login or password.");
         });
@@ -64,8 +84,14 @@ schoolApp.service("PupilScheduleService", function($http, $q) {
         return deferred.promise;
     }
 });
-schoolApp.controller('pupilController', function($scope, PupilScheduleService) {
+schoolApp.controller('pupilController', function($scope, $location, PupilScheduleService, LogOut) {
     $scope.pageClass = 'page-app';
+    if (role!='pupil') {
+        LogOut.logout();
+    }
+    $scope.logout = function() {
+        LogOut.logout();
+    }
 
     /*$scope.schedule = $resource('http://search.twitter.com/:action',
         {action:'search.json', q:'angular', callback: 'JSON_CALLBACK'},
@@ -78,11 +104,23 @@ schoolApp.controller('pupilController', function($scope, PupilScheduleService) {
         console.log($scope.daySchedule);
     });
 });
-schoolApp.controller('teacherController', function($scope) {
+schoolApp.controller('teacherController', function($scope, LogOut) {
     $scope.pageClass = 'page-app';
+    if (role!='teacher') {
+        LogOut.logout();
+    }
+    $scope.logout = function() {
+        LogOut.logout();
+    }
 });
-schoolApp.controller('adminController', function($scope) {
+schoolApp.controller('adminController', function($scope, LogOut) {
     $scope.pageClass = 'page-app';
+    if (role!='admin') {
+       LogOut.logout();
+    }
+    $scope.logout = function() {
+        LogOut.logout();
+    }
 });
 function openAdminTab(event, tabName, tabIndex) {
     // Declare all variables

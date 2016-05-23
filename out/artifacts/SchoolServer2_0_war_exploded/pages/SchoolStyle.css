@@ -260,10 +260,11 @@ ul.tab li button:focus, .active {
 	top: 70%;
 }
 .toast {
-	display: none;
-	border-radius: 40px;
-	height: 40px;
-	width: 150px;
+	animation: toastanim 4s both ease-in;
+	padding-top: 10px;
+	border-radius: 30px;
+	height: 30px;
+	width: 300px;
 	background: #212121;
 	color: white;
 	font-family: UbuntuR;
