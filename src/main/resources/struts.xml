@@ -6,7 +6,7 @@
 
 <struts>
     <constant name="struts.devMode" value="true" />
-    <package name="account" extends="struts-default, json-default">
+    <package name="account" extends="json-default">
         <interceptors>
             <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
         </interceptors>
@@ -18,7 +18,7 @@
                     <param name="root">user</param>
             </result>
             <result name="error" type="json">
-                <param name="statusCode">501</param>
+                <param name="statusCode">500</param>
             </result>
         </action>
     </package>

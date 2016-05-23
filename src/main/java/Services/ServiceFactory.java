@@ -18,19 +18,26 @@ public class ServiceFactory {
 
     private ServiceFactory() {}
 
-    public static IPrintService getPrintService(){
-        return new PrintService(new UnitOfWork(new MySqlConnection()));
+    private static MySqlConnection connection = new MySqlConnection("jdbc:mysql://localhost:3306/school_test_db?useSSL=true", "root", "root");
+
+    public static IPrintService getPrintService() {
+        return new PrintService(new UnitOfWork(connection));
     }
 
     public static IScheduleService getScheduleService(){
-        return new ScheduleService(new UnitOfWork(new MySqlConnection()));
+        return new ScheduleService(new UnitOfWork(connection));
     }
 
     public static IUserService getUserService(){
-        return new UserService(new UnitOfWork(new MySqlConnection()));
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            return new UserService(new UnitOfWork(connection));
+        }
+        catch (Exception ex){}
+        return null;
     }
 
     public static IStudyService getStudyService(){
-        return new StudyService(new UnitOfWork(new MySqlConnection()));
+        return new StudyService(new UnitOfWork(connection));
     }
 }

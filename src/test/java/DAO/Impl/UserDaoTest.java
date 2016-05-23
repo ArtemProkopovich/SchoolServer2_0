@@ -46,9 +46,9 @@ public class UserDaoTest {
 
     @Test
     public void getTeacherByUserId() throws Exception {
-        Teacher teacher = dao.GetTeacherByUserId(3);
+        Teacher teacher = dao.GetTeacherByUserId(4);
         Assert.assertNotNull(teacher);
-        Assert.assertTrue(teacher.getName().equals("Petr") && teacher.getUserID() == 3);
+        Assert.assertTrue(teacher.getName().equals("Petr") && teacher.getUserID() == 4);
     }
 
     @Test

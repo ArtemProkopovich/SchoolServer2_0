@@ -36,22 +36,17 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
             "login" : $scope.login,
             "password" : $scope.password
         };
-
-        var data = angular.toJson(params);
-        console.log(data);
-        $http( {
-            method : 'POST',
-            url : 'login',
-            data : 'value=' + data
-        }).success(function(data) {
+        
+        $http.post( 'login', params
+        ).then(function(data) {
             console.log(data);
             //$location.path('/');
             $scope.loginmsg = 'OK!';
             document.getElementById('toast').style.display = 'block';
             document.getElementById('toast').style.animation = 'toastanim 4s both ease-in';
-        }).error(function () {
+        })/*.error(function () {
             console.log("Incorrect login or password.");
-        });
+        });*/
     }
 });
 schoolApp.service("PupilScheduleService", function($http, $q) {

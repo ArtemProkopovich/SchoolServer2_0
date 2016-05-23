@@ -19,6 +19,7 @@ public class Login extends ActionSupport implements SessionAware {
     private Map session;
     private final String USER = "user";
 
+    @Override
     public String execute() throws Exception {
         try {
             if ((user = userService.Login(user.getLogin(), user.getPassword()))!=null) {
