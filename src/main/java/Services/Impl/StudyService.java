@@ -25,8 +25,9 @@ public class StudyService implements IStudyService {
         this.uof = uof;
     }
 
-    public void GetLessonPupilMarksList(Lesson lesson) throws ServiceException {
+    public void GetLessonPupilMarksList(int lessonID) throws ServiceException {
         try {
+            Lesson lesson = uof.getLessonDao().Select(lessonID);
             List<Pupil> pupilsList = uof.getSubjectDao().GetSubjectPupils(lesson.getSubjectID());
             List<Mark> markList = uof.getLessonDao().GetLessonMarks(lesson.getID());
             Map<Pupil, Mark> pupilMarkMap = new HashMap<Pupil, Mark>();
@@ -52,10 +53,10 @@ public class StudyService implements IStudyService {
         }
     }
 
-    public void GetPupilSubjectMarks(Subject subject, Pupil pupil) throws ServiceException {
+    public void GetPupilSubjectMarks(int subjectID, int pupilID) throws ServiceException {
         try {
-            List<Mark> markList = uof.getMarkDao().GetPupilMarksBySubjectID(subject.getID(),pupil.getID());
-            List<Lesson> lessonList = uof.getLessonDao().GetSubjectLessons(subject.getID());
+            List<Mark> markList = uof.getMarkDao().GetPupilMarksBySubjectID(subjectID, pupilID);
+            List<Lesson> lessonList = uof.getLessonDao().GetSubjectLessons(subjectID);
             Map<Lesson, Mark> lessonMarkMap = new HashMap<Lesson, Mark>();
             for (Lesson l:lessonList) {
                 int i = 0;
@@ -68,7 +69,7 @@ public class StudyService implements IStudyService {
                 else {
                     Mark defMark = new Mark();
                     defMark.setLessonID(l.getID());
-                    defMark.setPupilID(pupil.getID());
+                    defMark.setPupilID(pupilID);
                     defMark.setMark(0);
                     lessonMarkMap.put(l, defMark);
                 }

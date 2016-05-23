@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by Артем on 08.05.2016.
  */
 public class Login extends ActionSupport implements SessionAware {
-    public User user;
+    public User user = new User();
     private IUserService userService = ServiceFactory.getUserService();
     private Map session;
     private final String USER = "user";

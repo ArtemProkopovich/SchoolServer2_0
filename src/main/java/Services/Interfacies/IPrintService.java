@@ -13,9 +13,9 @@ import java.io.InputStream;
 public interface IPrintService {
 
     //Лист статистики ученика(средние баллы по предметам.)
-    InputStream PrintPDFAchivementStatistics(Pupil pupil) throws ServiceException;
-    InputStream PrintXLSAchivementStatistics(Pupil pupil)throws ServiceException;
-    InputStream PrintCSVAchivementStatistics(Pupil pupil)throws ServiceException;
+    InputStream PrintPDFAchivementStatistics(int pupilID) throws ServiceException;
+    InputStream PrintXLSAchivementStatistics(int pupilID)throws ServiceException;
+    InputStream PrintCSVAchivementStatistics(int pupilID)throws ServiceException;
 
     //Печать листа благодраности
     InputStream PrintPDFThanksLetter(Pupil pupil, Teacher teacher)throws ServiceException;
@@ -23,17 +23,17 @@ public interface IPrintService {
     InputStream PrintCSVThanksLetter(Pupil pupil, Teacher teacher)throws ServiceException;
 
     //Лист журнала с одним предметом
-    InputStream PrintPDFSubjectList(Subject subject)throws ServiceException;
-    InputStream PrintXLSSubjectList(Subject subject)throws ServiceException;
-    InputStream PrintCSVSubjectList(Subject subject)throws ServiceException;
+    InputStream PrintPDFSubjectList(int subjectID)throws ServiceException;
+    InputStream PrintXLSSubjectList(int subjectID)throws ServiceException;
+    InputStream PrintCSVSubjectList(int subjectID)throws ServiceException;
 
     //Расписание недели учителя
-    InputStream PrintPDFTeacherWeekSchedule(Teacher teacher)throws ServiceException;
-    InputStream PrintXLSTeacherWeekSchedule(Teacher teacher)throws ServiceException;
-    InputStream PrintCSVTeacherWeekSchedule(Teacher teacher)throws ServiceException;
+    InputStream PrintPDFTeacherWeekSchedule(int teacherID)throws ServiceException;
+    InputStream PrintXLSTeacherWeekSchedule(int teacherID)throws ServiceException;
+    InputStream PrintCSVTeacherWeekSchedule(int teacherID)throws ServiceException;
 
     //Расписание недели ученика
-    InputStream PrintPDFPupilWeekSchedule(Pupil pupil)throws ServiceException;
-    InputStream PrintXLSPupilWeekSchedule(Pupil pupil)throws ServiceException;
-    InputStream PrintCSVPupilWeekSchedule(Pupil pupil)throws ServiceException;
+    InputStream PrintPDFPupilWeekSchedule(int pupilID)throws ServiceException;
+    InputStream PrintXLSPupilWeekSchedule(int pupilID)throws ServiceException;
+    InputStream PrintCSVPupilWeekSchedule(int pupilID)throws ServiceException;
 }

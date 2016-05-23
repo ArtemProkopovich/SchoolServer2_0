@@ -124,7 +124,7 @@ public class PupilDao implements IPupilDao {
             while (set.next()){
                 Subject subject = new Subject();
                 subject.setID(set.getInt("subject_id"));
-                subject.setName(set.getString("name"));
+                subject.setName(set.getString("subjects.name"));
                 subject.setLessonCount(set.getInt("lesson_count"));
                 subject.setClassID(set.getInt("class_id"));
                 subject.setTeacherID(set.getInt("teacher_id"));

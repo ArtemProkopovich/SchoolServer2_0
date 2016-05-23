@@ -10,17 +10,21 @@ import ServiceEntities.SubjectJournalList;
 import Services.Interfacies.IPrintService;
 import Services.ServiceException;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.io.output.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.util.*;
 import java.util.List;
@@ -36,8 +40,9 @@ public class PrintService implements IPrintService {
         this.uof = uof;
     }
 
-    public InputStream PrintPDFAchivementStatistics(Pupil pupil) throws ServiceException {
+    public InputStream PrintPDFAchivementStatistics(int pupilID) throws ServiceException {
         try {
+            Pupil pupil = uof.getPupilDao().Select(pupilID);
             OutputStream stream = new FileOutputStream("achive.pdf");
             Document document = new Document();
             PdfWriter.getInstance(document,stream);
@@ -101,8 +106,9 @@ public class PrintService implements IPrintService {
         return result.toString();
     }
 
-    public InputStream PrintXLSAchivementStatistics(Pupil pupil)throws ServiceException {
+    public InputStream PrintXLSAchivementStatistics(int pupilID)throws ServiceException {
         try {
+            Pupil pupil = uof.getPupilDao().Select(pupilID);
             Map<Subject, List<Mark>> achieveMap = GetPupilAchivementStatistics(pupil);
             int maxLength = GetMaxSize(achieveMap);
             XSSFWorkbook book = new XSSFWorkbook();
@@ -161,8 +167,9 @@ public class PrintService implements IPrintService {
     }
 
     private static final String NEW_LINE_SEPARATOR = "\n";
-    public InputStream PrintCSVAchivementStatistics(Pupil pupil)throws ServiceException {
+    public InputStream PrintCSVAchivementStatistics(int pupilID)throws ServiceException {
         try{
+            Pupil pupil = uof.getPupilDao().Select(pupilID);
             CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("pas.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
@@ -251,8 +258,9 @@ public class PrintService implements IPrintService {
         return null;
     }
 
-    public InputStream PrintPDFSubjectList(Subject subject) throws ServiceException {
+    public InputStream PrintPDFSubjectList(int subjectID) throws ServiceException {
         try {
+            Subject subject = uof.getSubjectDao().Select(subjectID);
             SubjectJournalList sjl = GetSubjectJournalInfo(subject);
             OutputStream stream = new FileOutputStream("sjl.pdf");
             Document document = new Document();
@@ -262,19 +270,22 @@ public class PrintService implements IPrintService {
             AddPDFFirstPage(document, "Subject journal table:" + subject.getName());
 
             document.add(new Paragraph("Subject: "+subject.getName()+". Teacher: "+sjl.getTeacher().getSurname()+" "+sjl.getTeacher().getName()+". Class: "+sjl.getCls().getName()+".", redFont));
+            document.add(new Paragraph(" "));
             PdfPTable table = new PdfPTable(sjl.getLessonList().size()+1);
             PdfPCell c1 = new PdfPCell(new Phrase("Pupil"));
             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(c1);
+
+            DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
             for (Lesson l : sjl.getLessonList())
             {
-                c1 = new PdfPCell(new Phrase(l.getDate().getDay()+"."+ l.getDate().getMonth()));
+                c1 = new PdfPCell(new Phrase(df.format(l.getDate())));
                 c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(c1);
             }
             table.setHeaderRows(1);
             for(int i=0;i<sjl.getPupilList().size();i++) {
-                table.addCell(String.valueOf(i+1)+". "+sjl.getPupilList().get(i).getSurname()+sjl.getPupilList().get(i).getSurname());
+                table.addCell(String.valueOf(i+1)+". "+sjl.getPupilList().get(i).getSurname()+" "+sjl.getPupilList().get(i).getName());
                 for (Lesson l : sjl.getLessonList())
                 {
                     Mark mark = null;
@@ -308,21 +319,23 @@ public class PrintService implements IPrintService {
 
     }
 
-    public InputStream PrintXLSSubjectList(Subject subject) throws ServiceException {
+    public InputStream PrintXLSSubjectList(int subjectID) throws ServiceException {
         try{
+            Subject subject = uof.getSubjectDao().Select(subjectID);
             SubjectJournalList sjl = GetSubjectJournalInfo(subject);
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet(sjl.getSubject().getName());
             XSSFRow row  = sheet.createRow(0);
-            sheet.autoSizeColumn(0);
             XSSFCell cell = row.createCell(0);
+            sheet.autoSizeColumn(0);
             cell.setCellValue("Pupil/Date");
             int index=1;
-            for(Lesson l : sjl.getLessonList())
-            {
+            DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+            for(Lesson l : sjl.getLessonList()) {
                 cell = row.createCell(index);
-                cell.setCellValue(l.getDate());
+                cell.setCellValue(df.format(l.getDate()));
                 sheet.autoSizeColumn(index);
+                index++;
             }
 
             int rowIndex=1;
@@ -355,7 +368,7 @@ public class PrintService implements IPrintService {
                 }
                 rowIndex++;
             }
-
+            sheet.autoSizeColumn(0);
             book.write(new FileOutputStream("sjl.xlsx"));
             book.close();
             return new FileInputStream("sjl.xlsx");
@@ -368,17 +381,19 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintCSVSubjectList(Subject subject) throws ServiceException {
+    public InputStream PrintCSVSubjectList(int subjectID) throws ServiceException {
         try{
+            Subject subject = uof.getSubjectDao().Select(subjectID);
             CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("sjl.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
             SubjectJournalList sjl = GetSubjectJournalInfo(subject);
             List headerList = new ArrayList();
+            DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
             headerList.add("Pupil/Date");
             for(Lesson l : sjl.getLessonList())
             {
-                headerList.add(l.getDate());
+                headerList.add(df.format(l.getDate()));
             }
             csvFilePrinter.printRecord(headerList);
 
@@ -444,8 +459,9 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintPDFTeacherWeekSchedule(Teacher teacher) throws ServiceException {
+    public InputStream PrintPDFTeacherWeekSchedule(int teacherID) throws ServiceException {
         try{
+            Teacher teacher = uof.getTeacherDao().Select(teacherID);
             List<List<ScheduleTeacherLesson>> weekScheduleList = GetTeacherWeekSchedule(teacher);
             OutputStream stream = new FileOutputStream("tws.pdf");
             Document document = new Document();
@@ -500,8 +516,9 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintXLSTeacherWeekSchedule(Teacher teacher) throws ServiceException {
+    public InputStream PrintXLSTeacherWeekSchedule(int teacherID) throws ServiceException {
         try{
+            Teacher teacher = uof.getTeacherDao().Select(teacherID);
             List<List<ScheduleTeacherLesson>> weekScheduleList = GetTeacherWeekSchedule(teacher);
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet(teacher.getSurname()+" "+teacher.getName()+" schedule");
@@ -557,8 +574,9 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintCSVTeacherWeekSchedule(Teacher teacher) throws ServiceException {
+    public InputStream PrintCSVTeacherWeekSchedule(int teacherID) throws ServiceException {
         try{
+            Teacher teacher = uof.getTeacherDao().Select(teacherID);
             List<List<ScheduleTeacherLesson>> weekScheduleList = GetTeacherWeekSchedule(teacher);
             CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("tws.csv");
@@ -627,8 +645,9 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintPDFPupilWeekSchedule(Pupil pupil) throws ServiceException {
+    public InputStream PrintPDFPupilWeekSchedule(int pupilID) throws ServiceException {
         try{
+            Pupil pupil = uof.getPupilDao().Select(pupilID);
             List<List<SchedulePupilLesson>> weekScheduleList = GetPupilWeekSchedule(pupil);
             OutputStream stream = new FileOutputStream("pws.pdf");
             Document document = new Document();
@@ -683,8 +702,9 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintCSVPupilWeekSchedule(Pupil pupil) throws ServiceException {
+    public InputStream PrintCSVPupilWeekSchedule(int pupilID) throws ServiceException {
         try{
+            Pupil pupil = uof.getPupilDao().Select(pupilID);
             List<List<SchedulePupilLesson>> weekScheduleList = GetPupilWeekSchedule(pupil);
             CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("pws.csv");
@@ -728,8 +748,9 @@ public class PrintService implements IPrintService {
         }
     }
 
-    public InputStream PrintXLSPupilWeekSchedule(Pupil pupil) throws ServiceException {
+    public InputStream PrintXLSPupilWeekSchedule(int pupilID) throws ServiceException {
         try{
+            Pupil pupil = uof.getPupilDao().Select(pupilID);
             List<List<SchedulePupilLesson>> weekScheduleList = GetPupilWeekSchedule(pupil);
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet(pupil.getSurname()+" "+pupil.getName()+" schedule");

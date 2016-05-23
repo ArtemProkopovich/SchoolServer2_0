@@ -14,12 +14,12 @@ import java.util.List;
  */
 public class GetClassSubjectList extends ActionSupport {
     public List<Subject> subjectList;
-    public Class cls;
+    public int classID;
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
         try {
-            subjectList = scheduleService.GetSubjectListForClass(cls);
+            subjectList = scheduleService.GetSubjectListForClass(classID);
             return SUCCESS;
 
         } catch (ServiceException ex) {
@@ -27,6 +27,14 @@ public class GetClassSubjectList extends ActionSupport {
         } catch (Exception ex) {
             return ERROR;
         }
+    }
+
+    public int getClassID() {
+        return classID;
+    }
+
+    public void setClassID(int classID) {
+        this.classID = classID;
     }
 
     public void setSubjectList(List<Subject> clsList) {
@@ -37,12 +45,4 @@ public class GetClassSubjectList extends ActionSupport {
         return subjectList;
     }
 
-
-    public Class getCls() {
-        return cls;
-    }
-
-    public void setCls(Class cls) {
-        this.cls = cls;
-    }
 }

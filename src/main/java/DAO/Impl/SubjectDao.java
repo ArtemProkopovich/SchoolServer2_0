@@ -53,7 +53,7 @@ public class SubjectDao implements ISubjectDao {
             ResultSet set = st.executeQuery();
             if (set.next()) {
                 Teacher teacher = new Teacher();
-                teacher.setName(set.getString("name"));
+                teacher.setName(set.getString("teachers.name"));
                 teacher.setSurname(set.getString("surname"));
                 teacher.setUserID(set.getInt("user_id"));
                 teacher.setID(set.getInt("teacher_id"));
@@ -134,8 +134,8 @@ public class SubjectDao implements ISubjectDao {
             while (set.next()){
                 Pupil pupil = new Pupil();
                 pupil.setID(set.getInt("pupil_id"));
-                pupil.setSurname(set.getString("surname"));
-                pupil.setName(set.getString("name"));
+                pupil.setSurname(set.getString("pupils.surname"));
+                pupil.setName(set.getString("pupils.name"));
                 pupil.setClassID(set.getInt("class_id"));
                 pupil.setUserID(set.getInt("user_id"));
                 result.add(pupil);

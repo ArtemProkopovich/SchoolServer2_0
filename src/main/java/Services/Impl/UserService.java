@@ -78,9 +78,9 @@ public class UserService implements IUserService {
         }
     }
 
-    public void RemovePupil(Pupil pupil) throws ServiceException {
+    public void RemovePupil(int pupilID) throws ServiceException {
         try{
-            Pupil dbPupil = uof.getPupilDao().Select(pupil.getID());
+            Pupil dbPupil = uof.getPupilDao().Select(pupilID);
             if (dbPupil!=null)
             {
                 uof.getPupilDao().Delete(dbPupil.getID());
@@ -91,22 +91,6 @@ public class UserService implements IUserService {
         {
             throw new ServiceException(ex);
         }
-    }
-
-    public void RemovePupil(int id) throws ServiceException {
-        try{
-            Pupil dbPupil = uof.getPupilDao().Select(id);
-            if (dbPupil!=null)
-            {
-                uof.getPupilDao().Delete(dbPupil.getID());
-                uof.getUserDao().Delete(dbPupil.getUserID());
-            }
-        }
-        catch (DAOException ex)
-        {
-            throw new ServiceException(ex);
-        }
-
     }
 
     public Pupil UpdatePupil(Pupil pupil) throws ServiceException {
@@ -152,21 +136,6 @@ public class UserService implements IUserService {
     public Teacher GetTeacherById(int id) throws ServiceException {
         try{
             return uof.getTeacherDao().Select(id);
-        }
-        catch (DAOException ex)
-        {
-            throw new ServiceException(ex);
-        }
-    }
-
-    public void RemoveTeacher(Teacher teacher) throws ServiceException {
-        try{
-            Teacher dbTeacher = uof.getTeacherDao().Select(teacher.getID());
-            if (dbTeacher!=null)
-            {
-                uof.getTeacherDao().Delete(dbTeacher.getID());
-                uof.getUserDao().Delete(dbTeacher.getUserID());
-            }
         }
         catch (DAOException ex)
         {
@@ -240,17 +209,6 @@ public class UserService implements IUserService {
     public Class GetClassById(int id) throws ServiceException {
         try{
             return uof.getClassDao().Select(id);
-        }
-        catch (DAOException ex)
-        {
-            throw new ServiceException(ex);
-        }
-    }
-
-    public void RemoveClass(Class cls) throws ServiceException {
-        try {
-            if (uof.getClassDao().Select(cls.getID()) != null)
-                uof.getClassDao().Delete(cls.getID());
         }
         catch (DAOException ex)
         {

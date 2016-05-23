@@ -17,6 +17,9 @@
                     <param name="excludeNullProperties">true</param>
                     <param name="root">user</param>
             </result>
+            <result name="error" type="json">
+                <param name="statusCode">501</param>
+            </result>
         </action>
     </package>
 </struts>

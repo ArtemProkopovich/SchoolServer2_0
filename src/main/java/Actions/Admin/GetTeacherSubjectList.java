@@ -15,12 +15,13 @@ import java.util.List;
  */
 public class GetTeacherSubjectList extends ActionSupport {
     public List<Subject> subjectList;
-    public Teacher teacher;
+
+    public int teacherID;
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
         try {
-            subjectList = scheduleService.GetSubjectListForTeacher(teacher);
+            subjectList = scheduleService.GetSubjectListForTeacher(teacherID);
             return SUCCESS;
 
         } catch (ServiceException ex) {
@@ -39,11 +40,11 @@ public class GetTeacherSubjectList extends ActionSupport {
     }
 
 
-    public Teacher getTeacher() {
-        return teacher;
+    public int getTeacherID() {
+        return teacherID;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacherID(int teacherID) {
+        this.teacherID = teacherID;
     }
 }

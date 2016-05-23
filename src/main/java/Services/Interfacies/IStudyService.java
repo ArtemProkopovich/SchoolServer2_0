@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public interface IStudyService {
 
-    void GetLessonPupilMarksList(Lesson lesson) throws ServiceException;
-    void GetPupilSubjectMarks(Subject subject, Pupil pupil) throws ServiceException;
+    void GetLessonPupilMarksList(int lessonID) throws ServiceException;
+    void GetPupilSubjectMarks(int subjectID, int pupilID) throws ServiceException;
 
     void UpdateLessonPupilsMarks(Map<Pupil, Mark> pupilMarkMap) throws ServiceException;
     void UpdatePupilSubjectMarks(Map<Lesson, Mark> lessonMarkMap) throws ServiceException;
