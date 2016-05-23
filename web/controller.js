@@ -3,6 +3,8 @@
  */
 var schoolApp = angular.module('schoolApp', ['ngRoute', 'ngAnimate', 'ngResource']);
 var role = 'guest';
+var firstname, lastname, classGrade, classLetter, teacherType, ID;
+var day = new Date();
 
 schoolApp.config(function($routeProvider) {
     $routeProvider
@@ -44,7 +46,6 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
         };
 
         var data = angular.toJson(params);
-        console.log(data);
         $http( {
             method : 'POST',
             url : 'test',
@@ -53,6 +54,12 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
         }).success(function(data) {
             console.log(data);
             role = data.role;
+            firstname = data.firstname;
+            lastname = data.lastname;
+            classGrade = data.classGrade;
+            classLetter = data.classLetter;
+            teacherType = data.teacherType;
+            ID = data.entityID;
             if (role=='pupil') {
                 $location.path('/pupil');
                 $scope.loginmsg = 'Hello, pupil!';
@@ -75,43 +82,109 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
         });
     }
 });
-schoolApp.service("PupilScheduleService", function($http, $q) {
-   var deferred = $q.defer();
-    $http.get("PupilDaySchedule.json").then(function (data) {
-        deferred.resolve(data);
-    });
-    this.getDaySchedule = function() {
-        return deferred.promise;
-    }
-});
-schoolApp.controller('pupilController', function($scope, $location, PupilScheduleService, LogOut) {
+schoolApp.controller('pupilController', function($scope, $location, LogOut, $http) {
+    $scope.logout = function() {
+        LogOut.logout();
+    };
+    $scope.getPupilDay = function() {
+        var params = {
+            "pupilID" : ID,
+            "date" : getDDMMYYY(day)
+        };
+        var data = angular.toJson(params);
+        $http( {
+            method : 'POST',
+            url : 'getPupilDay',
+            data : 'value=' + data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function(data) {
+            $scope.daySchedule = data;
+        });
+    };
+    $scope.setTomorrow = function() {
+        day.setDate(day.getDate() + 1);
+        $scope.day = getDayName(day)+', '+ getDDMMYYY(day);
+        $scope.getPupilDay();
+    };
+    $scope.setYesterday = function() {
+        day.setDate(day.getDate()-1);
+        $scope.day = getDayName(day)+', '+getDDMMYYY(day);
+        $scope.getPupilDay();
+    };
     $scope.pageClass = 'page-app';
     if (role!='pupil') {
         LogOut.logout();
     }
+    $scope.firstname = firstname;
+    $scope.lastname = lastname;
+    $scope.classGrade = classGrade;
+    $scope.classLetter = classLetter;
+    $scope.day = getDayName(day)+', '+ getDDMMYYY(day);
+    $scope.getPupilDay();
+});
+schoolApp.controller('teacherController', function($scope, LogOut, $location, $http) {
     $scope.logout = function() {
         LogOut.logout();
-    }
+    };
+    $scope.getTeacherDay = function() {
+        var params = {
+            "teacherID" : ID,
+            "date" : getDDMMYYY(day)
+        };
+        var data = angular.toJson(params);
+        $http( {
+            method : 'POST',
+            url : 'getTeacherDay',
+            data : 'value=' + data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function(data) {
+            $scope.daySchedule = data;
+        });
+    };
+    $scope.setTomorrow = function() {
+        day.setDate(day.getDate() + 1);
+        $scope.day = getDayName(day)+', '+ getDDMMYYY(day);
+        $scope.getTeacherDay();
+    };
+    $scope.setYesterday = function() {
+        day.setDate(day.getDate()-1);
+        $scope.day = getDayName(day)+', '+getDDMMYYY(day);
+        $scope.getTeacherDay();
+    };
+    $scope.loadLesson = function(lessonID) {
+        var params = {
+          "lessonID":lessonID
+        };
+        var data = angular.toJson(params);
+        $http( {
+            method : 'POST',
+            url : 'getTeacherLesson',
+            data : 'value=' + data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function(data) {
+            $scope.subject = data.subject;
+            $scope.timerange = data.timerange;
+            $scope.classGrade = data.classGrade;
+            $scope.classLetter = data.classLetter;
+            $scope.homework = data.homework;
+            $scope.pupils = data.pupils;
+        });
 
-    /*$scope.schedule = $resource('http://search.twitter.com/:action',
-        {action:'search.json', q:'angular', callback: 'JSON_CALLBACK'},
-        {get:{method:'JSONP'}});
-
-    $scope.ClassDaySchedule = $scope.schedule.get();*/
-    var promise = PupilScheduleService.getDaySchedule();
-    promise.then(function (data) {
-        $scope.daySchedule = data.data;
-        console.log($scope.daySchedule);
-    });
-});
-schoolApp.controller('teacherController', function($scope, LogOut) {
+    };
+    $scope.goToLesson = function(lessonID) {
+        $scope.loadLesson(lessonID);
+        document.getElementById('lesson').style.animation = 'slideInRight 1s both ease-in';
+        document.getElementById('schedule').style.animation = 'slideOutLeft 1s both ease-in';
+    };
     $scope.pageClass = 'page-app';
     if (role!='teacher') {
         LogOut.logout();
     }
-    $scope.logout = function() {
-        LogOut.logout();
-    }
+    $scope.firstname = firstname;
+    $scope.lastname = lastname;
+    $scope.teacherType = teacherType;
+    $scope.day = getDayName(day)+', '+ getDDMMYYY(day);
+    $scope.getTeacherDay();
 });
 schoolApp.controller('adminController', function($scope, LogOut) {
     $scope.pageClass = 'page-app';
@@ -157,5 +230,30 @@ function toggleWindow (windowId, isVisible) {
         document.getElementById(windowId).style.display = "block"
     } else {
         document.getElementById(windowId).style.display = "none";
+    }
+}
+function getDDMMYYY (date) {
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; //January is 0!
+    var yyyy = date.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+    return (dd+'.'+mm+'.'+yyyy);
+}
+function getDayName (date) {
+    switch (date.getDay()) {
+        case 0: return 'Sunday';
+        case 1: return 'Monday';
+        case 2: return 'Tuesday';
+        case 3: return 'Wednesday';
+        case 4: return 'Thursday';
+        case 5: return 'Friday';
+        case 6: return 'Saturday';
     }
 }

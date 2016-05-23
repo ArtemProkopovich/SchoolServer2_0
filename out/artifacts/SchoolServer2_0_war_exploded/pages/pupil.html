@@ -1,14 +1,14 @@
 <div class="vertcontainer" align="left">
-	<h3>Shimanskey Eugene </h3><p>6 A</p>
+	<h3>{{lastname}} {{firstname}}</h3><p>{{classGrade}} {{classLetter}}</p>
 </div>
 <div class="vertcontainer" align="right">
 	<button class="button" ng-click="logout()">Log out</button>
 	<button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
 </div>
 <div align="center">
-		<button class="navigate"><</button>
-		<div class="datecontainer" align="center">Monday 20.10.2016</div>
-		<button class="navigate">></button>
+		<button class="navigate" ng-click="setYesterday()"><</button>
+		<div class="datecontainer" align="center">{{day}}</div>
+		<button class="navigate" ng-click="setTomorrow()">></button>
 
 	<div class="scrollable">
 		<table align="center">

@@ -1,21 +1,21 @@
 <div class="vertcontainer" align="left">
-    <h3>Pasechniy Alexander</h3><p>Physics</p>
+    <h3>{{lastname}} {{firstname}}</h3><p>{{teacherType}}</p>
 </div>
 <div class="vertcontainer" align="right">
     <button class="button" ng-click="logout()">Log out</button>
     <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
 </div>
 <div class="scrollable">
-    <div id="schedule" class="tabcontent maintab">
-        <button class="navigate"><</button>
-        <div class="datecontainer" align="center">Monday 20.10.2016</div>
-        <button class="navigate">></button>
+    <div id="schedule" class="tabcontent maintab" style="animation: slideInLeft 1s both ease-in;">
+        <button class="navigate" ng-click="setYesterday()"><</button>
+        <div class="datecontainer" align="center">{{day}}</div>
+        <button class="navigate" ng-click="setTomorrow()">></button>
         <table align="center">
             <tbody>
             <tr ng-repeat="lesson in daySchedule">
                 <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
-                <td><h3>{{lesson.class}}</h3><p>{{lesson.auditorium}}</p></td>
-                <td><button class="navigate">></button></td>
+                <td><h3>{{lesson.subject}} {{lesson.classGrade}} {{lesson.classLetter}}</h3><p>{{lesson.auditorium}}</p></td>
+                <td><button class="navigate" ng-click="goToLesson(lesson.lessonID)">></button></td>
             </tr>
             </tbody>
         </table>
