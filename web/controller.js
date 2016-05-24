@@ -45,13 +45,7 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
             "password" : $scope.password
         };
 
-        var data = angular.toJson(params);
-        $http( {
-            method : 'POST',
-            url : 'test',
-            data : 'value=' + data,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function(data) {
+        $http.post('login',params).then(function(data) {
             console.log(data);
             role = data.role;
             firstname = data.firstname;
