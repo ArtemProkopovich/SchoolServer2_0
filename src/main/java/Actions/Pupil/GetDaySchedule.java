@@ -8,6 +8,8 @@ import Services.ServiceException;
 import Services.ServiceFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +18,15 @@ import java.util.List;
  */
 public class GetDaySchedule extends ActionSupport {
     public int pupilID;
-    public Date date;
+    public String date;
 
     public List<PupilDayLesson> lessons;
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
         try {
+            DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            Date date = format.parse(this.date);
             lessons = scheduleService.GetPupilDayLessons(pupilID, date);
             return SUCCESS;
         } catch (ServiceException ex) {
@@ -32,16 +36,17 @@ public class GetDaySchedule extends ActionSupport {
         }
     }
 
-    public List<PupilDayLesson> getLessons() {
-        return lessons;
-    }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public List<PupilDayLesson> getLessons() {
+        return lessons;
     }
 
     public int getPupilID() {
