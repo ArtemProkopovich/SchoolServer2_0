@@ -1,0 +1,16 @@
+<h3>School Server v1.0</h3>
+<p>Welcome my dear friend!</p>
+
+<div class="form" align="center">
+	<p>Please log in to continue</p>
+	<form name="LoginForm" ng-submit="submit()">
+		<input class="in" type="text" name="login" placeholder="Login" ng-model="login">
+		<input class="in" type="password" name="password" placeholder="Password" ng-model="password">
+		<input class="button" type="submit" name="commit" value="Go">
+	 </form>
+</div>
+<div class="toastlayer" align="center">
+	<div id="toast" class="toast" style="display: none">
+		{{ loginmsg }}
+	</div>
+</div>

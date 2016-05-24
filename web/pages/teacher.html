@@ -1,0 +1,44 @@
+<div class="vertcontainer" align="left">
+    <h3>{{lastname}} {{firstname}}</h3><p>{{teacherType}}</p>
+</div>
+<div class="vertcontainer" align="right">
+    <button class="button" ng-click="logout()">Log out</button>
+    <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
+</div>
+<div class="scrollable">
+    <div id="schedule" class="tabcontent maintab" style="animation: slideInLeft 1s both ease-in;">
+        <button class="navigate" ng-click="setYesterday()"><</button>
+        <div class="datecontainer" align="center">{{day}}</div>
+        <button class="navigate" ng-click="setTomorrow()">></button>
+        <table align="center">
+            <tbody>
+            <tr ng-repeat="lesson in daySchedule">
+                <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
+                <td><h3>{{lesson.subject}} {{lesson.classGrade}} {{lesson.classLetter}}</h3><p>{{lesson.auditorium}}</p></td>
+                <td><button class="navigate" ng-click="goToLesson(lesson.lessonID)">></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="lesson" class="tabcontent maintab">
+        <h3>{{subject}} {{classGrade}} {{classLetter}}</h3><p>{{timerange}}</p>
+        <p>Homework: {{homework}} </p>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="schedwindow" class="window">
+        <div class="formheader">
+            <h5>Choose format</h5>
+            <button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+                <input id="radioCSV" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
+                <input id="radioXLS" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
+                <input id="radioPDF" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
+            </p>
+            <button class="button">Download</button><div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+

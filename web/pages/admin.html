@@ -1,0 +1,48 @@
+<div class="vertcontainer" align="left">
+    <h3>Shimanskey Eugene </h3><p>Administrator</p>
+</div>
+<div class="vertcontainer" align="right">
+    <button class="button" ng-click="logout()">Log out</button>
+</div>
+<div align="center">
+    <ul class="tab">
+        <li><button class="tablinks" onclick="openAdminTab(event, 'pupils', 0)">pupils</button></li>
+        <li><button class="tablinks" onclick="openAdminTab(event, 'teachers', 1)">teachers</button></li>
+        <li><button class="tablinks" onclick="openAdminTab(event, 'schedule', 2)">schedule</button></li>
+        <li><button class="tablinks" onclick="openAdminTab(event, 'subjects', 3)">subjects</button></li>
+    </ul>
+</div>
+<div class="scrollable">
+    <div id="pupils" class="tabcontent maintab">
+        <h3>London</h3>
+        <p>London is the capital city of England.</p>
+    </div>
+
+    <div id="teachers" class="tabcontent maintab">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p>
+    </div>
+
+    <div id="schedule" class="tabcontent maintab">
+        <h3>Tokyo</h3>
+        <p>Tokyo is the capital of Japan.</p>
+    </div>
+    <div id="subjects" class="tabcontent maintab">
+        <p>
+            Subjects
+            <button class="button" onclick="toggleWindow('addsubject', true)">Add</button>
+        </p>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="addsubject" class="window">
+        <div class="formheader">
+            <h5>Add teacher</h5>
+            <button class="close" onclick="toggleWindow('addsubject', false)">X</button>
+        </div>
+        <div align="center">
+            <input class="in" type="text" placeholder="name"/>
+            <button class="button">Confirm</button><div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
