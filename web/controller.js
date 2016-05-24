@@ -45,22 +45,22 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
             "password" : $scope.password
         };
 
-        $http.post('login',params).then(function(data) {
-            console.log(data);
-            role = data.role;
-            firstname = data.firstname;
-            lastname = data.lastname;
-            classGrade = data.classGrade;
-            classLetter = data.classLetter;
-            teacherType = data.teacherType;
-            ID = data.entityID;
-            if (role=='pupil') {
+        $http.post('login',params).then(function(response) {
+            console.log(response);
+            role = response.data.role;
+            firstname = response.data.firstname;
+            lastname = response.data.lastname;
+            classGrade = response.data.classGrade;
+            classLetter = response.data.classLetter;
+            teacherType = response.data.teacherType;
+            ID = response.data.entityID;
+            if (role=='PUPIL') {
                 $location.path('/pupil');
                 $scope.loginmsg = 'Hello, pupil!';
-            } else if (role=='teacher') {
+            } else if (role=='TEACHER') {
                 $location.path('/teacher');
                 $scope.loginmsg = 'Welcome, teacher!';
-            } else if (role=='admin') {
+            } else if (role=='ADMIN') {
                 $location.path('/admin');
                 $scope.loginmsg = 'Welcome, admin!';
             } else {
