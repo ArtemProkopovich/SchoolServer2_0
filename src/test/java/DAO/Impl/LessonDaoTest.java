@@ -28,21 +28,21 @@ public class LessonDaoTest {
 
     @Test
     public void getPupilDayLessons() throws Exception {
-        List<Lesson> lessons = dao.GetPupilDayLessons(1, new GregorianCalendar(2015, 00, 01).getTime());
+        List<Lesson> lessons = dao.GetPupilDayLessons(1, new GregorianCalendar(2016, 04, 24).getTime());
         Assert.assertNotNull(lessons);
         Assert.assertTrue(lessons.size() > 0);
     }
 
     @Test
     public void getClassDayLessons() throws Exception {
-        List<Lesson> lessons = dao.GetClassDayLessons(1, new GregorianCalendar(2015, 00, 01).getTime());
+        List<Lesson> lessons = dao.GetClassDayLessons(1, new GregorianCalendar(2016, 04, 24).getTime());
         Assert.assertNotNull(lessons);
         Assert.assertTrue(lessons.size() > 0);
     }
 
     @Test
     public void getTeacherDayLessons() throws Exception {
-        List<Lesson> lessons = dao.GetTeacherDayLessons(1, new GregorianCalendar(2015, 00, 01).getTime());
+        List<Lesson> lessons = dao.GetTeacherDayLessons(1, new GregorianCalendar(2016, 04, 24).getTime());
         Assert.assertNotNull(lessons);
         Assert.assertTrue(lessons.size() > 0);
     }

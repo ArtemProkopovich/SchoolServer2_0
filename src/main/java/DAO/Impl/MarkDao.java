@@ -68,12 +68,7 @@ public class MarkDao implements IMarkDao {
             st.setInt(1,id);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Mark mark = new Mark();
-                mark.setID(set.getInt("mark_id"));
-                mark.setMark(set.getInt("mark"));
-                mark.setPupilID(set.getInt("pupil_id"));
-                mark.setLessonID(set.getInt("lesson_id"));
-                return mark;
+                return ResultSetToMark(set);
             }
         }
         catch (SQLException ex) {
@@ -131,13 +126,7 @@ public class MarkDao implements IMarkDao {
             st.setInt(1,markID);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Pupil pupil = new Pupil();
-                pupil.setID(set.getInt("pupil_id"));
-                pupil.setName(set.getString("name"));
-                pupil.setSurname(set.getString("surname"));;
-                pupil.setUserID(set.getInt("user_id"));
-                pupil.setClassID(set.getInt("class_id"));
-                return pupil;
+                return PupilDao.ResultSetToPupil(set);
             }
         }
         catch (SQLException ex) {
@@ -158,12 +147,7 @@ public class MarkDao implements IMarkDao {
             st.setInt(1,markID);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Lesson lesson = new Lesson();
-                lesson.setID(set.getInt("lesson_id"));
-                lesson.setDate(set.getDate("date"));
-                lesson.setScheduleNumber(set.getInt("schedule_number"));
-                lesson.setSubjectID(set.getInt("subject_id"));
-                return lesson;
+                return LessonDao.ResultSetToLesson(set);
             }
         }
         catch (SQLException ex) {
@@ -185,12 +169,7 @@ public class MarkDao implements IMarkDao {
             st.setInt(2,lessonID);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Mark mark = new Mark();
-                mark.setID(set.getInt("mark_id"));
-                mark.setMark(set.getInt("mark"));
-                mark.setPupilID(set.getInt("pupil_id"));
-                mark.setLessonID(set.getInt("lesson_id"));
-                return mark;
+                return ResultSetToMark(set);
             }
         }
         catch (SQLException ex) {
@@ -213,12 +192,7 @@ public class MarkDao implements IMarkDao {
             ResultSet set = st.executeQuery();
             ArrayList<Mark> result = new ArrayList<Mark>();
             while (set.next()){
-                Mark mark = new Mark();
-                mark.setID(set.getInt("mark_id"));
-                mark.setMark(set.getInt("mark"));
-                mark.setLessonID(set.getInt("lesson_id"));
-                mark.setPupilID(set.getInt("pupil_id"));
-                result.add(mark);
+                result.add(ResultSetToMark(set));
             }
             return result;
         }
@@ -229,5 +203,14 @@ public class MarkDao implements IMarkDao {
             if (cn!=null)
                 connection.closeConnection();
         }
+    }
+
+    public static Mark ResultSetToMark(ResultSet set) throws SQLException {
+        Mark mark = new Mark();
+        mark.setID(set.getInt("mark_id"));
+        mark.setMark(set.getInt("mark"));
+        mark.setLessonID(set.getInt("lesson_id"));
+        mark.setPupilID(set.getInt("pupil_id"));
+        return mark;
     }
 }

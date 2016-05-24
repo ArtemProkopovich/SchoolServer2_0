@@ -43,12 +43,7 @@ public class PupilDao implements IPupilDao {
             st.setInt(1,pupilID);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                User user = new User();
-                user.setID(set.getInt("user_id"));
-                user.setLogin(set.getString("login"));
-                user.setPassword(set.getString("password"));
-                user.setEmail(set.getString("email"));
-                return user;
+                return UserDao.ResultSetToUser(set);
             }
         }
         catch (SQLException ex) {
@@ -69,11 +64,7 @@ public class PupilDao implements IPupilDao {
             st.setInt(1,pupilID);
             ResultSet set = st.executeQuery();
             if (set.next()) {
-                Class cl = new Class();
-                cl.setID(set.getInt("class_id"));
-                cl.setGrade(set.getInt("grade"));
-                cl.setLetter(set.getString("letter"));
-                return cl;
+                return ClassDao.ResultSetToClass(set);
             }
         }
         catch (SQLException ex) {
@@ -94,13 +85,7 @@ public class PupilDao implements IPupilDao {
             ResultSet set = st.executeQuery();
             ArrayList<Pupil> result = new ArrayList<Pupil>();
             while (set.next()){
-                Pupil pupil = new Pupil();
-                pupil.setID(set.getInt("pupil_id"));
-                pupil.setSurname(set.getString("surname"));
-                pupil.setName(set.getString("name"));
-                pupil.setClassID(set.getInt("class_id"));
-                pupil.setUserID(set.getInt("user_id"));
-                result.add(pupil);
+                result.add(ResultSetToPupil(set));
             }
             return result;
         }
@@ -128,7 +113,7 @@ public class PupilDao implements IPupilDao {
                 subject.setLessonCount(set.getInt("lesson_count"));
                 subject.setClassID(set.getInt("class_id"));
                 subject.setTeacherID(set.getInt("teacher_id"));
-                result.add(subject);
+                result.add(SubjectDao.ResultSetToSubject(set));
             }
             return result;
         }
@@ -175,13 +160,7 @@ public class PupilDao implements IPupilDao {
             st.setInt(1,id);
             ResultSet set = st.executeQuery();
             if (set.next()) {
-                Pupil pupil = new Pupil();
-                pupil.setID(set.getInt("pupil_id"));
-                pupil.setName(set.getString("name"));
-                pupil.setSurname(set.getString("surname"));
-                pupil.setUserID(set.getInt("user_id"));
-                pupil.setClassID(set.getInt("class_id"));
-                return pupil;
+                return ResultSetToPupil(set);
             }
         }
         catch (SQLException ex) {
@@ -230,5 +209,15 @@ public class PupilDao implements IPupilDao {
             if (cn!=null)
                 connection.closeConnection();
         }
+    }
+
+    public static Pupil ResultSetToPupil(ResultSet set) throws SQLException{
+        Pupil pupil = new Pupil();
+        pupil.setID(set.getInt("pupil_id"));
+        pupil.setSurname(set.getString("pupils.surname"));
+        pupil.setName(set.getString("pupils.name"));
+        pupil.setClassID(set.getInt("class_id"));
+        pupil.setUserID(set.getInt("user_id"));
+        return pupil;
     }
 }

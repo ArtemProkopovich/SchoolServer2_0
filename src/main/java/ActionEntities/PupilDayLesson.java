@@ -92,9 +92,14 @@ public class PupilDayLesson {
         auditorium = spl.getLesson().getRoom();
         homework = spl.getLesson().getHomework();
         timeRange = TimeOfLesson.NumberToTime(number);
-        if (_mark.getMark() < 0)
-            mark = "absent";
-        else
-            mark = String.valueOf(_mark.getMark());
+        if (_mark!=null) {
+            if (_mark.getMark() < 0)
+                mark = "absent";
+            else
+                mark = String.valueOf(_mark.getMark());
+        }
+        else{
+            mark="";
+        }
     }
 }

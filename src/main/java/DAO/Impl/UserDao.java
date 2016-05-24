@@ -69,7 +69,7 @@ public class UserDao implements IUserDao {
             ResultSet set = st.executeQuery();
             ArrayList<User> result = new ArrayList<User>();
             while (set.next()){
-                result.add(ResultSetToUser(set));
+                result.add(ResultSetToUserWithRole(set));
             }
             return result;
         }
@@ -90,13 +90,7 @@ public class UserDao implements IUserDao {
             st.setInt(1, id);
             ResultSet set = st.executeQuery();
             if (set.next()) {
-                Pupil pupil = new Pupil();
-                pupil.setID(set.getInt("pupil_id"));
-                pupil.setName(set.getString("name"));
-                pupil.setSurname(set.getString("surname"));;
-                pupil.setUserID(set.getInt("user_id"));
-                pupil.setClassID(set.getInt("class_id"));
-                return pupil;
+                return PupilDao.ResultSetToPupil(set);
             }
         }
         catch (SQLException ex) {
@@ -115,15 +109,9 @@ public class UserDao implements IUserDao {
             cn = connection.getConnection();
             PreparedStatement stP = cn.prepareStatement(SELECT_TEACHER_BY_USER_ID);
             stP.setInt(1, id);
-            ResultSet setP = stP.executeQuery();
-            if (setP.next()) {
-                Teacher teacher = new Teacher();
-                teacher.setID(setP.getInt("teacher_id"));
-                teacher.setType(setP.getString("type"));
-                teacher.setSurname(setP.getString("surname"));
-                teacher.setName(setP.getString("name"));
-                teacher.setUserID(setP.getInt("user_id"));
-                return teacher;
+            ResultSet set = stP.executeQuery();
+            if (set.next()) {
+                return TeacherDao.ResultSetToTeacher(set);
             }
         }
         catch (SQLException ex) {
@@ -169,7 +157,7 @@ public class UserDao implements IUserDao {
             st.setInt(1,id);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                return ResultSetToUser(set);
+                return ResultSetToUserWithRole(set);
             }
         }
         catch (SQLException ex) {
@@ -220,13 +208,23 @@ public class UserDao implements IUserDao {
         }
     }
 
-    private User ResultSetToUser(ResultSet set) throws SQLException {
+    public static User ResultSetToUserWithRole(ResultSet set) throws SQLException {
         User user = new User();
         user.setID(set.getInt("user_id"));
         user.setLogin(set.getString("login"));
         user.setPassword(set.getString("password"));
         user.setEmail(set.getString("email"));
         user.setRole(Role.valueOf(set.getString("type").toUpperCase()));
+        return user;
+    }
+
+    public static User ResultSetToUser(ResultSet set) throws SQLException {
+
+        User user = new User();
+        user.setID(set.getInt("user_id"));
+        user.setLogin(set.getString("login"));
+        user.setPassword(set.getString("password"));
+        user.setEmail(set.getString("email"));
         return user;
     }
 

@@ -31,11 +31,11 @@ public class LessonPupil {
         this.surname = surname;
     }
 
-    public int getMark() {
+    public String getMark() {
         return mark;
     }
 
-    public void setMark(int mark) {
+    public void setMark(String mark) {
         this.mark = mark;
     }
 
@@ -50,14 +50,22 @@ public class LessonPupil {
     private int pupilID;
     private String name;
     private String surname;
-    private int mark;
+    private String mark;
     private int number;
 
     public LessonPupil(Pupil pupil, Mark _mark, int number) {
         pupilID = pupil.getID();
         name = pupil.getName();
         surname = pupil.getSurname();
-        mark = _mark.getMark();
         this.number = number;
+        if (_mark!=null) {
+            if (_mark.getMark() < 0)
+                mark = "absent";
+            else
+                mark = String.valueOf(_mark.getMark());
+        }
+        else{
+            mark="";
+        }
     }
 }

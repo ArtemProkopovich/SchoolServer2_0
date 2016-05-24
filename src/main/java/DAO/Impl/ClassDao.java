@@ -60,11 +60,7 @@ public class ClassDao implements IClassDao {
             st.setInt(1,id);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Class cl = new Class();
-                cl.setID(set.getInt("class_id"));
-                cl.setGrade(set.getInt("grade"));
-                cl.setLetter(set.getString("letter"));
-                return cl;
+                return ResultSetToClass(set);
             }
         }
         catch (SQLException ex) {
@@ -121,11 +117,7 @@ public class ClassDao implements IClassDao {
             ResultSet set = st.executeQuery();
             ArrayList<Class> result = new ArrayList<Class>();
             while (set.next()){
-                Class cl = new Class();
-                cl.setID(set.getInt("class_id"));
-                cl.setGrade(set.getInt("grade"));
-                cl.setLetter(set.getString("letter"));
-                result.add(cl);
+                result.add(ResultSetToClass(set));
             }
             return result;
         }
@@ -147,13 +139,7 @@ public class ClassDao implements IClassDao {
             ResultSet set = st.executeQuery();
             ArrayList<Subject> result = new ArrayList<Subject>();
             while (set.next()){
-                Subject subject = new Subject();
-                subject.setID(set.getInt("subject_id"));
-                subject.setName(set.getString("name"));
-                subject.setLessonCount(set.getInt("lesson_count"));
-                subject.setClassID(set.getInt("class_id"));
-                subject.setTeacherID(set.getInt("teacher_id"));
-                result.add(subject);
+                result.add(SubjectDao.ResultSetToSubject(set));
             }
             return result;
         }
@@ -164,5 +150,12 @@ public class ClassDao implements IClassDao {
             if (cn!=null)
                 connection.closeConnection();
         }
+    }
+    public static Class ResultSetToClass(ResultSet set) throws SQLException {
+        Class cl = new Class();
+        cl.setID(set.getInt("class_id"));
+        cl.setGrade(set.getInt("grade"));
+        cl.setLetter(set.getString("letter"));
+        return cl;
     }
 }

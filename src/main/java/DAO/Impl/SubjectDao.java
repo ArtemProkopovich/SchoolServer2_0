@@ -52,13 +52,7 @@ public class SubjectDao implements ISubjectDao {
             st.setInt(1,subjectID);
             ResultSet set = st.executeQuery();
             if (set.next()) {
-                Teacher teacher = new Teacher();
-                teacher.setName(set.getString("teachers.name"));
-                teacher.setSurname(set.getString("surname"));
-                teacher.setUserID(set.getInt("user_id"));
-                teacher.setID(set.getInt("teacher_id"));
-                teacher.setType(set.getString("type"));
-                return teacher;
+                return TeacherDao.ResultSetToTeacher(set);
             }
         }
         catch (SQLException ex) {
@@ -79,11 +73,7 @@ public class SubjectDao implements ISubjectDao {
             st.setInt(1,subjectID);
             ResultSet set = st.executeQuery();
             if (set.next()) {
-                Class cl = new Class();
-                cl.setID(set.getInt("class_id"));
-                cl.setGrade(set.getInt("grade"));
-                cl.setLetter(set.getString("letter"));
-                return cl;
+                return ClassDao.ResultSetToClass(set);
             }
         }
         catch (SQLException ex) {
@@ -104,13 +94,7 @@ public class SubjectDao implements ISubjectDao {
             ResultSet set = st.executeQuery();
             ArrayList<Subject> result = new ArrayList<Subject>();
             while (set.next()){
-                Subject subject = new Subject();
-                subject.setID(set.getInt("subject_id"));
-                subject.setName(set.getString("name"));
-                subject.setLessonCount(set.getInt("lesson_count"));
-                subject.setClassID(set.getInt("class_id"));
-                subject.setTeacherID(set.getInt("teacher_id"));
-                result.add(subject);
+                result.add(ResultSetToSubject(set));
             }
             return result;
         }
@@ -132,13 +116,7 @@ public class SubjectDao implements ISubjectDao {
             ResultSet set = st.executeQuery();
             ArrayList<Pupil> result = new ArrayList<Pupil>();
             while (set.next()){
-                Pupil pupil = new Pupil();
-                pupil.setID(set.getInt("pupil_id"));
-                pupil.setSurname(set.getString("pupils.surname"));
-                pupil.setName(set.getString("pupils.name"));
-                pupil.setClassID(set.getInt("class_id"));
-                pupil.setUserID(set.getInt("user_id"));
-                result.add(pupil);
+                result.add(PupilDao.ResultSetToPupil(set));
             }
             return result;
         }
@@ -184,13 +162,7 @@ public class SubjectDao implements ISubjectDao {
             st.setInt(1,id);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Subject subject = new Subject();
-                subject.setID(set.getInt("subject_id"));
-                subject.setName(set.getString("name"));
-                subject.setLessonCount(set.getInt("lesson_count"));
-                subject.setClassID(set.getInt("class_id"));
-                subject.setTeacherID(set.getInt("teacher_id"));
-                return subject;
+                return ResultSetToSubject(set);
             }
         }
         catch (SQLException ex) {
@@ -240,5 +212,15 @@ public class SubjectDao implements ISubjectDao {
             if (cn!=null)
                 connection.closeConnection();
         }
+    }
+
+    public static Subject ResultSetToSubject(ResultSet set) throws SQLException {
+        Subject subject = new Subject();
+        subject.setID(set.getInt("subject_id"));
+        subject.setName(set.getString("subjects.name"));
+        subject.setLessonCount(set.getInt("lesson_count"));
+        subject.setClassID(set.getInt("class_id"));
+        subject.setTeacherID(set.getInt("teacher_id"));
+        return subject;
     }
 }

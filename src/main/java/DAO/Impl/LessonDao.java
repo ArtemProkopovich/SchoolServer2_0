@@ -23,9 +23,9 @@ public class LessonDao implements ILessonDao {
     private final String SELECT_SUBJECT_LESSONS = "SELECT * FROM `lessons` WHERE `subject_id`=?";
 
     private final String SELECT_LESSON_BY_ID="SELECT * FROM `lessons` WHERE `lesson_id` = ?";
-    private final String INSERT_LESSON="INSERT INTO `lessons` (`date`, `schedule_number`, `homework`, `subject_id`) " +
-            "VALUES (?, ?, ?, ?);";
-    private final String UPDATE_LESSON="UPDATE `lessons` SET `date` = ?, `schedule_number` = ?, `homework`= ?, `subject_id` = ? " +
+    private final String INSERT_LESSON="INSERT INTO `lessons` (`date`, `schedule_number`, `homework`,`room`, `subject_id`) " +
+            "VALUES (?, ?, ?, ?, ?);";
+    private final String UPDATE_LESSON="UPDATE `lessons` SET `date` = ?, `schedule_number` = ?, `homework`= ?, `room`=?, `subject_id` = ? " +
             "WHERE lesson_id=?";
     private final String DELETE_LESSON="DELETE FROM `lessons` WHERE `lesson_id`= ?";
 
@@ -56,12 +56,7 @@ public class LessonDao implements ILessonDao {
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()) {
-                Lesson lesson = new Lesson();
-                lesson.setID(set.getInt("lesson_id"));
-                lesson.setDate(set.getDate("date"));
-                lesson.setScheduleNumber(set.getInt("schedule_number"));
-                lesson.setSubjectID(set.getInt("subject_id"));
-                result.add(lesson);
+                result.add(ResultSetToLesson(set));
             }
             return result;
         } catch (SQLException ex) {
@@ -82,12 +77,7 @@ public class LessonDao implements ILessonDao {
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()) {
-                Lesson lesson = new Lesson();
-                lesson.setID(set.getInt("lesson_id"));
-                lesson.setDate(set.getDate("date"));
-                lesson.setScheduleNumber(set.getInt("schedule_number"));
-                lesson.setSubjectID(set.getInt("subject_id"));
-                result.add(lesson);
+                result.add(ResultSetToLesson(set));
             }
             return result;
         } catch (SQLException ex) {
@@ -108,12 +98,7 @@ public class LessonDao implements ILessonDao {
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()) {
-                Lesson lesson = new Lesson();
-                lesson.setID(set.getInt("lesson_id"));
-                lesson.setDate(set.getDate("date"));
-                lesson.setScheduleNumber(set.getInt("schedule_number"));
-                lesson.setSubjectID(set.getInt("subject_id"));
-                result.add(lesson);
+                result.add(ResultSetToLesson(set));
             }
             return result;
         } catch (SQLException ex) {
@@ -133,12 +118,7 @@ public class LessonDao implements ILessonDao {
             ResultSet set = st.executeQuery();
             ArrayList<Lesson> result = new ArrayList<Lesson>();
             while (set.next()){
-                Lesson lesson = new Lesson();
-                lesson.setID(set.getInt("lesson_id"));
-                lesson.setDate(set.getDate("date"));
-                lesson.setScheduleNumber(set.getInt("schedule_number"));
-                lesson.setSubjectID(set.getInt("subject_id"));
-                result.add(lesson);
+                result.add(ResultSetToLesson(set));
             }
             return result;
         }
@@ -186,7 +166,8 @@ public class LessonDao implements ILessonDao {
             st.setDate(1, (java.sql.Date)item.getDate());
             st.setInt(2,item.getScheduleNumber());
             st.setString(3,item.getHomework());
-            st.setInt(4,item.getSubjectID());
+            st.setInt(4,item.getRoom());
+            st.setInt(5,item.getSubjectID());
             st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
             if (set.next()){
@@ -211,12 +192,7 @@ public class LessonDao implements ILessonDao {
             st.setInt(1,id);
             ResultSet set = st.executeQuery();
             if (set.next()){
-                Lesson lesson = new Lesson();
-                lesson.setID(set.getInt("lesson_id"));
-                lesson.setDate(set.getDate("date"));
-                lesson.setScheduleNumber(set.getInt("schedule_number"));
-                lesson.setSubjectID(set.getInt("subject_id"));
-                return lesson;
+                return ResultSetToLesson(set);
             }
         }
         catch (SQLException ex) {
@@ -237,8 +213,9 @@ public class LessonDao implements ILessonDao {
             st.setDate(1, (java.sql.Date)item.getDate());
             st.setInt(2,item.getScheduleNumber());
             st.setString(3,item.getHomework());
-            st.setInt(4,item.getSubjectID());
-            st.setInt(5,item.getID());
+            st.setInt(4,item.getRoom());
+            st.setInt(5,item.getSubjectID());
+            st.setInt(6,item.getID());
             st.executeUpdate();
         }
         catch (SQLException ex) {
@@ -265,5 +242,16 @@ public class LessonDao implements ILessonDao {
             if (cn!=null)
                 connection.closeConnection();
         }
+    }
+
+    public static Lesson ResultSetToLesson(ResultSet set) throws SQLException{
+        Lesson lesson = new Lesson();
+        lesson.setID(set.getInt("lesson_id"));
+        lesson.setDate(set.getDate("date"));
+        lesson.setScheduleNumber(set.getInt("schedule_number"));
+        lesson.setHomework(set.getString("homework"));
+        lesson.setRoom(set.getInt("room"));
+        lesson.setSubjectID(set.getInt("subject_id"));
+        return lesson;
     }
 }
