@@ -85,14 +85,8 @@ schoolApp.controller('pupilController', function($scope, $location, LogOut, $htt
             "pupilID" : ID,
             "date" : getDDMMYYY(day)
         };
-        var data = angular.toJson(params);
-        $http( {
-            method : 'POST',
-            url : 'getPupilDay',
-            data : 'value=' + data,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function(data) {
-            $scope.daySchedule = data;
+        $http.post('getPupilDay',params).then(function(response) {
+            $scope.daySchedule = response.data;
         });
     };
     $scope.setTomorrow = function() {
@@ -106,7 +100,7 @@ schoolApp.controller('pupilController', function($scope, $location, LogOut, $htt
         $scope.getPupilDay();
     };
     $scope.pageClass = 'page-app';
-    if (role!='pupil') {
+    if (role!='PUPIL') {
         LogOut.logout();
     }
     $scope.firstname = firstname;
@@ -125,14 +119,8 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
             "teacherID" : ID,
             "date" : getDDMMYYY(day)
         };
-        var data = angular.toJson(params);
-        $http( {
-            method : 'POST',
-            url : 'getTeacherDay',
-            data : 'value=' + data,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function(data) {
-            $scope.daySchedule = data;
+        $http.post('getTeacherDay',params).then(function(response) {
+            $scope.daySchedule = response.data;
         });
     };
     $scope.setTomorrow = function() {
@@ -149,19 +137,13 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
         var params = {
           "lessonID":lessonID
         };
-        var data = angular.toJson(params);
-        $http( {
-            method : 'POST',
-            url : 'getTeacherLesson',
-            data : 'value=' + data,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function(data) {
-            $scope.subject = data.subject;
-            $scope.timerange = data.timerange;
-            $scope.classGrade = data.classGrade;
-            $scope.classLetter = data.classLetter;
-            $scope.homework = data.homework;
-            $scope.pupils = data.pupils;
+        $http.post('getTeacherLesson',params).then(function(response) {
+            $scope.subject = response.data.subject;
+            $scope.timerange = response.data.timerange;
+            $scope.classGrade = response.data.classGrade;
+            $scope.classLetter = response.data.classLetter;
+            $scope.homework = response.data.homework;
+            $scope.pupils = response.data.pupils;
         });
 
     };
@@ -171,7 +153,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
         document.getElementById('schedule').style.animation = 'slideOutLeft 1s both ease-in';
     };
     $scope.pageClass = 'page-app';
-    if (role!='teacher') {
+    if (role!='TEACHER') {
         LogOut.logout();
     }
     $scope.firstname = firstname;
@@ -182,7 +164,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
 });
 schoolApp.controller('adminController', function($scope, LogOut) {
     $scope.pageClass = 'page-app';
-    if (role!='admin') {
+    if (role!='ADMIN') {
        LogOut.logout();
     }
     $scope.logout = function() {
