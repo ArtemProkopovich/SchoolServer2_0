@@ -10,13 +10,13 @@ import com.opensymphony.xwork2.ActionSupport;
  * Created by Артем on 08.05.2016.
  */
 public class AddSubject extends ActionSupport {
-    public Subject subject;
+    public Subject subject = new Subject();
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
         try {
-            if (subject.getName() != null && subject.getClassID() != 0 && subject.getTeacherID() != 0) {
-                subject = scheduleService.AddSubject(subject);
+            if (subject.getName() != null) {
+                scheduleService.AddSubject(subject);
                 return SUCCESS;
             }
             return ERROR;
@@ -25,6 +25,18 @@ public class AddSubject extends ActionSupport {
         } catch (Exception ex) {
             return ERROR;
         }
+    }
+
+    public void setTeacherID(int teacherID) {
+        subject.setTeacherID(teacherID);
+    }
+
+    public void setClassID(int classID) {
+        subject.setClassID(classID);
+    }
+
+    public void setName(String name) {
+        subject.setName(name);
     }
 
     public Subject getSubject() {

@@ -2,15 +2,14 @@ package Actions.Admin;
 
 import Entities.Class;
 import Services.Interfacies.IAdminService;
-import Services.Interfacies.IUserService;
 import Services.ServiceException;
 import Services.ServiceFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * Created by Артем on 08.05.2016.
+ * Created by Артем on 25.05.2016.
  */
-public class AddClass extends ActionSupport {
+public class UpdateClass extends ActionSupport {
 
     public Class cls = new Class();
     private IAdminService adminService = ServiceFactory.getAdminService();
@@ -18,7 +17,7 @@ public class AddClass extends ActionSupport {
     public String execute() throws Exception {
         try {
             if (cls.getGrade()!=0 && cls.getLetter()!=null) {
-                adminService.AddClass(cls);
+                adminService.UpdateClass(cls);
                 return SUCCESS;
             }
             return ERROR;
@@ -28,6 +27,14 @@ public class AddClass extends ActionSupport {
         }catch (Exception ex) {
             return ERROR;
         }
+    }
+
+    public void setClassID(int classID) {
+        cls.setID(classID);
+    }
+
+    public int getClassID(){
+        return cls.getID();
     }
 
     public void setClassGrade(int classGrade){

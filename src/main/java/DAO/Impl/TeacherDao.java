@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class TeacherDao implements ITeacherDao {
 
+    private final String SELECT_SUBJECTS_WITH_NULL_TEACHER = "SELECT * FROM subjects WHERE teacher_id IS NULL";
     private final String SELECT_SUBJECTS_BY_TEACHER = "SELECT * FROM subjects WHERE subjects.teacher_id = ?";
     private final String SELECT_USER_BY_TEACHER_ID = "SELECT * FROM users JOIN teachers ON users.user_id=teachers.user_id WHERE teacher_id = ?";
     private final String INSERT_TEACHER = "INSERT INTO `teachers` (`surname`, `name`, `type`, `user_id`) VALUES (?, ?, ?, ?)";
@@ -75,8 +76,13 @@ public class TeacherDao implements ITeacherDao {
         Connection cn = null;
         try {
             cn = connection.getConnection();
-            PreparedStatement st = cn.prepareStatement(SELECT_SUBJECTS_BY_TEACHER);
-            st.setInt(1, teacherID);
+            PreparedStatement st;
+            if (teacherID<=0)
+                st=cn.prepareStatement(SELECT_SUBJECTS_WITH_NULL_TEACHER);
+            else {
+                st = cn.prepareStatement(SELECT_SUBJECTS_BY_TEACHER);
+                st.setInt(1, teacherID);
+            }
             ResultSet set = st.executeQuery();
             ArrayList<Subject> result = new ArrayList<Subject>();
             while (set.next()) {

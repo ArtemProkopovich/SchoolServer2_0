@@ -1,6 +1,7 @@
 package Services.Impl;
 
 import ActionEntities.PupilDayLesson;
+import ActionEntities.ScheduleClassLesson;
 import ActionEntities.TeacherDayLesson;
 import DAO.Impl.UnitOfWork;
 import DAO.MySqlConnection;
@@ -59,14 +60,7 @@ public class ScheduleServiceTest {
 
     @Test
     public void getClassDayLessons() throws Exception {
-        List<SchedulePupilLesson> lessonList = service.GetClassDayLessons(1, new GregorianCalendar(2016, 04, 24).getTime());
-        Assert.assertNotNull(lessonList);
-        Assert.assertTrue(lessonList.size() > 0);
-    }
-
-    @Test
-    public void getNextLessons() throws Exception {
-        List<Lesson> lessonList = service.GetNextLessons(1, 10);
+        List<ScheduleClassLesson> lessonList = service.GetClassDayLessons(1, 0);
         Assert.assertNotNull(lessonList);
         Assert.assertTrue(lessonList.size() > 0);
     }

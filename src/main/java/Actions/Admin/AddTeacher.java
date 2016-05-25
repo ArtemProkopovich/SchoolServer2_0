@@ -1,7 +1,10 @@
 package Actions.Admin;
 
 import Entities.Pupil;
+import Entities.Role;
 import Entities.Teacher;
+import Entities.User;
+import Services.Interfacies.IAdminService;
 import Services.Interfacies.IUserService;
 import Services.ServiceException;
 import Services.ServiceFactory;
@@ -11,13 +14,15 @@ import com.opensymphony.xwork2.ActionSupport;
  * Created by Артем on 08.05.2016.
  */
 public class AddTeacher extends ActionSupport {
-    public Teacher teacher;
-    private IUserService userService = ServiceFactory.getUserService();
+    public Teacher teacher = new Teacher();
+    public User user = new User();
+    private IAdminService adminService = ServiceFactory.getAdminService();
 
     public String execute() throws Exception {
         try {
             if (teacher.getName()!=null && teacher.getSurname()!=null) {
-                teacher = userService.AddTeacher(teacher);
+                user.setRole(Role.TEACHER);
+                adminService.AddTeacher(teacher, user);
                 return SUCCESS;
             }
             return ERROR;
@@ -27,6 +32,19 @@ public class AddTeacher extends ActionSupport {
             return ERROR;
         }
     }
+
+    public void setFirstname(String firstname){teacher.setName(firstname);}
+
+    public void setLastname(String lastname){teacher.setSurname(lastname);}
+
+    public void setType(String type){teacher.setType(type);}
+
+    public void setLogin(String login){user.setLogin(login);}
+
+    public void setEmail(String email){user.setEmail(email);}
+
+    public void setPassword(String password){user.setPassword(password);}
+
     public Teacher getTeacher() {
         return teacher;
     }

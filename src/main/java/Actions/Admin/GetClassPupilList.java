@@ -1,9 +1,7 @@
 package Actions.Admin;
 
 import ActionEntities.PupilUser;
-import Entities.Pupil;
 import Services.Interfacies.IAdminService;
-import Services.Interfacies.IUserService;
 import Services.ServiceException;
 import Services.ServiceFactory;
 import com.opensymphony.xwork2.ActionSupport;
@@ -11,15 +9,17 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 
 /**
- * Created by Артем on 08.05.2016.
+ * Created by Артем on 25.05.2016.
  */
-public class GetPupilList  extends ActionSupport {
+public class GetClassPupilList extends ActionSupport {
+
+    public int classID;
     public List<PupilUser> pupilList;
     private IAdminService adminService = ServiceFactory.getAdminService();
 
     public String execute() throws Exception {
         try {
-            pupilList = adminService.GetPupilList();
+            pupilList = adminService.GetPupilListByClassID(classID);
             return SUCCESS;
 
         } catch (ServiceException ex) {
@@ -35,5 +35,13 @@ public class GetPupilList  extends ActionSupport {
 
     public List<PupilUser> getPupilList() {
         return pupilList;
+    }
+
+    public void setClassID(int classID) {
+        this.classID = classID;
+    }
+
+    public int getClassID(){
+        return classID;
     }
 }
