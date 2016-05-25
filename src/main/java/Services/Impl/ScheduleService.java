@@ -141,7 +141,19 @@ public class ScheduleService implements IScheduleService {
 
     public void RemoveLesson(int lessonID) throws ServiceException {
         try {
-            uof.getLessonDao().Delete(lessonID);
+            Lesson dbLesson = uof.getLessonDao().Select(lessonID);
+            List<Lesson> lessonList = uof.getLessonDao().GetSubjectLessons(dbLesson.getSubjectID());
+            List<Lesson> removeList = new ArrayList<Lesson>();
+            Calendar startDate = new GregorianCalendar();
+            startDate.setTime(dbLesson.getDate());
+            Calendar endDate = new GregorianCalendar(2017, 03, 30);
+            while (startDate.before(endDate)) {
+                for (Lesson lesson : lessonList) {
+                    if (lesson.getDate().equals(startDate.getTime()))
+                        uof.getLessonDao().Delete(lesson.getID());
+                }
+                startDate.add(Calendar.WEEK_OF_YEAR, 1);
+            }
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
