@@ -1,6 +1,7 @@
 package Actions.Admin;
 
 import Entities.Class;
+import Services.Interfacies.IAdminService;
 import Services.Interfacies.IUserService;
 import Services.ServiceException;
 import Services.ServiceFactory;
@@ -13,11 +14,11 @@ import java.util.List;
  */
 public class GetClassList extends ActionSupport {
     public List<Class> clsList;
-    private IUserService userService = ServiceFactory.getUserService();
+    private IAdminService adminService = ServiceFactory.getAdminService();
 
     public String execute() throws Exception {
         try {
-                clsList = userService.GetClassList();
+                clsList = adminService.GetClassList();
                 return SUCCESS;
 
         } catch (ServiceException ex) {

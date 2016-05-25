@@ -1,7 +1,9 @@
 package Actions.Admin;
 
+import ActionEntities.TeacherUser;
 import Entities.Class;
 import Entities.Teacher;
+import Services.Interfacies.IAdminService;
 import Services.Interfacies.IUserService;
 import Services.ServiceException;
 import Services.ServiceFactory;
@@ -13,12 +15,12 @@ import java.util.List;
  * Created by Артем on 08.05.2016.
  */
 public class GetTeacherList  extends ActionSupport {
-    public List<Teacher> teacherList;
-    private IUserService userService = ServiceFactory.getUserService();
+    public List<TeacherUser> teacherList;
+    private IAdminService adminService = ServiceFactory.getAdminService();
 
     public String execute() throws Exception {
         try {
-            teacherList = userService.GetTeacherList();
+            teacherList = adminService.GetTeacherList();
             return SUCCESS;
 
         } catch (ServiceException ex) {
@@ -28,11 +30,11 @@ public class GetTeacherList  extends ActionSupport {
         }
     }
 
-    public void setTeacherList(List<Teacher> teacherList) {
+    public void setTeacherList(List<TeacherUser> teacherList) {
         this.teacherList = teacherList;
     }
 
-    public List<Teacher> getTeacherList(){
+    public List<TeacherUser> getTeacherList(){
         return teacherList;
     }
 }

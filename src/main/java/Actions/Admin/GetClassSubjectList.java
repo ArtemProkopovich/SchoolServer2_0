@@ -1,5 +1,6 @@
 package Actions.Admin;
 
+import ActionEntities.FullSubject;
 import Entities.Subject;
 import Entities.Class;
 import Services.Interfacies.IScheduleService;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by Артем on 22.05.2016.
  */
 public class GetClassSubjectList extends ActionSupport {
-    public List<Subject> subjectList;
+    public List<FullSubject> subjectList;
     public int classID;
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
@@ -37,11 +38,11 @@ public class GetClassSubjectList extends ActionSupport {
         this.classID = classID;
     }
 
-    public void setSubjectList(List<Subject> clsList) {
+    public void setSubjectList(List<FullSubject> clsList) {
         this.subjectList = subjectList;
     }
 
-    public List<Subject> getSubjectList() {
+    public List<FullSubject> getSubjectList() {
         return subjectList;
     }
 

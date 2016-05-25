@@ -2,14 +2,8 @@ package Services;
 
 import DAO.Impl.UnitOfWork;
 import DAO.MySqlConnection;
-import Services.Impl.PrintService;
-import Services.Impl.ScheduleService;
-import Services.Impl.StudyService;
-import Services.Impl.UserService;
-import Services.Interfacies.IPrintService;
-import Services.Interfacies.IScheduleService;
-import Services.Interfacies.IStudyService;
-import Services.Interfacies.IUserService;
+import Services.Impl.*;
+import Services.Interfacies.*;
 
 /**
  * Created by Артем on 08.05.2016.
@@ -39,5 +33,9 @@ public class ServiceFactory {
 
     public static IStudyService getStudyService(){
         return new StudyService(new UnitOfWork(connection));
+    }
+
+    public static IAdminService getAdminService(){
+        return new AdminService(new UnitOfWork(connection));
     }
 }

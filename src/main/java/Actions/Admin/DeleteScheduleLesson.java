@@ -1,22 +1,22 @@
 package Actions.Admin;
 
 import Services.Interfacies.IAdminService;
-import Services.Interfacies.IUserService;
+import Services.Interfacies.IScheduleService;
 import Services.ServiceException;
 import Services.ServiceFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * Created by Артем on 08.05.2016.
+ * Created by Артем on 25.05.2016.
  */
-public class DeletePupil extends ActionSupport {
+public class DeleteScheduleLesson extends ActionSupport {
     public int id;
-    private IAdminService adminService = ServiceFactory.getAdminService();
+    private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
         try {
             if (id!=0) {
-                adminService.RemovePupil(id);
+                scheduleService.RemoveLesson(id);
                 return SUCCESS;
             }
             return ERROR;
@@ -28,11 +28,11 @@ public class DeletePupil extends ActionSupport {
         }
     }
 
-    public void setPupilID(int pupilID) {
-        this.id = pupilID;
+    public void setLessonID(int lessonID) {
+        this.id = lessonID;
     }
 
-    public int getPupilID(){
+    public int getLessonID(){
         return id;
     }
 }

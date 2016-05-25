@@ -24,7 +24,7 @@ public class Login extends ActionSupport implements SessionAware {
     @Override
     public String execute() throws Exception {
         try {
-            if ((userData = userService.Login(userData.getLogin(), userData.getPassword()))!=null) {
+            if (userData.getLogin()!=null && userData.getPassword()!=null && (userData = userService.Login(userData.getLogin(), userData.getPassword()))!=null) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put(USER, userData);
                 setSession(map);

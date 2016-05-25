@@ -28,11 +28,11 @@ public class DeleteSubject extends ActionSupport {
         }
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSubjectID(int subjectID) {
+        this.id = subjectID;
     }
 
-    public int getId(){
+    public int getSubjectID(){
         return id;
     }
 }

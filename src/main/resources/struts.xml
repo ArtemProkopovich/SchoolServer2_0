@@ -83,4 +83,226 @@
             </result>
         </action>
     </package>
+    <package name="admin" extends="json-default">
+        <interceptors>
+            <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
+        </interceptors>
+        <action name ="getTeachers" class="Actions.Admin.GetTeacherList" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">teacherList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="editTeacher" class="Actions.Admin.UpdateTeacher" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="addTeacher" class="Actions.Admin.AddTeacher" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="deleteTeacher" class="Actions.Admin.DeleteTeacher" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+
+        <action name ="getSubjects" class="Actions.Admin.GetSubjectList" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">subjectList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="getSubjectsByTeacher" class="Actions.Admin.GetTeacherSubjectList" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">subjectList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="getSubjectsByClass" class="Actions.Admin.GetClassSubjectList" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">subjectList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+
+        <action name ="editSubject" class="Actions.Admin.UpdateSubject" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="addSubject" class="Actions.Admin.AddSubject" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="deleteSubject" class="Actions.Admin.DeleteSubject" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+
+        <action name ="getClasses" class="Actions.Admin.GetClassList" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">clsList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="editClass" class="Actions.Admin.UpdateClass" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="addClass" class="Actions.Admin.AddClass" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="deleteClass" class="Actions.Admin.DeleteClass" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+
+        <action name ="getPupils" class="Actions.Admin.GetClassPupilList" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">pupilList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="editPupil" class="Actions.Admin.UpdatePupil" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="addPupil" class="Actions.Admin.AddPupil" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="deletePupil" class="Actions.Admin.DeletePupil" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+
+        <action name ="getClassDaySchedule" class="Actions.Admin.GetClassDaySchedule" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">lessonList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="addLesson" class="Actions.Admin.AddScheduleLesson" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="editLesson" class="Actions.Admin.UpdateScheduleLesson" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+        <action name ="deleteLesson" class="Actions.Admin.DeleteScheduleLesson" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="statusCode">200</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
+    </package>
 </struts>

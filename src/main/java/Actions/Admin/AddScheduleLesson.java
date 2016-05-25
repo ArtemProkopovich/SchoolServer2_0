@@ -13,15 +13,15 @@ import java.util.List;
 /**
  * Created by Артем on 08.05.2016.
  */
-public class CreateSchedule extends ActionSupport {
-    public List<Lesson> lessonList;
-    public int dayOfWeek;
+public class AddScheduleLesson extends ActionSupport {
+    public Lesson lesson = new Lesson();
+    public int day;
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
         try {
-            if (lessonList != null && dayOfWeek > 0 && dayOfWeek < 8) {
-                scheduleService.CreateScheduleForDay(lessonList, dayOfWeek);
+            if (day >= 0 && day <= 6) {
+                scheduleService.AddLesson(lesson, day);
                 return SUCCESS;
             }
             return ERROR;
@@ -32,19 +32,17 @@ public class CreateSchedule extends ActionSupport {
         }
     }
 
-    public List<Lesson> getLessonList() {
-        return lessonList;
-    }
+    public void setSubjectID(int subjectID){lesson.setSubjectID(subjectID);}
 
-    public void setLessonList(List<Lesson> lessonList) {
-        this.lessonList = lessonList;
-    }
+    public void setNumber(int number){lesson.setSubjectID(number);}
+
+    public void setAuditorium(int auditorium){lesson.setSubjectID(auditorium);}
 
     public int getDayOfWeek() {
-        return dayOfWeek;
+        return day;
     }
 
-    public void setDayOfWeek(int dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public void setDay(int day) {
+        this.day = day;
     }
 }

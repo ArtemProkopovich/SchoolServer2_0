@@ -15,8 +15,8 @@ public class UpdateSubject extends ActionSupport {
 
     public String execute() throws Exception {
         try {
-            if (subject.getID()!=0 && subject.getTeacherID()!=0 && subject.getClassID()!=0 && subject.getName() != null && subject.getClassID() != 0 && subject.getTeacherID() != 0) {
-                subject = scheduleService.UpdateSubject(subject);
+            if (subject.getName() != null) {
+                scheduleService.UpdateSubject(subject);
                 return SUCCESS;
             }
             return ERROR;
@@ -25,6 +25,22 @@ public class UpdateSubject extends ActionSupport {
         } catch (Exception ex) {
             return ERROR;
         }
+    }
+
+
+    public void setSubjectID(int subjectID) {
+        subject.setID(subjectID);
+    }
+    public void setTeacherID(int teacherID) {
+        subject.setTeacherID(teacherID);
+    }
+
+    public void setClassID(int classID) {
+        subject.setClassID(classID);
+    }
+
+    public void setName(String name) {
+        subject.setName(name);
     }
 
     public Subject getSubject() {

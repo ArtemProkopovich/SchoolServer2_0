@@ -1,16 +1,4 @@
-DROP TABLE IF EXISTS `pupils` CASCADE
-;
-
-DROP TABLE IF EXISTS `teachers` CASCADE
-;
-
-DROP TABLE IF EXISTS `users` CASCADE
-;
-
 DROP TABLE IF EXISTS `classes` CASCADE
-;
-
-DROP TABLE IF EXISTS `subjects` CASCADE
 ;
 
 DROP TABLE IF EXISTS `lessons` CASCADE
@@ -19,7 +7,19 @@ DROP TABLE IF EXISTS `lessons` CASCADE
 DROP TABLE IF EXISTS `marks` CASCADE
 ;
 
+DROP TABLE IF EXISTS `pupils` CASCADE
+;
+
 DROP TABLE IF EXISTS `roles` CASCADE
+;
+
+DROP TABLE IF EXISTS `subjects` CASCADE
+;
+
+DROP TABLE IF EXISTS `teachers` CASCADE
+;
+
+DROP TABLE IF EXISTS `users` CASCADE
 ;
 
 CREATE TABLE `classes`
@@ -58,8 +58,8 @@ CREATE TABLE `pupils`
 	`pupil_id` INT NOT NULL AUTO_INCREMENT ,
 	`surname` VARCHAR(50) NOT NULL,
 	`name` VARCHAR(50) NOT NULL,
-	`user_id` INT,
-	`class_id` INT NOT NULL,
+	`user_id` INT NOT NULL,
+	`class_id` INT,
 	CONSTRAINT `PK_pupils` PRIMARY KEY (`pupil_id`)
 )
 ;
@@ -77,8 +77,8 @@ CREATE TABLE `subjects`
 	`subject_id` INT NOT NULL AUTO_INCREMENT ,
 	`name` VARCHAR(50) NOT NULL,
 	`lesson_count` INT NOT NULL,
-	`class_id` INT NOT NULL,
-	`teacher_id` INT NOT NULL,
+	`class_id` INT,
+	`teacher_id` INT,
 	CONSTRAINT `PK_subjects` PRIMARY KEY (`subject_id`)
 )
 ;
@@ -89,7 +89,7 @@ CREATE TABLE `teachers`
 	`surname` VARCHAR(50) NOT NULL,
 	`name` VARCHAR(50) NOT NULL,
 	`type` VARCHAR(100),
-	`user_id` INT,
+	`user_id` INT NOT NULL,
 	CONSTRAINT `PK_teachers` PRIMARY KEY (`teacher_id`)
 )
 ;
@@ -122,32 +122,32 @@ ALTER TABLE `marks`
 
 ALTER TABLE `pupils` 
  ADD CONSTRAINT `FK_pupils_classes`
-	FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`) ON DELETE Cascade ON UPDATE Cascade
+	FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`) ON DELETE Set Null ON UPDATE Cascade
 ;
 
 ALTER TABLE `pupils` 
  ADD CONSTRAINT `FK_pupils_users`
-	FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE Cascade ON UPDATE Cascade
+	FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE Restrict ON UPDATE Cascade
 ;
 
 ALTER TABLE `subjects` 
  ADD CONSTRAINT `FK_subjects_classes`
-	FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`) ON DELETE Cascade ON UPDATE Cascade
+	FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`) ON DELETE Set Null ON UPDATE Cascade
 ;
 
 ALTER TABLE `subjects` 
  ADD CONSTRAINT `FK_subjects_teachers`
-	FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`teacher_id`) ON DELETE Cascade ON UPDATE Cascade
+	FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`teacher_id`) ON DELETE Set Null ON UPDATE Cascade
 ;
 
 ALTER TABLE `teachers` 
  ADD CONSTRAINT `FK_teachers_users`
-	FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE Cascade ON UPDATE Cascade
+	FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE Restrict ON UPDATE Cascade
 ;
 
 ALTER TABLE `users` 
  ADD CONSTRAINT `FK_users_role`
-	FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE Cascade ON UPDATE Cascade
+	FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE Restrict ON UPDATE Cascade
 ;
 
 INSERT INTO `school_test_db`.`roles` (`role_id`, `type`) VALUES ('1', 'admin');
@@ -160,12 +160,14 @@ INSERT INTO `school_test_db`.`users` (`login`, `password`, `email`, `role_id`) V
 INSERT INTO `school_test_db`.`users` (`login`, `password`, `email`, `role_id`) VALUES ('pup_user', 'pup_pass', 'pupkin@mail.com', '3');
 INSERT INTO `school_test_db`.`users` (`login`, `password`, `email`, `role_id`) VALUES ('sta_user', 'sta_pass', 'stalin@mail.com', '3');
 INSERT INTO `school_test_db`.`users` (`login`, `password`, `email`, `role_id`) VALUES ('kuz_user', 'kuz_pass', 'kuznecov@mail.com', '2');
+INSERT INTO `school_test_db`.`users` (`login`, `password`, `email`, `role_id`) VALUES ('und_user', 'und_pass', 'und@mail.com', '3');
 INSERT INTO `school_test_db`.`classes` (`grade`, `letter`) VALUES ('5', 'B');
 INSERT INTO `school_test_db`.`classes` (`grade`, `letter`) VALUES ('7', 'A');
 INSERT INTO `school_test_db`.`pupils` (`surname`, `name`, `user_id`, `class_id`) VALUES ('Ivanov', 'Ivan', '2', '1');
 INSERT INTO `school_test_db`.`pupils` (`surname`, `name`, `user_id`, `class_id`) VALUES ('Sidorov', 'Sidor', '3', '1');
 INSERT INTO `school_test_db`.`pupils` (`surname`, `name`, `user_id`, `class_id`) VALUES ('Pupkin', 'Vasya', '5', '2');
 INSERT INTO `school_test_db`.`pupils` (`surname`, `name`, `user_id`, `class_id`) VALUES ('Stalin', 'Iosya', '6', '2');
+INSERT INTO `school_test_db`.`pupils` (`surname`, `name`, `user_id`) VALUES ('Undefined', 'Undef', '8');
 INSERT INTO `school_test_db`.`teachers` (`surname`, `name`, `type`, `user_id`) VALUES ('Petrov', 'Petr', 'super_teacher', '4');
 INSERT INTO `school_test_db`.`teachers` (`surname`, `name`, `type`, `user_id`) VALUES ('Kuznecov', 'Kuznec', 'maths_teacher', '7');
 INSERT INTO `school_test_db`.`subjects` (`name`, `lesson_count`, `class_id`, `teacher_id`) VALUES ('Maths', '20', '1', '1');

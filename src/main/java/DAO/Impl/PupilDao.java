@@ -107,12 +107,6 @@ public class PupilDao implements IPupilDao {
             ResultSet set = st.executeQuery();
             ArrayList<Subject> result = new ArrayList<Subject>();
             while (set.next()){
-                Subject subject = new Subject();
-                subject.setID(set.getInt("subject_id"));
-                subject.setName(set.getString("subjects.name"));
-                subject.setLessonCount(set.getInt("lesson_count"));
-                subject.setClassID(set.getInt("class_id"));
-                subject.setTeacherID(set.getInt("teacher_id"));
                 result.add(SubjectDao.ResultSetToSubject(set));
             }
             return result;

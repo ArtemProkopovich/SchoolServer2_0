@@ -2,6 +2,7 @@ package Actions.Admin;
 
 import Entities.Class;
 import Entities.Pupil;
+import Services.Interfacies.IAdminService;
 import Services.Interfacies.IUserService;
 import Services.ServiceException;
 import Services.ServiceFactory;
@@ -12,12 +13,12 @@ import com.opensymphony.xwork2.ActionSupport;
  */
 public class DeleteClass extends ActionSupport {
     public int id;
-    private IUserService userService = ServiceFactory.getUserService();
+    private IAdminService adminService = ServiceFactory.getAdminService();
 
     public String execute() throws Exception {
         try {
             if (id!=0) {
-                userService.RemoveClass(id);
+                adminService.RemoveClass(id);
                 return SUCCESS;
             }
             return ERROR;
@@ -29,11 +30,11 @@ public class DeleteClass extends ActionSupport {
         }
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setClassID(int classID) {
+        this.id = classID;
     }
 
-    public int getId(){
+    public int getClassID(){
         return id;
     }
 }
