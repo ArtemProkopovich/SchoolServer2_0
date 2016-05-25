@@ -11,18 +11,53 @@
         <div class="datecontainer" align="center">{{day}}</div>
         <button class="navigate" ng-click="setTomorrow()">></button>
         <table align="center">
+            <tr>
+                <th>Time</th>
+                <th>Subject | Class</th>
+                <th>Go to</th>
+            </tr>
             <tbody>
             <tr ng-repeat="lesson in daySchedule">
-                <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
-                <td><h3>{{lesson.subject}} {{lesson.classGrade}} {{lesson.classLetter}}</h3><p>{{lesson.auditorium}}</p></td>
-                <td><button class="navigate" ng-click="goToLesson(lesson.lessonID)">></button></td>
+                <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timeRange}}</p></td>
+                <td><h3>{{lesson.subject}} {{lesson.classGrade}}-{{lesson.classLetter}}</h3><p>{{lesson.auditorium}}</p></td>
+                <td><button class="goto" ng-click="goToLesson(lesson.lessonID)">></button></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div id="lesson" class="tabcontent maintab">
-        <h3>{{subject}} {{classGrade}} {{classLetter}}</h3><p>{{timerange}}</p>
-        <p>Homework: {{homework}} </p>
+    <div id="lesson" class="tabcontent maintab" align="center">
+        <div class="window" style="display: block;">
+            <div class="formheader"><h5>Lesson info</h5></div>
+            <div align="left" style="padding-left: 20px;">
+                <p>
+                    Subject: {{subject}}<br>
+                    Class: {{classGrade}}-{{classLetter}}<br>
+                    Time: {{timerange}}<br>
+                    Homework:<input class="in shortin" type="text" name="homework" ng-model="newHomework">
+                    <button class="button minibutton" ng-click="goToSchedule()">Back</button>
+                    <button class="button minibutton" ng-click="resetHomework()">Reset</button>
+                    <button class="button minibutton" ng-click="setHomework(curLessonID)">Save</button>
+                </p>
+                <div style="height: 1px;"></div>
+            </div>
+        </div>
+        <br>
+        <table align="center">
+            <tr>
+                <th>Number</th>
+                <th>Pupil name</th>
+                <th>Mark</th>
+                <th>Set</th>
+            </tr>
+            <tbody>
+            <tr ng-repeat="pupil in pupils">
+                <td align="center"><p>{{pupil.number}}</p></td>
+                <td align="center"><p>{{pupil.surname}} {{pupil.name}}</p></td>
+                <td align="center"><p>{{pupil.mark}}</p></td>
+                <td><button class="goto" ng-click="openMarkWindow(pupil.pupilID, pupil.surname, pupil.name)">...</button></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="winlayer" align="center">
@@ -39,6 +74,27 @@
             </p>
             <button class="button">Download</button><div style="height: 1px;"></div>
         </div>
+    </div>
+</div>
+<div class="winlayer" align="center" style="top:50%">
+    <div id="markwindow" class="window">
+        <div class="formheader">
+            <h5>Set mark</h5>
+            <button class="close" onclick="toggleWindow('markwindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>Pupil:{{curSurname}} {{curName}}</p>
+            <form name="LoginForm" ng-submit="setMark(curPupilID, curLessonID)">
+                <input class="in" type="text" name="mark" placeholder="mark" ng-model="mark">
+                <input class="button" type="submit" name="commit" value="Apply">
+            </form>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+<div class="toastlayer" align="center">
+    <div id="toast" class="toast" style="display: none">
+        {{ message }}
     </div>
 </div>
 

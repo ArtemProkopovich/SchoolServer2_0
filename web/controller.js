@@ -48,11 +48,11 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
         $http.post('login',params).then(function(response) {
             console.log(response);
             role = response.data.role;
-            firstname = response.data.firstname;
-            lastname = response.data.lastname;
+            firstname = response.data.name;
+            lastname = response.data.surname;
             classGrade = response.data.classGrade;
             classLetter = response.data.classLetter;
-            teacherType = response.data.teacherType;
+            teacherType = response.data.type;
             ID = response.data.entityID;
             if (role=='PUPIL') {
                 $location.path('/pupil');
@@ -66,11 +66,7 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
             } else {
                 $scope.loginmsg = 'Incorrect login or password';
             }
-            var toast = document.getElementById('toast');
-            toast.classList.remove("toast");
-            toast.offsetWidth = toast.offsetWidth;
-            toast.classList.add("toast");
-            toast.style.display = 'block';
+            showToast();
         }).error(function () {
             console.log("Incorrect login or password.");
         });
@@ -133,24 +129,67 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
         $scope.day = getDayName(day)+', '+getDDMMYYY(day);
         $scope.getTeacherDay();
     };
+    $scope.resetHomework = function() {
+        $scope.newHomework = $scope.homework;
+    };
+    $scope.setHomework = function(lessonID) {
+        var params = {
+            "lessonID":lessonID,
+            "homework":$scope.newHomework
+        };
+        $http.post('setHomework',params).success(function() {
+            $scope.message = 'Homework is saved.';
+            $scope.homework = $scope.newHomework;
+        }).error(function() {
+            $scope.message = "Error: can't save homework.";
+        });
+        showToast();
+    };
     $scope.loadLesson = function(lessonID) {
         var params = {
           "lessonID":lessonID
         };
         $http.post('getTeacherLesson',params).then(function(response) {
             $scope.subject = response.data.subject;
-            $scope.timerange = response.data.timerange;
+            $scope.timerange = response.data.timeRange;
             $scope.classGrade = response.data.classGrade;
             $scope.classLetter = response.data.classLetter;
             $scope.homework = response.data.homework;
             $scope.pupils = response.data.pupils;
+            $scope.curLessonID = lessonID;
+            $scope.resetHomework();
         });
 
+    };
+    $scope.goToSchedule = function() {
+        document.getElementById('lesson').style.animation = 'slideOutRight 1s both ease-in';
+        document.getElementById('schedule').style.animation = 'slideInLeft 1s both ease-in';
     };
     $scope.goToLesson = function(lessonID) {
         $scope.loadLesson(lessonID);
         document.getElementById('lesson').style.animation = 'slideInRight 1s both ease-in';
         document.getElementById('schedule').style.animation = 'slideOutLeft 1s both ease-in';
+    };
+    $scope.openMarkWindow = function(pupilID, pupilSurname, pupilName) {
+        $scope.curPupilID = pupilID;
+        $scope.curSurname = pupilSurname;
+        $scope.curName = pupilName;
+        document.getElementById('markwindow').style.display = 'block';
+    };
+    $scope.setMark = function(pupilID, lessonID) {
+        var params = {
+            "lessonID":lessonID,
+            "pupilID":pupilID,
+            "mark":$scope.mark
+        };
+        $http.post('setMark',params).success(function() {
+            $scope.message = 'Mark is saved.';
+            document.getElementById('markwindow').style.display = 'none';
+        }).error(function() {
+            $scope.message = "Error: can't save mark.";
+        });
+        showToast();
+        $scope.loadLesson(lessonID);
     };
     $scope.pageClass = 'page-app';
     if (role!='TEACHER') {
@@ -232,4 +271,11 @@ function getDayName (date) {
         case 5: return 'Friday';
         case 6: return 'Saturday';
     }
+}
+function showToast() {
+    var toast = document.getElementById('toast');
+    toast.classList.remove("toast");
+    toast.offsetWidth = toast.offsetWidth;
+    toast.classList.add("toast");
+    toast.style.display = 'block';
 }

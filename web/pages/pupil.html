@@ -1,5 +1,5 @@
 <div class="vertcontainer" align="left">
-	<h3>{{lastname}} {{firstname}}</h3><p>{{classGrade}} {{classLetter}}</p>
+	<h3>{{lastname}} {{firstname}}</h3><p>{{classGrade}}-{{classLetter}}</p>
 </div>
 <div class="vertcontainer" align="right">
 	<button class="button" ng-click="logout()">Log out</button>
@@ -12,10 +12,15 @@
 
 	<div class="scrollable">
 		<table align="center">
+			<tr>
+				<th>Time</th>
+				<th>Subject | Homework</th>
+				<th>Mark</th>
+			</tr>
 			<tbody>
 				<tr ng-repeat="lesson in daySchedule">
-					<td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timerange}}</p></td>
-					<td><h3>{{lesson.subject}}</h3><p>{{lesson.homework}}</p></td>
+					<td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timeRange}}</p></td>
+					<td><h3>{{lesson.subject}} {{lesson.teacher}} {{lesson.auditorium}}</h3><p>{{lesson.homework}}</p></td>
 					<td align="center"><h3>{{lesson.mark}}</h3></td>
 				</tr>
 			</tbody>
