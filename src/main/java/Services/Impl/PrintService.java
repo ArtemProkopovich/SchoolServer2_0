@@ -760,11 +760,14 @@ public class PrintService implements IPrintService {
     private List<List<ScheduleTeacherLesson>> GetTeacherWeekSchedule(Teacher teacher) throws DAOException
     {
         try{
+            Calendar startDate = new GregorianCalendar(2016, 04, 01);
+            while (startDate.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+                startDate.add(Calendar.DAY_OF_MONTH, 1);
             List<List<ScheduleTeacherLesson>> resultList = new ArrayList<List<ScheduleTeacherLesson>>();
             for(int i=0;i<7;i++) {
                 List<ScheduleTeacherLesson> dayLessonList = new ArrayList<ScheduleTeacherLesson>();
                 List<Lesson> lessonList = uof.getLessonDao().GetTeacherDayLessons(teacher.getID(), new Date());
-                for(Lesson l : lessonList) {
+                for (Lesson l : lessonList) {
                     Subject subject = uof.getSubjectDao().Select(l.getID());
                     Class cls = uof.getClassDao().Select(subject.getClassID());
                     ScheduleTeacherLesson stl = new ScheduleTeacherLesson();
@@ -774,6 +777,7 @@ public class PrintService implements IPrintService {
                     dayLessonList.add(stl);
                 }
                 resultList.add(dayLessonList);
+                startDate.add(Calendar.DAY_OF_YEAR, 1);
             }
             return resultList;
         }
@@ -947,10 +951,13 @@ public class PrintService implements IPrintService {
     {
         try{
             List<List<SchedulePupilLesson>> resultList = new ArrayList<List<SchedulePupilLesson>>();
+            Calendar startDate = new GregorianCalendar(2016, 04, 01);
+            while (startDate.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+                startDate.add(Calendar.DAY_OF_MONTH, 1);
             for(int i=0;i<7;i++) {
                 List<SchedulePupilLesson> dayLessonList = new ArrayList<SchedulePupilLesson>();
-                List<Lesson> lessonList = uof.getLessonDao().GetPupilDayLessons(pupil.getID(),new Date());
-                for(Lesson l : lessonList) {
+                List<Lesson> lessonList = uof.getLessonDao().GetPupilDayLessons(pupil.getID(), new Date());
+                for (Lesson l : lessonList) {
                     Subject subject = uof.getSubjectDao().Select(l.getID());
                     Teacher teacher = uof.getTeacherDao().Select(subject.getTeacherID());
                     SchedulePupilLesson spl = new SchedulePupilLesson();
@@ -960,6 +967,7 @@ public class PrintService implements IPrintService {
                     dayLessonList.add(spl);
                 }
                 resultList.add(dayLessonList);
+                startDate.add(Calendar.DAY_OF_YEAR, 1);
             }
             return resultList;
         }
