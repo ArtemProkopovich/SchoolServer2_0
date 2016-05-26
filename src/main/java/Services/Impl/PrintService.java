@@ -164,7 +164,7 @@ public class PrintService implements IPrintService {
     public InputStream PrintCSVAchivementStatistics(int pupilID)throws ServiceException {
         try{
             Pupil pupil = uof.getPupilDao().Select(pupilID);
-            CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
+            CSVFormat csvFileFormat = CSVFormat.newFormat(';').withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("pas.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
             PupilStats stats = GetPupilAchivementStatistics(pupil);
@@ -209,7 +209,7 @@ public class PrintService implements IPrintService {
             PupilStats result = new PupilStats();
             result.setPupil(pupil);
             List<PupilSubjectStats> subjectStats = new ArrayList<PupilSubjectStats>();
-            List<Subject> subjectList = uof.getPupilDao().GetPupilSubjects(pupil.getID());
+            List<Subject> subjectList = uof.getClassDao().GetClassSubjects(pupil.getClassID());
             double sumAv = 0.0;
             for (Subject s : subjectList) {
                 PupilSubjectStats pss = new PupilSubjectStats();
@@ -312,6 +312,9 @@ public class PrintService implements IPrintService {
                 sheet.autoSizeColumn(index);
                 index++;
             }
+            cell = row.createCell(index);
+            cell.setCellValue("Rating");
+            sheet.autoSizeColumn(index);
 
             int rowIndex=1;
             for(PupilStats ps : pupilStats) {
@@ -350,7 +353,7 @@ public class PrintService implements IPrintService {
             Class cls = uof.getClassDao().Select(classID);
             List<Subject> subjects = uof.getClassDao().GetClassSubjects(classID);
             List<PupilStats> pupilStats = GetPupilsStats(classID);
-            CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
+            CSVFormat csvFileFormat = CSVFormat.newFormat(';').withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("prs.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
             List headerList = new ArrayList();
@@ -358,6 +361,7 @@ public class PrintService implements IPrintService {
             for(Subject s : subjects) {
                 headerList.add(s.getName());
             }
+            headerList.add("Rating");
             csvFilePrinter.printRecord(headerList);
 
             int rowIndex=1;
@@ -521,7 +525,7 @@ public class PrintService implements IPrintService {
     public InputStream PrintCSVSubjectList(int subjectID) throws ServiceException {
         try{
             Subject subject = uof.getSubjectDao().Select(subjectID);
-            CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
+            CSVFormat csvFileFormat = CSVFormat.newFormat(';').withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("sjl.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
             SubjectJournalList sjl = GetSubjectJournalInfo(subject);
@@ -715,7 +719,7 @@ public class PrintService implements IPrintService {
         try{
             Teacher teacher = uof.getTeacherDao().Select(teacherID);
             List<List<ScheduleTeacherLesson>> weekScheduleList = GetTeacherWeekSchedule(teacher);
-            CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
+            CSVFormat csvFileFormat = CSVFormat.newFormat(';').withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("tws.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
 
@@ -847,7 +851,7 @@ public class PrintService implements IPrintService {
         try{
             Pupil pupil = uof.getPupilDao().Select(pupilID);
             List<List<SchedulePupilLesson>> weekScheduleList = GetPupilWeekSchedule(pupil);
-            CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
+            CSVFormat csvFileFormat = CSVFormat.newFormat(';').withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("pws.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
 

@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
  * Created by Артем on 23.05.2016.
  */
 public class PrintServiceTest {
+
     static MySqlConnection connection;
     static UnitOfWork uof;
     static PrintService service;
@@ -46,7 +47,7 @@ public class PrintServiceTest {
         Assert.assertNotNull(stream);
     }*/
 
-    @Test
+    /*@Test
     public void printXLSAchivementStatistics() throws Exception {
         InputStream stream =  service.PrintXLSAchivementStatistics(1);
         Assert.assertNotNull(stream);
@@ -68,15 +69,15 @@ public class PrintServiceTest {
     public void printXLSPupilWeekSchedule() throws Exception {
         InputStream stream = service.PrintXLSPupilWeekSchedule(1);
         Assert.assertNotNull(stream);
-    }
+    }*/
 
-    /*@Test
+    @Test
     public void printCSVAchivementStatistics() throws Exception {
         InputStream stream =  service.PrintCSVAchivementStatistics(1);
         Assert.assertNotNull(stream);
     }
 
-    @Test
+    /*@Test
     public void printCSVSubjectList() throws Exception {
         InputStream stream =  service.PrintCSVSubjectList(1);
         Assert.assertNotNull(stream);
@@ -93,4 +94,22 @@ public class PrintServiceTest {
         InputStream stream =  service.PrintCSVPupilWeekSchedule(1);
         Assert.assertNotNull(stream);
     }*/
+
+    @Test
+    public void printPDFPupilsRating() throws Exception {
+        InputStream stream =  service.PrintPDFPupilsRating(1);
+        Assert.assertNotNull(stream);
+    }
+
+    @Test
+    public void printXLSPupilsRating() throws Exception {
+        InputStream stream =  service.PrintXLSPupilsRating(1);
+        Assert.assertNotNull(stream);
+    }
+
+    @Test
+    public void printCSVPupilsRating() throws Exception {
+        InputStream stream =  service.PrintCSVPupilsRating(1);
+        Assert.assertNotNull(stream);
+    }
 }
