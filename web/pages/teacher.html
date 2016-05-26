@@ -5,7 +5,7 @@
     <button class="button" ng-click="logout()">Log out</button>
     <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
 </div>
-<div class="scrollable">
+<div id="teacherDiv" class="scrollable">
     <div id="schedule" class="tabcontent maintab" style="animation: slideInLeft 1s both ease-in;">
         <button class="navigate" ng-click="setYesterday()"><</button>
         <div class="datecontainer" align="center">{{day}}</div>
@@ -54,7 +54,7 @@
                 <td align="center"><p>{{pupil.number}}</p></td>
                 <td align="center"><p>{{pupil.surname}} {{pupil.name}}</p></td>
                 <td align="center"><p>{{pupil.mark}}</p></td>
-                <td><button class="goto" ng-click="openMarkWindow(pupil.pupilID, pupil.surname, pupil.name)">...</button></td>
+                <td><button class="goto" ng-click="openMarkWindow(pupil.ID, $event)">...</button></td>
             </tr>
             </tbody>
         </table>
@@ -76,25 +76,23 @@
         </div>
     </div>
 </div>
-<div class="winlayer" align="center" style="top:50%">
-    <div id="markwindow" class="window">
-        <div class="formheader">
-            <h5>Set mark</h5>
-            <button class="close" onclick="toggleWindow('markwindow', false)">X</button>
-        </div>
-        <div align="center">
-            <p>Pupil:{{curSurname}} {{curName}}</p>
-            <form name="LoginForm" ng-submit="setMark(curPupilID, curLessonID)">
-                <input class="in" type="text" name="mark" placeholder="mark" ng-model="mark">
-                <input class="button" type="submit" name="commit" value="Apply">
-            </form>
-            <div style="height: 1px;"></div>
-        </div>
-    </div>
-</div>
 <div class="toastlayer" align="center">
     <div id="toast" class="toast" style="display: none">
         {{ message }}
     </div>
+</div>
+<div id="marklist" class="dropdown">
+    <button class="dropitem" ng-click="setMark(-1)">absent</button>
+    <button class="dropitem" ng-click="setMark(0)">present</button>
+    <button class="dropitem" ng-click="setMark(1)">1</button>
+    <button class="dropitem" ng-click="setMark(2)">2</button>
+    <button class="dropitem" ng-click="setMark(3)">3</button>
+    <button class="dropitem" ng-click="setMark(4)">4</button>
+    <button class="dropitem" ng-click="setMark(5)">5</button>
+    <button class="dropitem" ng-click="setMark(6)">6</button>
+    <button class="dropitem" ng-click="setMark(7)">7</button>
+    <button class="dropitem" ng-click="setMark(8)">8</button>
+    <button class="dropitem" ng-click="setMark(9)">9</button>
+    <button class="dropitem" ng-click="setMark(10)">10</button>
 </div>
 
