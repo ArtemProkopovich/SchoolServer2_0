@@ -84,7 +84,7 @@ public class PrintService implements IPrintService {
         catch (DAOException ex) {
             throw new ServiceException(ex);
         }
-        catch (DocumentException ex) {
+        catch (Exception ex) {
             throw new ServiceException(ex);
         }
     }
@@ -289,7 +289,7 @@ public class PrintService implements IPrintService {
             throw new ServiceException(ex);
         } catch (DAOException ex) {
             throw new ServiceException(ex);
-        } catch (DocumentException ex) {
+        } catch (Exception ex) {
             throw new ServiceException(ex);
         }
     }
@@ -455,7 +455,7 @@ public class PrintService implements IPrintService {
             throw new ServiceException(ex);
         } catch (DAOException ex) {
             throw new ServiceException(ex);
-        } catch (DocumentException ex) {
+        } catch (Exception ex) {
             throw new ServiceException(ex);
         }
     }
@@ -652,7 +652,7 @@ public class PrintService implements IPrintService {
         {
             throw new ServiceException(ex);
         }
-        catch (DocumentException ex) {
+        catch (Exception ex) {
             throw new ServiceException(ex);
         }
     }
@@ -842,7 +842,7 @@ public class PrintService implements IPrintService {
         {
             throw new ServiceException(ex);
         }
-        catch (DocumentException ex) {
+        catch (Exception ex) {
             throw new ServiceException(ex);
         }
     }

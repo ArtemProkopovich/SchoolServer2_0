@@ -25,9 +25,14 @@ public class MySqlConnection {
             return connection;
         else
             try {
+                Class.forName("com.mysql.jdbc.Driver");
                 connection = DriverManager.getConnection(HOST, USER, PASSWORD);
                 return connection;
-            } catch (SQLException e) {
+            }
+            catch(ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            catch (SQLException e) {
                 e.printStackTrace();
             }
         return null;

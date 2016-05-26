@@ -313,6 +313,9 @@
                 <param name="inputName">fileStream</param>
                 <param name="bufferSize">4096</param>
             </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
         </action>
         <action name="downloadPupilSchedule" class="Actions.Download.DownloadPupilSchedule" method="execute">
             <result type="stream" name="success">
@@ -320,6 +323,9 @@
                 <param name="contentType">application/octet-stream</param>
                 <param name="inputName">fileStream</param>
                 <param name="bufferSize">4096</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
             </result>
         </action>
         <action name="downloadPupilStats" class="Actions.Download.DownloadPupilStats" method="execute">
@@ -329,6 +335,9 @@
                 <param name="inputName">fileStream</param>
                 <param name="bufferSize">4096</param>
             </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
         </action>
         <action name="downloadTeacherSchedule" class="Actions.Download.DownloadTeacherSchedule" method="execute">
             <result type="stream" name="success">
@@ -337,6 +346,9 @@
                 <param name="inputName">fileStream</param>
                 <param name="bufferSize">4096</param>
             </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
         </action>
         <action name="downloadPupilsRating" class="Actions.Download.DownloadPupilsRating" method="execute">
             <result type="stream" name="success">
@@ -344,6 +356,9 @@
                 <param name="contentType">application/octet-stream</param>
                 <param name="inputName">fileStream</param>
                 <param name="bufferSize">4096</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
             </result>
         </action>
 </package>
