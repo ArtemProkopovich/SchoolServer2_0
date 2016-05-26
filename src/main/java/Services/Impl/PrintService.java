@@ -770,7 +770,7 @@ public class PrintService implements IPrintService {
             List<List<ScheduleTeacherLesson>> resultList = new ArrayList<List<ScheduleTeacherLesson>>();
             for(int i=0;i<7;i++) {
                 List<ScheduleTeacherLesson> dayLessonList = new ArrayList<ScheduleTeacherLesson>();
-                List<Lesson> lessonList = uof.getLessonDao().GetTeacherDayLessons(teacher.getID(), new Date());
+                List<Lesson> lessonList = uof.getLessonDao().GetTeacherDayLessons(teacher.getID(), startDate.getTime());
                 for (Lesson l : lessonList) {
                     Subject subject = uof.getSubjectDao().Select(l.getID());
                     Class cls = uof.getClassDao().Select(subject.getClassID());
@@ -960,7 +960,7 @@ public class PrintService implements IPrintService {
                 startDate.add(Calendar.DAY_OF_MONTH, 1);
             for(int i=0;i<7;i++) {
                 List<SchedulePupilLesson> dayLessonList = new ArrayList<SchedulePupilLesson>();
-                List<Lesson> lessonList = uof.getLessonDao().GetPupilDayLessons(pupil.getID(), new Date());
+                List<Lesson> lessonList = uof.getLessonDao().GetPupilDayLessons(pupil.getID(), startDate.getTime());
                 for (Lesson l : lessonList) {
                     Subject subject = uof.getSubjectDao().Select(l.getID());
                     Teacher teacher = uof.getTeacherDao().Select(subject.getTeacherID());
