@@ -156,6 +156,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
             $scope.classLetter = response.data.classLetter;
             $scope.homework = response.data.homework;
             $scope.pupils = response.data.pupils;
+            console.log(response.data.pupils);
             $scope.curLessonID = lessonID;
             $scope.resetHomework();
         });
@@ -170,26 +171,26 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
         document.getElementById('lesson').style.animation = 'slideInRight 1s both ease-in';
         document.getElementById('schedule').style.animation = 'slideOutLeft 1s both ease-in';
     };
-    $scope.openMarkWindow = function(pupilID, pupilSurname, pupilName) {
+    $scope.openMarkWindow = function(pupilID, event) {
+        console.log(pupilID);
         $scope.curPupilID = pupilID;
-        $scope.curSurname = pupilSurname;
-        $scope.curName = pupilName;
-        document.getElementById('markwindow').style.display = 'block';
+        showDropdown('marklist',event.x,event.y);
     };
-    $scope.setMark = function(pupilID, lessonID) {
+    $scope.setMark = function(mark) {
+        console.log($scope.curPupilID);
         var params = {
-            "lessonID":lessonID,
-            "pupilID":pupilID,
-            "mark":$scope.mark
+            "lessonID":$scope.curLessonID,
+            "pupilID":$scope.curPupilID,
+            "mark":mark
         };
         $http.post('setMark',params).success(function() {
             $scope.message = 'Mark is saved.';
-            document.getElementById('markwindow').style.display = 'none';
         }).error(function() {
             $scope.message = "Error: can't save mark.";
         });
+        hideDropdown('marklist');
         showToast();
-        $scope.loadLesson(lessonID);
+        $scope.loadLesson($scope.curLessonID);
     };
     $scope.pageClass = 'page-app';
     if (role!='TEACHER') {
@@ -278,4 +279,24 @@ function showToast() {
     toast.offsetWidth = toast.offsetWidth;
     toast.classList.add("toast");
     toast.style.display = 'block';
+}
+function hideDropdown(id) {
+    document.getElementById(id).style.display = 'none';
+    document.getElementById(id).style.top = 'none';
+    document.getElementById(id).style.left = 'none';
+    document.getElementById(id).style.bottom = 'none';
+    document.getElementById(id).style.right = 'none';
+}
+function showDropdown(id,x,y) {
+    document.getElementById(id).style.display = 'block';
+    if (x>window.innerWidth/2) {
+        document.getElementById(id).style.right = window.innerWidth-x;
+    } else {
+        document.getElementById(id).style.left = x;
+    }
+    if (y>window.innerHeight/2) {
+        document.getElementById(id).style.bottom = window.innerHeight-y;
+    } else {
+        document.getElementById(id).style.top = y;
+    }
 }

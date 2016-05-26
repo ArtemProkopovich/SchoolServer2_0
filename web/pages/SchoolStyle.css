@@ -52,6 +52,24 @@ th {
 tr:nth-child(even) {
 	background-color: #f2f2f2;
 }
+.dropdown {
+	position: absolute;
+	width: 70px;
+	display: none;
+
+}
+.dropitem {
+	display: block;
+	border: none;
+	width: 100%;
+	font-family: UbuntuR;
+	color: white;
+	outline: none;
+	background: #333333;
+}
+.dropitem:hover {
+	background: #cc0000;
+}
 .button {
 	display: block;
 	width: 110px;
@@ -304,6 +322,7 @@ ul.tab li button:focus, .active {
 	top: 70%;
 }
 .toast {
+	pointer-events: none;
 	animation: toastanim 4s both ease-in;
 	padding-top: 10px;
 	border-radius: 30px;
