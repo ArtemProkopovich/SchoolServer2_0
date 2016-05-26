@@ -163,7 +163,7 @@ public class LessonDao implements ILessonDao {
         try{
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(INSERT_LESSON,PreparedStatement.RETURN_GENERATED_KEYS);
-            st.setDate(1, (java.sql.Date)item.getDate());
+            st.setDate(1, new java.sql.Date(item.getDate().getTime()));
             st.setInt(2,item.getScheduleNumber());
             st.setString(3,item.getHomework());
             st.setInt(4,item.getRoom());
@@ -210,7 +210,7 @@ public class LessonDao implements ILessonDao {
         try{
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(UPDATE_LESSON);
-            st.setDate(1, (java.sql.Date)item.getDate());
+            st.setDate(1, new java.sql.Date(item.getDate().getTime()));
             st.setInt(2,item.getScheduleNumber());
             st.setString(3,item.getHomework());
             st.setInt(4,item.getRoom());

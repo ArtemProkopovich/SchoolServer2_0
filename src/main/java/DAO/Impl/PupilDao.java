@@ -8,10 +8,7 @@ import Entities.Pupil;
 import Entities.Subject;
 import Entities.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class PupilDao implements IPupilDao {
     private final String SELECT_PUPIL = "SELECT * FROM pupils WHERE pupil_id=?";
     private final String SELECT_ALL_PUPILS = "SELECT * FROM pupils";
     private final String DELETE_PUPIL = "DELETE FROM pupils WHERE pupil_id=?";
-    private final String UPDATE_PUPIL = "UPDATE NITO pupils SET surname=?, name = ?, user_id=?, class_id=? WHERE pupil_id=?";
+    private final String UPDATE_PUPIL = "UPDATE pupils SET surname=?, name = ?, user_id=?, class_id=? WHERE pupil_id=?";
     private final String SELECT_USER_BY_PUPIL_ID = "SELECT * FROM users JOIN pupils ON users.user_id=pupils.user_id WHERE pupil_id = ?";
     private final String SELECT_CLASS_BY_PUPIL = "SELECT * FROM classes JOIN pupils ON classes.class_id=pupils.class_id WHERE pupil_id=?";
     private final String SELECT_PUPIL_SUBJECTS = "SELECT * FROM pupils JOIN classes ON pupils.class_id = classes.class_id " +
@@ -123,16 +120,19 @@ public class PupilDao implements IPupilDao {
 
     public int Insert(Pupil item) throws DAOException {
         Connection cn = null;
-        try{
+        try {
             cn = connection.getConnection();
-            PreparedStatement st = cn.prepareStatement(INSERT_PUPIL,PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement st = cn.prepareStatement(INSERT_PUPIL, PreparedStatement.RETURN_GENERATED_KEYS);
             st.setString(1, item.getSurname());
             st.setString(2, item.getName());
             st.setInt(3, item.getUserID());
-            st.setInt(4,item.getClassID());
+            if (item.getClassID() > 0)
+                st.setInt(4, item.getClassID());
+            else
+                st.setNull(4, Types.INTEGER);
             st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
-            if (set.next()){
+            if (set.next()) {
                 return set.getInt(1);
             }
         }
@@ -169,14 +169,17 @@ public class PupilDao implements IPupilDao {
 
     public void Update(Pupil item) throws DAOException {
         Connection cn = null;
-        try{
+        try {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(UPDATE_PUPIL);
             st.setString(1, item.getSurname());
             st.setString(2, item.getName());
             st.setInt(3, item.getUserID());
-            st.setInt(4,item.getClassID());
-            st.setInt(5,item.getID());
+            if (item.getClassID() > 0)
+                st.setInt(4, item.getClassID());
+            else
+                st.setNull(4, Types.INTEGER);
+            st.setInt(5, item.getID());
             st.executeUpdate();
         }
         catch (SQLException ex) {
