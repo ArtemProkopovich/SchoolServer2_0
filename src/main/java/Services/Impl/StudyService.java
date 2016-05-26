@@ -29,7 +29,7 @@ public class StudyService implements IStudyService {
             Lesson lesson = uof.getLessonDao().Select(lessonID);
             Subject subject = uof.getSubjectDao().Select(lesson.getSubjectID());
             Class cls = uof.getClassDao().Select(subject.getClassID());
-            List<Pupil> pupilsList = uof.getSubjectDao().GetSubjectPupils(lesson.getSubjectID());
+            List<Pupil> pupilsList =  uof.getClassDao().GetClassPupilList(cls.getID());;
             Map<Pupil, Mark> pupilMarkMap = new HashMap<Pupil, Mark>();
             for (Pupil p : pupilsList) {
                 Mark mark = uof.getMarkDao().GetPupilLessonMark(lesson.getID(), p.getID());
@@ -121,9 +121,12 @@ public class StudyService implements IStudyService {
         try {
             Mark dbMark = uof.getMarkDao().GetPupilLessonMark(lessonID, pupilID);
             if (dbMark != null) {
-                dbMark.setMark(mark);
-                uof.getMarkDao().Update(dbMark);
-            } else {
+                if (mark != 0) {
+                    dbMark.setMark(mark);
+                    uof.getMarkDao().Update(dbMark);
+                } else
+                    uof.getMarkDao().Delete(dbMark.getID());
+            } else if (mark != 0) {
                 dbMark = new Mark();
                 dbMark.setMark(mark);
                 dbMark.setLessonID(lessonID);

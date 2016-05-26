@@ -58,14 +58,15 @@ public class LessonPupil {
         name = pupil.getName();
         surname = pupil.getSurname();
         this.number = number;
-        if (_mark!=null) {
+        if (_mark != null) {
             if (_mark.getMark() < 0)
                 mark = "absent";
+            else if (_mark.getMark() == 0)
+                mark = "";
             else
                 mark = String.valueOf(_mark.getMark());
-        }
-        else{
-            mark="";
+        } else {
+            mark = "";
         }
     }
 }

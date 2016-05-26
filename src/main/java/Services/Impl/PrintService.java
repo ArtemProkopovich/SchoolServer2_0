@@ -4,9 +4,7 @@ import DAO.DAOException;
 import DAO.Interfacies.IUnitOfWork;
 import Entities.Class;
 import Entities.*;
-import ServiceEntities.SchedulePupilLesson;
-import ServiceEntities.ScheduleTeacherLesson;
-import ServiceEntities.SubjectJournalList;
+import ServiceEntities.*;
 import Services.Interfacies.IPrintService;
 import Services.ServiceException;
 import com.itextpdf.text.*;
@@ -49,7 +47,7 @@ public class PrintService implements IPrintService {
             document.open();
             AddPDFDocumentMeta(document,"Achievement statistics: "+pupil.getSurname()+" "+pupil.getName());
             AddPDFFirstPage(document, "Achievement statistics:" + pupil.getSurname()+" " +pupil.getName());
-            Map<Subject, List<Mark>> achiveMap = GetPupilAchivementStatistics(pupil);
+            PupilStats stats = GetPupilAchivementStatistics(pupil);
 
             PdfPTable table = new PdfPTable(3);
             PdfPCell c1 = new PdfPCell(new Phrase("Subject"));
@@ -65,13 +63,12 @@ public class PrintService implements IPrintService {
             table.addCell(c1);
             table.setHeaderRows(1);
 
-            Set<Map.Entry<Subject, List<Mark>>> set = achiveMap.entrySet();
-            for (Map.Entry<Subject, List<Mark>> s : set)
+            for (PupilSubjectStats pss : stats.getStatsList())
             {
-                table.addCell(s.getKey().getName());
-                table.addCell(GetMarksList(s.getValue()));
-                if (s.getValue().size()>0) {
-                    table.addCell(String.valueOf(s.getValue().get(s.getValue().size() - 1).getMark()));
+                table.addCell(pss.getSubject().getName());
+                table.addCell(GetMarksList(pss.getMarkList()));
+                if (pss.getAverageMark()>0.0001) {
+                    table.addCell(String.format("%.2f", pss.getAverageMark()));
                 }
                 else {
                     table.addCell("-");
@@ -109,8 +106,8 @@ public class PrintService implements IPrintService {
     public InputStream PrintXLSAchivementStatistics(int pupilID)throws ServiceException {
         try {
             Pupil pupil = uof.getPupilDao().Select(pupilID);
-            Map<Subject, List<Mark>> achieveMap = GetPupilAchivementStatistics(pupil);
-            int maxLength = GetMaxSize(achieveMap);
+            PupilStats stats = GetPupilAchivementStatistics(pupil);
+            int maxLength = GetMaxSize(stats.getStatsList());
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet("Achievement");
 
@@ -128,19 +125,18 @@ public class PrintService implements IPrintService {
             avM.setCellValue("Average mark");
             sheet.autoSizeColumn(maxLength);
 
-            Set<Map.Entry<Subject, List<Mark>>> set = achieveMap.entrySet();
             int rowIndex=1;
-            for(Map.Entry<Subject, List<Mark>> s : set) {
+            for(PupilSubjectStats s : stats.getStatsList()) {
                 row = sheet.createRow(rowIndex);
                 XSSFCell cell = row.createCell(0);
-                cell.setCellValue(s.getKey().getName());
-                for (int i = 0; i < s.getValue().size() - 1; i++) {
+                cell.setCellValue(s.getSubject().getName());
+                for (int i = 0; i < s.getMarkList().size() - 1; i++) {
                     cell = row.createCell(i + 1);
-                    cell.setCellValue(s.getValue().get(i).getMark());
+                    cell.setCellValue(s.getMarkList().get(i).getMark());
                 }
-                if (s.getValue().size() > 0) {
+                if (s.getAverageMark() > 0.0001) {
                     cell = row.createCell(maxLength);
-                    cell.setCellValue(s.getValue().get(s.getValue().size() - 1).getMark());
+                    cell.setCellValue(s.getAverageMark());
                 }
                 rowIndex++;
             }
@@ -155,15 +151,13 @@ public class PrintService implements IPrintService {
         }
     }
 
-    private int GetMaxSize (Map<Subject, List<Mark>> map)
-    {
-        Set<Map.Entry<Subject, List<Mark>>> set = map.entrySet();
-        int length=0;
-        for(Map.Entry<Subject, List<Mark>> s : set){
-            if (s.getValue().size()>length)
-                length=s.getValue().size();
+    private int GetMaxSize (List<PupilSubjectStats> list) {
+        int length = 0;
+        for (PupilSubjectStats s : list) {
+            if (s.getMarkList().size() > length)
+                length = s.getMarkList().size();
         }
-        return length;
+        return length + 1;
     }
 
     private static final String NEW_LINE_SEPARATOR = "\n";
@@ -173,8 +167,8 @@ public class PrintService implements IPrintService {
             CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
             FileWriter fw = new FileWriter("pas.csv");
             CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
-            Map<Subject, List<Mark>> achieveMap = GetPupilAchivementStatistics(pupil);
-            int maxLength=GetMaxSize(achieveMap);
+            PupilStats stats = GetPupilAchivementStatistics(pupil);
+            int maxLength=GetMaxSize(stats.getStatsList());
             List headerList = new ArrayList();
             headerList.add("Subject");
             for (int i=1;i<maxLength;i++) {
@@ -183,18 +177,17 @@ public class PrintService implements IPrintService {
             headerList.add("Average mark");
             csvFilePrinter.printRecord(headerList);
 
-            Set<Map.Entry<Subject, List<Mark>>> set = achieveMap.entrySet();
-            for(Map.Entry<Subject, List<Mark>> s : set) {
+            for(PupilSubjectStats s : stats.getStatsList()) {
                 List printList = new ArrayList();
-                printList.add(s.getKey().getName());
-                for (int i = 0; i < maxLength-1; i++) {
-                    if (i < s.getValue().size())
-                        printList.add(s.getValue().get(i).getMark());
+                printList.add(s.getSubject().getName());
+                for (int i = 0; i < maxLength - 1; i++) {
+                    if (i < s.getMarkList().size())
+                        printList.add(s.getMarkList().get(i).getMark());
                     else
                         printList.add("");
                 }
-                if (s.getValue().size() > 0) {
-                    printList.add(s.getValue().get(s.getValue().size() - 1).getMark());
+                if (s.getAverageMark() > 0.0001) {
+                    printList.add(s.getAverageMark());
                 }
                 csvFilePrinter.printRecord(printList);
             }
@@ -211,51 +204,196 @@ public class PrintService implements IPrintService {
         }
     }
 
-    private Map<Subject,List<Mark>> GetPupilAchivementStatistics(Pupil pupil) throws DAOException{
+    private PupilStats GetPupilAchivementStatistics(Pupil pupil) throws DAOException {
         try {
-            Map<Subject,List<Mark>> resultList = new HashMap<Subject, List<Mark>>();
+            PupilStats result = new PupilStats();
+            result.setPupil(pupil);
+            List<PupilSubjectStats> subjectStats = new ArrayList<PupilSubjectStats>();
             List<Subject> subjectList = uof.getPupilDao().GetPupilSubjects(pupil.getID());
-            for (Subject s : subjectList){
-                List<Mark> marksList = uof.getMarkDao().GetPupilMarksBySubjectID(s.getID(),pupil.getID());
-                List<Mark> resultMarksList = new ArrayList<Mark>();
-                int sum = 0;
+            double sumAv = 0.0;
+            for (Subject s : subjectList) {
+                PupilSubjectStats pss = new PupilSubjectStats();
+                List<Mark> marksList = uof.getMarkDao().GetPupilMarksBySubjectID(s.getID(), pupil.getID());
+                double sum = 0.0;
                 int count = 0;
-                for (Mark m : marksList){
-                    if (m.getMark()>0)
-                    {
-                        sum+=m.getMark();
+                for (Mark m : marksList) {
+                    if (m.getMark() > 0) {
+                        sum += m.getMark();
                         count++;
-                        resultMarksList.add(m);
                     }
                 }
-                if (count>0) {
-                    Mark avMark  = new Mark();
-                    avMark.setPupilID(pupil.getID());
-                    avMark.setMark(sum/count);
-                    resultMarksList.add(avMark);
+                pss.setMarkList(marksList);
+                pss.setSubject(s);
+                if (count > 0) {
+                    sumAv += sum / count;
+                    pss.setAverageMark(sum / count);
                 }
-                resultList.put(s,resultMarksList);
+                subjectStats.add(pss);
             }
-            return resultList;
-        }
-        catch (DAOException ex)
-        {
+            if (subjectList.size() > 0)
+                result.setAverageMark(sumAv / subjectList.size());
+            result.setStatsList(subjectStats);
+            return result;
+        } catch (DAOException ex) {
             throw ex;
         }
     }
 
+    public InputStream PrintPDFPupilsRating(int classID) throws ServiceException {
+        try {
+            Class cls = uof.getClassDao().Select(classID);
+            List<Subject> subjects = uof.getClassDao().GetClassSubjects(classID);
+            List<PupilStats> pupilStats = GetPupilsStats(classID);
+            OutputStream stream = new FileOutputStream("prs.pdf");
+            Document document = new Document();
+            PdfWriter.getInstance(document, stream);
+            document.open();
+            AddPDFDocumentMeta(document, "Rating of pupils by: " + cls.getName()+" class.");
+            AddPDFFirstPage(document, "Rating of pupils by:" + cls.getName()+" class.");
 
+            document.add(new Paragraph("Class: "+cls.getName()+".", redFont));
+            document.add(new Paragraph(" "));
+            PdfPTable table = new PdfPTable(subjects.size()+2);
+            PdfPCell c1 = new PdfPCell(new Phrase("Pupil"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
 
-    public InputStream PrintPDFThanksLetter(Pupil pupil, Teacher teacher) throws ServiceException {
-        return null;
+            DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+            for (Subject s: subjects)
+            {
+                c1 = new PdfPCell(new Phrase(s.getName()));
+                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(c1);
+            }
+            c1 = new PdfPCell(new Phrase("Rating"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+            table.setHeaderRows(1);
+            for(int i=0;i<pupilStats.size();i++) {
+                table.addCell(String.valueOf(i + 1) + ". " + pupilStats.get(i).getPupil().getSurname() + " " + pupilStats.get(i).getPupil().getName());
+                double sum = 0.0;
+                for (PupilSubjectStats pss : pupilStats.get(i).getStatsList()) {
+                    table.addCell(String.format("%.2f", pss.getAverageMark()));
+                    sum += pss.getAverageMark();
+                }
+                if (pupilStats.get(i).getStatsList().size() > 0)
+                    table.addCell(String.format("%.2f", sum / pupilStats.get(i).getStatsList().size()));
+                else
+                    table.addCell("-");
+            }
+            document.add(table);
+            document.close();
+            return new FileInputStream("prs.pdf");
+
+        } catch (FileNotFoundException ex) {
+            throw new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        } catch (DocumentException ex) {
+            throw new ServiceException(ex);
+        }
     }
 
-    public InputStream PrintXLSThanksLetter(Pupil pupil, Teacher teacher) throws ServiceException {
-        return null;
+    public InputStream PrintXLSPupilsRating(int classID) throws ServiceException {
+        try {
+            Class cls = uof.getClassDao().Select(classID);
+            List<Subject> subjects = uof.getClassDao().GetClassSubjects(classID);
+            List<PupilStats> pupilStats = GetPupilsStats(classID);
+            OutputStream stream = new FileOutputStream("prs.xlsx");
+            XSSFWorkbook book = new XSSFWorkbook();
+            XSSFSheet sheet = book.createSheet(cls.getName());
+            XSSFRow row  = sheet.createRow(0);
+            XSSFCell cell = row.createCell(0);
+            cell.setCellValue("Pupil/Subjects");
+            int index=1;
+            for(Subject s : subjects) {
+                cell = row.createCell(index);
+                cell.setCellValue(s.getName());
+                sheet.autoSizeColumn(index);
+                index++;
+            }
+
+            int rowIndex=1;
+            for(PupilStats ps : pupilStats) {
+                row = sheet.createRow(rowIndex);
+                cell = row.createCell(0);
+                cell.setCellValue(ps.getPupil().getSurname() + " " + ps.getPupil().getName());
+                int columnIndex = 1;
+                double sum = 0.0;
+                for (PupilSubjectStats pss : ps.getStatsList()) {
+                    cell = row.createCell(columnIndex);
+                    cell.setCellValue(String.format("%.2f", pss.getAverageMark()));
+                    sum += pss.getAverageMark();
+                    columnIndex++;
+                }
+                cell = row.createCell(columnIndex);
+                if (pupilStats.get(rowIndex - 1).getStatsList().size() > 0)
+                    cell.setCellValue(String.format("%.2f", sum / pupilStats.get(rowIndex - 1).getStatsList().size()));
+                else
+                    cell.setCellValue("-");
+                rowIndex++;
+            }
+            sheet.autoSizeColumn(0);
+            book.write(new FileOutputStream("prs.xlsx"));
+            book.close();
+            return new FileInputStream("prs.xlsx");
+
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        } catch (IOException ex) {
+            throw new ServiceException(ex);
+        }
     }
 
-    public InputStream PrintCSVThanksLetter(Pupil pupil, Teacher teacher) throws ServiceException {
-        return null;
+    public InputStream PrintCSVPupilsRating(int classID) throws ServiceException {
+        try {
+            Class cls = uof.getClassDao().Select(classID);
+            List<Subject> subjects = uof.getClassDao().GetClassSubjects(classID);
+            List<PupilStats> pupilStats = GetPupilsStats(classID);
+            CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
+            FileWriter fw = new FileWriter("prs.csv");
+            CSVPrinter csvFilePrinter = new CSVPrinter(fw,csvFileFormat);
+            List headerList = new ArrayList();
+            headerList.add("Pupil/Subjects");
+            for(Subject s : subjects) {
+                headerList.add(s.getName());
+            }
+            csvFilePrinter.printRecord(headerList);
+
+            int rowIndex=1;
+            for(PupilStats ps : pupilStats) {
+                headerList= new ArrayList();
+                headerList.add(ps.getPupil().getSurname() + " " + ps.getPupil().getName());
+                double sum = 0.0;
+                for (PupilSubjectStats pss : ps.getStatsList()) {
+                    headerList.add(String.format("%.2f", pss.getAverageMark()));
+                    sum += pss.getAverageMark();
+                }
+                if (pupilStats.get(rowIndex - 1).getStatsList().size() > 0)
+                    headerList.add(String.format("%.2f", sum / pupilStats.get(rowIndex - 1).getStatsList().size()));
+                else
+                    headerList.add("-");
+                rowIndex++;
+                csvFilePrinter.printRecord(headerList);
+            }
+            fw.flush();
+            fw.close();
+            return new FileInputStream("prs.csv");
+
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        } catch (IOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    private List<PupilStats> GetPupilsStats(int classID) throws DAOException {
+        List<PupilStats> result = new ArrayList<PupilStats>();
+        List<Pupil> pupils = uof.getClassDao().GetClassPupilList(classID);
+        for (Pupil p : pupils) {
+            result.add(GetPupilAchivementStatistics(p));
+        }
+        return result;
     }
 
     public InputStream PrintPDFSubjectList(int subjectID) throws ServiceException {
@@ -316,7 +454,6 @@ public class PrintService implements IPrintService {
         } catch (DocumentException ex) {
             throw new ServiceException(ex);
         }
-
     }
 
     public InputStream PrintXLSSubjectList(int subjectID) throws ServiceException {
