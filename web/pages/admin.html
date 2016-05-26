@@ -1,15 +1,15 @@
 <div class="vertcontainer" align="left">
-    <h3>Shimanskey Eugene </h3><p>Administrator</p>
+    <h3>Administrator</h3>
 </div>
 <div class="vertcontainer" align="right">
     <button class="button" ng-click="logout()">Log out</button>
 </div>
 <div align="center">
     <ul class="tab">
-        <li><button class="tablinks" onclick="openAdminTab(event, 'pupils', 0)">pupils</button></li>
-        <li><button class="tablinks" onclick="openAdminTab(event, 'teachers', 1)">teachers</button></li>
-        <li><button class="tablinks" onclick="openAdminTab(event, 'schedule', 2)">schedule</button></li>
-        <li><button class="tablinks" onclick="openAdminTab(event, 'subjects', 3)">subjects</button></li>
+        <li><button class="tablinks" ng-click="openMainTab(event, 'pupils', 0)">pupils</button></li>
+        <li><button class="tablinks" ng-click="openMainTab(event, 'teachers', 1)">teachers</button></li>
+        <li><button class="tablinks" ng-click="openMainTab(event, 'schedule', 2)">schedule</button></li>
+        <li><button class="tablinks" ng-click="openMainTab(event, 'subjects', 3)">subjects</button></li>
     </ul>
 </div>
 <div class="scrollable">
@@ -17,12 +17,25 @@
         <h3>London</h3>
         <p>London is the capital city of England.</p>
     </div>
-
     <div id="teachers" class="tabcontent maintab">
-        <h3>Paris</h3>
-        <p>Paris is the capital of France.</p>
+        <div style="display: inline-block;">
+            <table align="center">
+                <tr>
+                    <th>Teacher name | type</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <tbody>
+                <tr ng-repeat="teacher in teachers">
+                    <td><p>{{teacher.surname}} {{teacher.name}}<br>{{teacher.type}}</p></td>
+                    <td><button class="goto gototable" ng-click="openSetTeacherWindow(teacher)">...</button></td>
+                    <td><button class="goto gototable" ng-click="openDeleteTeacherWindow(teacher)">X</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="goto gotorow" ng-click="openSetTeacherWindow(null)">Add new</button>
+        </div>
     </div>
-
     <div id="schedule" class="tabcontent maintab">
         <h3>Tokyo</h3>
         <p>Tokyo is the capital of Japan.</p>
@@ -35,14 +48,43 @@
     </div>
 </div>
 <div class="winlayer" align="center">
-    <div id="addsubject" class="window">
+    <div id="setTeacherWindow" class="window">
         <div class="formheader">
-            <h5>Add teacher</h5>
-            <button class="close" onclick="toggleWindow('addsubject', false)">X</button>
+            <h5>{{teacherHeader}}</h5>
+            <button class="close" onclick="toggleWindow('setTeacherWindow', false)">X</button>
         </div>
         <div align="center">
-            <input class="in" type="text" placeholder="name"/>
-            <button class="button">Confirm</button><div style="height: 1px;"></div>
+            <p>
+                <table class="nvis">
+                    <tr class="nvis">
+                        <td class="nvis">Login:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="curTeacherLogin"/></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Password:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="curTeacherPassword"/></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Name:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="curTeacherName"/></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Surname:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="curTeacherSurname"></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Type:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="curTeacherType"></td>
+                    </tr>
+                </table>
+            </p>
+            <button class="button" ng-click="setTeacher()">Confirm</button>
+            <div style="height: 1px;"></div>
         </div>
+    </div>
+</div>
+<div class="toastlayer" align="center">
+    <div id="toast" class="toast" style="display: none;">
+        {{ message }}
     </div>
 </div>

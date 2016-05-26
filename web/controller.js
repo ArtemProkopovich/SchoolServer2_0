@@ -202,13 +202,68 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
     $scope.day = getDayName(day)+', '+ getDDMMYYY(day);
     $scope.getTeacherDay();
 });
-schoolApp.controller('adminController', function($scope, LogOut) {
+schoolApp.controller('adminController', function($scope, LogOut, $location, $http) {
+    $scope.logout = function() {
+        LogOut.logout();
+    };
+    $scope.getTeachers = function() {
+        $http.get('getTeachers').then(function(response) {
+            $scope.teachers = response.data;
+            console.log(response.data);
+        });
+    };
+    $scope.openMainTab = function(event, tabName, tabIndex) {
+        switch (tabName) {
+            case 'teachers': $scope.getTeachers(); break;
+        }
+        openAdminTab(event, tabName, tabIndex);
+    };
+    $scope.openSetTeacherWindow = function(teacher) {
+        document.getElementById('setTeacherWindow').style.display = 'block';
+        console.log(teacher);
+        if (teacher==null) {
+            $scope.teacherHeader = 'Add teacher';
+            $scope.curTeacherID = null;
+            $scope.curTeacherSurname = null;
+            $scope.curTeacherName = null;
+            $scope.curTeacherLogin = null;
+            $scope.curTeacherPassword = null;
+            $scope.curTeacherType = null;
+        } else {
+            $scope.teacherHeader = 'Edit teacher';
+            $scope.curTeacherID = teacher.teacherID;
+            $scope.curTeacherSurname = teacher.surname;
+            $scope.curTeacherName = teacher.name;
+            $scope.curTeacherLogin = teacher.login;
+            $scope.curTeacherPassword = teacher.password;
+            $scope.curTeacherType = teacher.type;
+        }
+    };
+    $scope.setTeacher = function() {
+        var actionName = 'editTeacher';
+        if ($scope.curTeacherID==null) actionName = 'addTeacher';
+        var params = {
+            "teacherID":    $scope.curTeacherID,
+            "login":        $scope.curTeacherLogin,
+            "password":     $scope.curTeacherPassword,
+            "name":         $scope.curTeacherName,
+            "surname":      $scope.curTeacherSurname,
+            "type":         $scope.curTeacherType
+        };
+        $http.post(actionName,params).success(function() {
+            $scope.message = 'Saved successfully';
+            document.getElementById('setTeacherWindow').style.display = 'none';
+        }).error(function() {
+            $scope.message = "Error: changes aren't saved";
+        });
+        showToast();
+    };
+    $scope.openDeleteTeacherWindow = function(teacher) {
+
+    };
     $scope.pageClass = 'page-app';
     if (role!='ADMIN') {
        LogOut.logout();
-    }
-    $scope.logout = function() {
-        LogOut.logout();
     }
 });
 function openAdminTab(event, tabName, tabIndex) {
