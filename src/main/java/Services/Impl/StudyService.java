@@ -8,10 +8,7 @@ import Entities.Class;
 import Services.Interfacies.IStudyService;
 import Services.ServiceException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Артем on 04.05.2016.
@@ -29,8 +26,8 @@ public class StudyService implements IStudyService {
             Lesson lesson = uof.getLessonDao().Select(lessonID);
             Subject subject = uof.getSubjectDao().Select(lesson.getSubjectID());
             Class cls = uof.getClassDao().Select(subject.getClassID());
-            List<Pupil> pupilsList = uof.getSubjectDao().GetSubjectPupils(lesson.getSubjectID());
-            Map<Pupil, Mark> pupilMarkMap = new HashMap<Pupil, Mark>();
+            List<Pupil> pupilsList =  uof.getClassDao().GetClassPupilList(cls.getID());;
+            Map<Pupil, Mark> pupilMarkMap = new LinkedHashMap<Pupil, Mark>();
             for (Pupil p : pupilsList) {
                 Mark mark = uof.getMarkDao().GetPupilLessonMark(lesson.getID(), p.getID());
                 if (mark != null)
@@ -54,7 +51,7 @@ public class StudyService implements IStudyService {
         try {
             List<Mark> markList = uof.getMarkDao().GetPupilMarksBySubjectID(subjectID, pupilID);
             List<Lesson> lessonList = uof.getLessonDao().GetSubjectLessons(subjectID);
-            Map<Lesson, Mark> lessonMarkMap = new HashMap<Lesson, Mark>();
+            Map<Lesson, Mark> lessonMarkMap = new LinkedHashMap<Lesson, Mark>();
             for (Lesson l:lessonList) {
                 int i = 0;
                 for (; i < markList.size(); i++) {
@@ -121,9 +118,12 @@ public class StudyService implements IStudyService {
         try {
             Mark dbMark = uof.getMarkDao().GetPupilLessonMark(lessonID, pupilID);
             if (dbMark != null) {
-                dbMark.setMark(mark);
-                uof.getMarkDao().Update(dbMark);
-            } else {
+                if (mark != 0) {
+                    dbMark.setMark(mark);
+                    uof.getMarkDao().Update(dbMark);
+                } else
+                    uof.getMarkDao().Delete(dbMark.getID());
+            } else if (mark != 0) {
                 dbMark = new Mark();
                 dbMark.setMark(mark);
                 dbMark.setLessonID(lessonID);

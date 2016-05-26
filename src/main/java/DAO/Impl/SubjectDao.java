@@ -8,10 +8,7 @@ import Entities.Pupil;
 import Entities.Subject;
 import Entities.Teacher;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,16 +128,19 @@ public class SubjectDao implements ISubjectDao {
 
     public int Insert(Subject item) throws DAOException {
         Connection cn = null;
-        try{
+        try {
             cn = connection.getConnection();
-            PreparedStatement st = cn.prepareStatement(INSERT_SUBJECT,PreparedStatement.RETURN_GENERATED_KEYS);
-            st.setString(1,item.getName());
-            st.setInt(2,item.getLessonCount());
-            st.setInt(3,item.getClassID());
-            st.setInt(4,item.getTeacherID());
+            PreparedStatement st = cn.prepareStatement(INSERT_SUBJECT, PreparedStatement.RETURN_GENERATED_KEYS);
+            st.setString(1, item.getName());
+            st.setInt(2, item.getLessonCount());
+            st.setInt(3, item.getClassID());
+            if (item.getTeacherID() > 0)
+                st.setInt(4, item.getTeacherID());
+            else
+                st.setNull(4, Types.INTEGER);
             st.executeUpdate();
             ResultSet set = st.getGeneratedKeys();
-            if (set.next()){
+            if (set.next()) {
                 return set.getInt(1);
             }
         }
@@ -183,7 +183,10 @@ public class SubjectDao implements ISubjectDao {
             st.setString(1,item.getName());
             st.setInt(2,item.getLessonCount());
             st.setInt(3,item.getClassID());
-            st.setInt(4,item.getTeacherID());
+            if (item.getTeacherID() > 0)
+                st.setInt(4, item.getTeacherID());
+            else
+                st.setNull(4, Types.INTEGER);
             st.setInt(5,item.getID());
             st.executeUpdate();
         }

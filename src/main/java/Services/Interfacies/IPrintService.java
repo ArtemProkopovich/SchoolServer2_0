@@ -17,10 +17,10 @@ public interface IPrintService {
     InputStream PrintXLSAchivementStatistics(int pupilID)throws ServiceException;
     InputStream PrintCSVAchivementStatistics(int pupilID)throws ServiceException;
 
-    //Печать листа благодраности
-    InputStream PrintPDFThanksLetter(Pupil pupil, Teacher teacher)throws ServiceException;
-    InputStream PrintXLSThanksLetter(Pupil pupil, Teacher teacher)throws ServiceException;
-    InputStream PrintCSVThanksLetter(Pupil pupil, Teacher teacher)throws ServiceException;
+    //Рейтинг учеников.(средние баллы по предметам.)
+    InputStream PrintPDFPupilsRating(int classID) throws ServiceException;
+    InputStream PrintXLSPupilsRating(int classID)throws ServiceException;
+    InputStream PrintCSVPupilsRating(int classID)throws ServiceException;
 
     //Лист журнала с одним предметом
     InputStream PrintPDFSubjectList(int subjectID)throws ServiceException;

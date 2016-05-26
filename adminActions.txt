@@ -1,0 +1,182 @@
+Экшены админа:
+1. getTeachers
+Возвращает:
+[
+	{
+		"firstname":"Eugene",
+		"lastname":"Basylev",
+		"type":"programmer",
+		"login":"eugenbas",
+		"password":"12345",
+		"teacherID":12
+	},
+...
+]
+2. editTeacher
+Принимает 
+{
+	"firstname":"Eugene",
+	"lastname":"Basylev",
+	"type":"programmer",
+	"login":"eugenbas",
+	"password":"12345",
+	"teacherID":12
+}
+Возвращает SUCCESS если всё хорошо, ERROR в противном случае.
+3. addTeacher
+Принимает
+{
+	"firstname":"Eugene",
+	"lastname":"Basylev",
+	"type":"programmer",
+	"login":"eugenbas",
+	"password":"12345",
+}
+Возвращает SUCCESS если всё хорошо, ERROR в противном случае.
+4. deleteTeacher
+Принимает { "teacherID":12 }
+При удалении учителя, предметы которые он вел, становятся нераспределенными (SET NULL).
+Возвращает SUCCESS если всё хорошо, ERROR в противном случае.
+5. getSubjects
+Принимает { "all":"false", "teacherID":12 }
+Если all=true, значит возвращать весь список предметов, иначе возвращать список предметов
+учителя teacherID. Если teacherID==-1 значит вернуть список предметов, которые не имеют
+учителя.
+Возвращает
+[
+	{
+		"subjectID":28,
+		"name":"Mathematics",
+		"lessonCount":70,
+		"classGrade":6,
+		"classLetter":'A',
+		"teacher":"Basylev E.N."
+	}
+]
+6. addSubject
+Принимает 
+{
+	"name":"Physics",
+	"lessonCount":76,
+	"classID":12,
+	"teacherID":1
+}
+Возвращает SUCCESS либо ERROR.
+7. editSubject
+Принимает
+{
+	"subjectID":5,
+	"name":"Physics",
+	"lessonCount":76,
+	"classID":12,
+	"teacherID":1
+}
+Возвращает SUCCESS либо ERROR.
+8. deleteSubject
+Принимает { "subjectID":5 }
+Возвращает SUCCESS либо ERROR.
+9. getClasses
+Возвращает
+[
+	{
+		"classID":5,
+		"classGrade":6,
+		"classLetter":"A"
+	}
+]
+10. addClass
+Принимает { "classGrade":7, "classLetter":"B" }
+Возвращает SUCCESS либо ERROR.
+11. editClass
+Принимает { "classID":4, "classGrade":8, "classLetter":"B" }
+Возвращает SUCCESS либо ERROR.
+12. deleteClass
+Принимает { "classID":5 }
+При удалении класса, удаляется его недельное расписание (CASCADE), ученики же становятся нераспределенными (SET NULL).
+Возвращает SUCCESS либо ERROR.
+13. getPupils
+Принимает { "classID":1 }. Если "classID"==-1, то возвращает нераспределенных учеников (т.е. у которых class_id=null).
+Возвращает:
+[
+	{
+		"firstname":"Eugene",
+		"lastname":"Shimanskey",
+		"login":"shima",
+		"password":"228",
+		"pupilID":12
+	},
+...
+]
+14. addPupil
+Принимает:
+{
+	"firstname":"Eugene",
+	"lastname":"Shimanskey",
+	"login":"shima",
+	"password":"228",
+	"classID":5
+}
+Возвращает SUCCESS либо ERROR.
+15. editPupil
+Принимает
+{
+	"pupilID":24,
+	"firstname":"Eugene",
+	"lastname":"Shimanskey",
+	"login":"shima",
+	"password":"228",
+	"classID":5
+}
+Возвращает SUCCESS либо ERROR.
+16. deletePupil
+Принимает { "pupilID":24 }
+Возвращает SUCCESS либо ERROR.
+17. getClassDaySchedule
+Принимает { "classID":24, "day":0} day- день недели, изменяется от 0(понедельник) до 6(воскресенье). Понимаю, что воскресенье - дебилизм, но вдруг такие школы бывают:)
+Возвращает
+[
+	{
+		"lessonID":24,
+		"number":1,
+		"timerange":"8:00-8:45",
+		"subject": "English",
+		"auditorium": "109",
+		"teacher": "Teseiko M.P."
+	}
+]
+18. addLesson
+Принимает
+{
+	"day":0,
+	"classID":24,
+	"number":1,
+	"timerange":"8:00-8:45",
+	"subjectID":24,
+	"auditorium":109
+}
+Возвращает SUCCESS либо ERROR.
+19. editLesson
+Принимает
+{
+	"lessonID":5,
+	"day":0,
+	"classID":24,
+	"number":1,
+	"timerange":"8:00-8:45",
+	"subjectID":24,
+	"auditorium":109
+}
+Возвращает SUCCESS либо ERROR.
+20. deleteLesson
+Принимает { "lessonID":4 }
+Возвращает SUCCESS либо ERROR.
+21. getSubjectsByClass
+Принимает {  "classID":24  }
+Возвращает
+[
+	{
+		"subjectID":28,
+		"name":"Mathematics",
+		"teacher":"Basylev E.N."
+	}
+]

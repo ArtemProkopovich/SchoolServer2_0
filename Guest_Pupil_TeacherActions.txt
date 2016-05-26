@@ -1,0 +1,99 @@
+Экшены, мясцо и кровище:
+1. login. 
+Принимает {"login":"vasya228,"password":"overlord444"}
+Возвращает:
+Одна большая сущность в зависимости от роли, некоторые поля будут заполнены 
+{
+	"login": "login1",
+	"password":"password1",
+	"role":"guest"|"pupil"|"teacher"|"admin"
+	"classGrade": 6,
+	"classLetter": "A",
+	"type":"mathematician",
+	"entityID":"1"  //Если это ученик или учитель, будет передан его ID в таблице учеников/учителей, 
+			//и в дальнейшем при вызове функций вместо логина/пароля удобней использовать этот ID.	
+}
+
+2.getPupilDay.
+Принимает {"pupilID":1,"date":"23.05.2016"}
+Возвращает:
+[
+	{
+		"lessonID" : "1",
+		"number": "1",
+		"timerange": "8:00-8:45", //Могу возвращать, но не факт что дата хорошо сериализуется
+		"subject": "Mathematics",
+		"auditorium": "210",
+		"teacher": "Shadrakov R.N.",
+		"homework": "Paragraph 2, #12 a), b), c), #14 d)",
+		"mark": "9"
+	},
+	{
+		"number": "2",
+		"timerange": "9:00-9:45",
+		"subject": "English",
+		"auditorium": "109",
+		"teacher": "Teseiko M.P.",
+		"homework": "Read O'Henry story, short retelling",
+		"mark": "absent"
+	},
+	{
+		"number": "4",
+		"timerange": "11:00-11:45",
+		"subject": "Russian literature",
+		"auditorium": "109",
+		"teacher": "Sergushov N.O.",
+		"homework": "",
+		"mark": ""
+	}
+]
+3.getTeacherDay.
+Принимает {"teacherID":"1","date":"23.05.2016"}
+Возвращает:
+[
+	{
+		"lessonID" : "1",
+		"number": 1,
+		"timerange": "8:00-8:45",
+		"subject": "Mathematics",
+		"auditorium": "210",
+		"classGrade": 6,
+		"classLetter": "A"
+	},
+	{
+		...
+	}
+	...
+]
+4.getTeacherLesson
+Принимает {"lessonID":"1"}
+Возвращает:
+{
+	"subject":"Mathematics",
+	"timerange":"8:00-8:45",
+	"classGrade":6,
+	"classLetter":"A",
+	"homework":"Collect one million dollars and give it to me",
+	"pupils":[
+		{
+			"pupilID":"1",
+			"number":1,
+			"name":"Vasiliy",
+			"lastname":"Pupkin",
+			"mark":"9"
+		},
+		{
+			"pupilID":"2",
+			"number":2,
+			"name":"Rostislav",
+			"lastname:"Babydonthurtme",
+			"mark":"absent"
+		}
+		]
+}
+5.setHomework
+Принимает {"lessonID":"1" , homework":"sprint 100m, swim 200m"}
+Возвращает SUCCESS, если всё хорошо, ERROR, если всё плохо.
+6.setMark
+Принимает {"pupilID":"1","lessonID":"1","mark":"5"}
+Возвращает SUCCESS, если всё хорошо, ERROR, если всё плохо.

@@ -143,7 +143,6 @@ public class ScheduleService implements IScheduleService {
         try {
             Lesson dbLesson = uof.getLessonDao().Select(lessonID);
             List<Lesson> lessonList = uof.getLessonDao().GetSubjectLessons(dbLesson.getSubjectID());
-            List<Lesson> removeList = new ArrayList<Lesson>();
             Calendar startDate = new GregorianCalendar();
             startDate.setTime(dbLesson.getDate());
             Calendar endDate = new GregorianCalendar(2017, 03, 30);
