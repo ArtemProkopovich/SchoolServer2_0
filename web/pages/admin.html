@@ -14,8 +14,23 @@
 </div>
 <div class="scrollable">
     <div id="pupils" class="tabcontent maintab">
-        <h3>London</h3>
-        <p>London is the capital city of England.</p>
+        <div style="display: inline-block;">
+            <table>
+                <tr>
+                    <th class="chead" align="left"><button class="dropbutton" ng-click="showClassList($event)">v</button><div style="display: inline-block; width: 100px;"> {{curClassName}}</div></th>
+                    <th class="chead"><button class="goto gototable" style="color:white;" ng-click="openSetClassWindow(curClass)">Edit</button></th>
+                    <th class="chead"><button class="goto gototable" style="color:white;" ng-click="openDeleteClassWindow()">Delete</button></th>
+                </tr>
+                <tbody>
+                    <tr ng-repeat="pupil in pupils">
+                        <td><p>{{pupil.surname}} {{pupil.name}}</p></td>
+                        <td><button class="goto gototable" ng-click="openSetPupilWindow(pupil)">...</button></td>
+                        <td><button class="goto gototable" ng-click="openDeletePupilWindow(pupil)">X</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="goto gotorow" ng-click="openSetPupilWindow(null)">Add new</button><button class="goto gotorow" ng-click="getPupils(curClass)">Refresh</button>
+        </div>
     </div>
     <div id="teachers" class="tabcontent maintab">
         <div style="display: inline-block;">
@@ -47,6 +62,7 @@
         </p>
     </div>
 </div>
+<!-- Teacher set and delete windows-->
 <div class="winlayer" align="center">
     <div id="setTeacherWindow" class="window">
         <div class="formheader">
@@ -126,9 +142,155 @@
         </div>
     </div>
 </div>
+<!-- Class set and delete windows-->
+<div class="winlayer" align="center">
+    <div id="setClassWindow" class="window">
+        <div class="formheader">
+            <h5>{{classHead}}</h5>
+            <button class="close" onclick="toggleWindow('setClassWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">Grade:</td>
+                    <td class="nvis"><input class="in shortin" type="number" min="0" max="30" ng-model="curClassGrade"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Letter:</td>
+                    <td class="nvis"><input class="in shortin" type="text" maxlength="1" ng-model="curClassLetter"/></td>
+                </tr>
+            </table>
+            </p>
+            <button class="button" ng-click="setClass()">Confirm</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="deleteClassWindow" class="window">
+        <div class="formheader">
+            <h5>Delete class</h5>
+            <button class="close" onclick="toggleWindow('deleteClassWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+                <table class="nvis">
+                    <tr class="nvis">
+                        <td class="nvis">ID:</td>
+                        <td class="nvis">{{curClass.ID}}</td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Grade:</td>
+                        <td class="nvis">{{curClass.grade}}</td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Letter:</td>
+                        <td class="nvis">{{curClass.letter}}</td>
+                    </tr>
+                </table>
+                <br>
+                Are you sure?
+            </p>
+            <button class="button minibutton" ng-click="deleteClass()">Yes</button>
+            <button class="button minibutton" onclick="toggleWindow('deleteClassWindow',false)">No</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+<!-- Pupil set and delete windows-->
+<div class="winlayer" align="center">
+    <div id="setPupilWindow" class="window">
+        <div class="formheader">
+            <h5>{{pupilHeader}}</h5>
+            <button class="close" onclick="toggleWindow('setPupilWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">Class:</td>
+                    <td class="nvis"><div class="lightdropblock">{{curPupilClassName}}</div><button class="lightdropbutton" ng-click="showList($event)">v</button></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Login:</td>
+                    <td class="nvis"><input class="in shortin" type="text" ng-model="curPupilLogin"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Password:</td>
+                    <td class="nvis"><input class="in shortin" type="text" ng-model="curPupilPassword"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Name:</td>
+                    <td class="nvis"><input class="in shortin" type="text" ng-model="curPupilName"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Surname:</td>
+                    <td class="nvis"><input class="in shortin" type="text" ng-model="curPupilSurname"></td>
+                </tr>
+
+            </table>
+            </p>
+            <button class="button" ng-click="setPupil()">Confirm</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="deletePupilWindow" class="window">
+        <div class="formheader">
+            <h5>Delete pupil</h5>
+            <button class="close" onclick="toggleWindow('deletePupilWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">ID:</td>
+                    <td class="nvis">{{curPupilID}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Login:</td>
+                    <td class="nvis">{{curPupilLogin}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Password:</td>
+                    <td class="nvis">{{curPupilPassword}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Name:</td>
+                    <td class="nvis">{{curPupilName}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Surname:</td>
+                    <td class="nvis">{{curPupilSurname}}</td>
+                </tr>
+            </table>
+            <br>
+            Are you sure?
+            </p>
+            <button class="button minibutton" ng-click="deletePupil()">Yes</button>
+            <button class="button minibutton" onclick="toggleWindow('deletePupilWindow',false)">No</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
 
 <div class="toastlayer" align="center">
     <div id="toast" class="toast" style="display: none;">
         {{ message }}
     </div>
+</div>
+<div id="classlist" class="dropdown" style="width: auto;">
+    <button class="dropitem" ng-click="changeClassAndClose(null)">Unassigned</button>
+    <button ng-repeat="class in classes" class="dropitem" ng-click="changeClassAndClose(class)">
+        {{class.grade}}-{{class.letter}}
+    </button>
+    <button class="dropitem" ng-click="openSetClassWindow(0)">Add new</button>
+</div>
+<div id="lightclasslist" class="lightdropdown" style="width: auto;">
+    <button class="lightdropitem" ng-click="changePupilClass(null)">Unassigned</button>
+    <button ng-repeat="class in classes" class="lightdropitem" ng-click="changePupilClass(class)">
+        {{class.grade}}-{{class.letter}}
+    </button>
 </div>

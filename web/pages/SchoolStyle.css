@@ -51,6 +51,63 @@ th {
 tr:nth-child(even) {
 	background-color: #f2f2f2;
 }
+.lightdropblock {
+	display: inline-block;
+	width: 100px;
+	height: 100%;
+	font-family: UbuntuR;
+	color: black;
+	border: 1px solid #a6a6a6;
+}
+.lightdropbutton {
+	display: inline-block;
+	height: 100%;
+	border: 1px solid #a6a6a6;
+	background: white;
+	font-family: UbuntuR;
+	color: black;
+	outline: none;
+}
+.lightdropbutton:hover {
+	background: #cc0000;
+	color: white;
+}
+.lightdropdown {
+	position: absolute;
+	background: white;
+	display: none;
+	width: 100px;
+
+}
+.lightdropitem {
+	display: block;
+	border: none;
+	width: 100%;
+	font-family: UbuntuR;
+	color: black;
+	outline: none;
+	background: white;
+}
+.lightdropitem:hover {
+	background: #cc0000;
+	color: white;
+}
+.dropbutton {
+	display: inline-block;
+	height: 100%;
+	border: none;
+	outline: none;
+	color: white;
+	font-family: UbuntuR;
+	background: #333333;
+	border-right: 1px solid #ffffff;
+}
+.dropbutton:hover {
+	background: #cc0000;
+}
+.chead {
+	padding: 0px;
+}
 .nvis, .nvis:nth-child(even) {
 	background: rgba(0,0,0,0);
 	border: none;

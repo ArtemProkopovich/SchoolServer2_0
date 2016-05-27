@@ -215,6 +215,10 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
     $scope.openMainTab = function(event, tabName, tabIndex) {
         switch (tabName) {
             case 'teachers': $scope.getTeachers(); break;
+            case 'pupils':
+                $scope.getClasses();
+                $scope.getPupils(null);
+                break;
         }
         openAdminTab(event, tabName, tabIndex);
     };
@@ -281,6 +285,168 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
         });
         showToast();
         $scope.getTeachers();
+    };
+    $scope.getClasses = function() {
+        $http.get('getClasses').then(function(response) {
+            $scope.classes = response.data;
+        });
+    };
+    $scope.showClassList = function(event) {
+        $scope.getClasses();
+        showDropdown('classlist',event.x,event.y);
+    };
+    $scope.showList = function(event) {
+        showDropdown('lightclasslist',event.x,event.y);
+    };
+    $scope.changeClassAndClose = function(curClass) {
+        $scope.getPupils(curClass);
+        $scope.curClass = curClass;
+        if (document.getElementById('setPupilWindow').style.display=='none')
+            $scope.curPupilClassName = $scope.curClassName;
+        hideDropdown('classlist');
+    };
+    $scope.openSetClassWindow = function(curClass) {
+        document.getElementById('classlist').style.display = 'none';
+        if (curClass==null) return;
+        if (curClass==0) {
+            $scope.classHead = 'Add class';
+            $scope.curClassID = null;
+            $scope.curClassGrade = 0;
+            $scope.curClassLetter = null;
+        } else {
+            $scope.classHead = 'Edit class';
+            $scope.curClassID = curClass.ID;
+            $scope.curClassGrade = curClass.grade;
+            $scope.curClassLetter = curClass.letter;
+        }
+        document.getElementById('setClassWindow').style.display = 'block';
+    };
+    $scope.setClass = function() {
+        var action = 'editClass';
+        if ($scope.curClassID==null) action = 'addClass';
+        var params = {
+            "classID":$scope.curClassID,
+            "classGrade":$scope.curClassGrade,
+            "classLetter":$scope.curClassLetter
+        };
+        $http.post(action,params).success(function() {
+            document.getElementById('setClassWindow').style.display = 'none';
+            $scope.message = 'Class is saved';
+            if (action=='editClass') $scope.curClassName = $scope.curClassGrade.toString() + '-' + $scope.curClassLetter;
+        }).error(function () {
+            $scope.message = "Error: class isn't saved";
+        });
+        showToast();
+    };
+    $scope.openDeleteClassWindow = function() {
+        if ($scope.curClass==null) return;
+        document.getElementById('deleteClassWindow').style.display = 'block';
+    };
+    $scope.deleteClass = function() {
+        var params = {
+            "classID":$scope.curClass.ID
+        };
+        $http.post('deleteClass',params).success(function() {
+            document.getElementById('deleteClassWindow').style.display = 'none';
+            $scope.message = "Class is deleted";
+            $scope.getPupils(null);
+        }).error(function() {
+            $scope.message = "Error: class isn't deleted";
+        });
+        showToast();
+    };
+
+    $scope.getPupils = function(curClass) {
+        var classID=-1;
+        if (curClass!=null) {
+            classID = curClass.ID;
+            $scope.curClassName = curClass.grade.toString() + '-' + curClass.letter;
+        } else {
+            $scope.curClassName = 'Unassigned';
+        }
+        var params = {
+            "classID":classID
+        };
+        $http.post('getPupils',params).then(function (response) {
+            $scope.pupils = response.data;
+        });
+    };
+    $scope.changePupilClass = function (curClass) {
+        if (curClass==null) {
+            $scope.curPupilClassName = 'Unassigned';
+            $scope.curPupilClassID = null;
+        } else {
+            $scope.curPupilClassName = curClass.grade.toString() + '-' + curClass.letter;
+            $scope.curPupilClassID = curClass.ID;
+        }
+        hideDropdown('lightclasslist');
+    };
+    $scope.openSetPupilWindow = function (pupil) {
+        document.getElementById('setPupilWindow').style.display = 'block';
+        if (pupil==null) {
+            $scope.pupilHeader = 'Add pupil';
+            $scope.curPupilID = null;
+            $scope.curPupilClassName = 'Unassigned';
+            $scope.curPupilClassID = null;
+            $scope.curPupilLogin = null;
+            $scope.curPupilPassword = null;
+            $scope.curPupilName = null;
+            $scope.curPupilSurname = null;
+        } else {
+            $scope.pupilHeader = 'Edit pupil';
+            $scope.curPupilID = pupil.pupilID;
+            $scope.curPupilClassName = $scope.curClassName;
+            if ($scope.curClass == null) {
+                $scope.curPupilClassID = null;
+            } else {
+                $scope.curPupilClassID = $scope.curClass.ID;
+            }
+            $scope.curPupilLogin = pupil.login;
+            $scope.curPupilPassword = pupil.password;
+            $scope.curPupilName = pupil.name;
+            $scope.curPupilSurname = pupil.surname;
+        }
+    };
+    $scope.setPupil = function() {
+        var action = 'editPupil';
+        if ($scope.curPupilID==null) action = 'addPupil';
+        var params = {
+            "pupilID":$scope.curPupilID,
+            "name":$scope.curPupilName,
+            "surname":$scope.curPupilSurname,
+            "classID":$scope.curPupilClassID,
+            "login":$scope.curPupilLogin,
+            "password":$scope.curPupilPassword
+        };
+        $http.post(action,params).success(function() {
+            $scope.message = "Pupil is saved";
+            toggleWindow('setPupilWindow',false);
+            $scope.getPupils($scope.curClass);
+        }).error(function() {
+            $scope.message = "Error: pupil is not saved";
+        });
+        showToast();
+    };
+    $scope.openDeletePupilWindow = function(pupil) {
+        document.getElementById('deletePupilWindow').style.display = 'block';
+        $scope.curPupilID = pupil.pupilID;
+        $scope.curPupilLogin = pupil.login;
+        $scope.curPupilPassword = pupil.password;
+        $scope.curPupilName = pupil.name;
+        $scope.curPupilSurname = pupil.surname;
+    };
+    $scope.deletePupil = function() {
+        var params = {
+            "pupilID":$scope.curPupilID
+        };
+        $http.post('deletePupil',params).success(function() {
+            toggleWindow('deletePupilWindow',false);
+            $scope.message = "Pupil is deleted";
+            $scope.getPupils($scope.curClass);
+        }).error(function () {
+            $scope.message = "Error: pupil isn't deleted";
+        });
+        showToast();
     };
     $scope.pageClass = 'page-app';
     if (role!='ADMIN') {
