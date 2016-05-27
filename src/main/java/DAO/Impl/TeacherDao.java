@@ -25,7 +25,7 @@ public class TeacherDao implements ITeacherDao {
     private final String INSERT_TEACHER = "INSERT INTO `teachers` (`surname`, `name`, `type`, `user_id`) VALUES (?, ?, ?, ?)";
     private final String SELECT_TEACHER = "SELECT * FROM teachers WHERE teacher_id=?";
     private final String SELECT_ALL_TEACHERS = "SELECT * FROM teachers";
-    private final String UPDATE_TEACHER = "UPDATE INTO teachers SET surname=?, name=?, type=?, user_id=? WHERE teacher_id=?";
+    private final String UPDATE_TEACHER = "UPDATE teachers SET surname=?, name=?, type=?, user_id=? WHERE teacher_id=?";
     private final String DELETE_TEACHER = "DELETE FROM teachers WHERE teacher_id=?";
 
     private MySqlConnection connection;

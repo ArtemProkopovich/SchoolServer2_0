@@ -33,9 +33,9 @@ public class UpdateTeacher extends ActionSupport {
 
     public void setTeacherID(int teacherID){teacher.setID(teacherID);}
 
-    public void setFirstname(String firstname){teacher.setName(firstname);}
+    public void setName(String name){teacher.setName(name);}
 
-    public void setLastname(String lastname){teacher.setSurname(lastname);}
+    public void setSurname(String surname){teacher.setSurname(surname);}
 
     public void setType(String type){teacher.setType(type);}
 

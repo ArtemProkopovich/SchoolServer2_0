@@ -35,13 +35,9 @@ public class UpdatePupil extends ActionSupport {
         pupil.setID(pupilID);
     }
 
-    public void setFirstname(String firstname) {
-        pupil.setName(firstname);
-    }
+    public void setName(String name){pupil.setName(name);}
 
-    public void setLastname(String lastname) {
-        pupil.setSurname(lastname);
-    }
+    public void setSurname(String surname){pupil.setSurname(surname);}
 
     public void setClassID(int classID) {
         pupil.setClassID(classID);
