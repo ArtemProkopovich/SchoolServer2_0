@@ -33,7 +33,7 @@
                 </tr>
                 </tbody>
             </table>
-            <button class="goto gotorow" ng-click="openSetTeacherWindow(null)">Add new</button>
+            <button class="goto gotorow" ng-click="openSetTeacherWindow(null)">Add new</button><button class="goto gotorow" ng-click="getTeachers()">Refresh</button>
         </div>
     </div>
     <div id="schedule" class="tabcontent maintab">
@@ -83,6 +83,50 @@
         </div>
     </div>
 </div>
+<div class="winlayer" align="center">
+    <div id="deleteTeacherWindow" class="window">
+        <div class="formheader">
+            <h5>Delete teacher</h5>
+            <button class="close" onclick="toggleWindow('deleteTeacherWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">ID:</td>
+                    <td class="nvis">{{curTeacherID}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Login:</td>
+                    <td class="nvis">{{curTeacherLogin}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Password:</td>
+                    <td class="nvis">{{curTeacherPassword}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Name:</td>
+                    <td class="nvis">{{curTeacherName}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Surname:</td>
+                    <td class="nvis">{{curTeacherSurname}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Type:</td>
+                    <td class="nvis">{{curTeacherType}}</td>
+                </tr>
+            </table>
+            <br>
+            Are you sure?
+            </p>
+            <button class="button minibutton" ng-click="deleteTeacher()">Yes</button>
+            <button class="button minibutton" onclick="toggleWindow('deleteTeacherWindow',false)">No</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+
 <div class="toastlayer" align="center">
     <div id="toast" class="toast" style="display: none;">
         {{ message }}

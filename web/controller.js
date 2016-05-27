@@ -256,10 +256,31 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
         }).error(function() {
             $scope.message = "Error: changes aren't saved";
         });
+        $scope.getTeachers();
         showToast();
     };
     $scope.openDeleteTeacherWindow = function(teacher) {
+        document.getElementById('deleteTeacherWindow').style.display = 'block';
+        $scope.curTeacherID = teacher.teacherID;
+        $scope.curTeacherSurname = teacher.surname;
+        $scope.curTeacherName = teacher.name;
+        $scope.curTeacherLogin = teacher.login;
+        $scope.curTeacherPassword = teacher.password;
+        $scope.curTeacherType = teacher.type;
+    };
+    $scope.deleteTeacher = function() {
+        var params = {
+            "teacherID":$scope.curTeacherID
+        };
+        $http.post('deleteTeacher',params).success(function() {
+            document.getElementById('deleteTeacherWindow').style.display = 'none';
+            $scope.message = 'Teacher is deleted';
 
+        }).error(function() {
+            $scope.message = "Error: teacher is not deleted";
+        });
+        showToast();
+        $scope.getTeachers();
     };
     $scope.pageClass = 'page-app';
     if (role!='ADMIN') {
