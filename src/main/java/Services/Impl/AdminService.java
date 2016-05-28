@@ -98,6 +98,7 @@ public class AdminService implements IAdminService {
             if (dbPupil != null) {
                 dbPupil.setName(pupil.getName());
                 dbPupil.setSurname(pupil.getSurname());
+                dbPupil.setClassID(pupil.getClassID());
                 uof.getPupilDao().Update(dbPupil);
                 dbUser.setLogin(user.getLogin());
                 dbUser.setPassword(user.getPassword());
