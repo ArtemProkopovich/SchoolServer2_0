@@ -62,7 +62,8 @@ tr:nth-child(even) {
 .lightdropbutton {
 	display: inline-block;
 	height: 100%;
-	border: 1px solid #a6a6a6;
+	border: none;
+	border-right: 1px solid #a6a6a6;
 	background: white;
 	font-family: UbuntuR;
 	color: black;

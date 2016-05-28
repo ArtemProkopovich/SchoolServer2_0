@@ -213,11 +213,15 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
         });
     };
     $scope.openMainTab = function(event, tabName, tabIndex) {
+        hideAll();
         switch (tabName) {
             case 'teachers': $scope.getTeachers(); break;
             case 'pupils':
                 $scope.getClasses();
                 $scope.getPupils(null);
+                break;
+            case 'subjects':
+                $scope.getSubjects();
                 break;
         }
         openAdminTab(event, tabName, tabIndex);
@@ -286,6 +290,7 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
         showToast();
         $scope.getTeachers();
     };
+
     $scope.getClasses = function() {
         $http.get('getClasses').then(function(response) {
             $scope.classes = response.data;
@@ -448,6 +453,98 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
         });
         showToast();
     };
+
+    $scope.getSubjects = function () {
+        var params = {
+            "all":true
+        };
+        $http.post('getSubjects',params).then(function(response) {
+            $scope.subjects = response.data;
+        });
+    };
+    $scope.resetSearch = function () {
+        $scope.search.name = undefined;
+        $scope.search.classGrade = undefined;
+        $scope.search.classLetter = undefined;
+        $scope.search.teacher = undefined;
+    };
+    $scope.showTeacherList = function(event) {
+        $scope.getTeachers();
+        showDropdown('teacherlist',event.x,event.y);
+    };
+    $scope.showSubjectClassList = function(event) {
+        $scope.getClasses();
+        showDropdown('subclasslist',event.x,event.y);
+    };
+    $scope.changeTeacherAndClose = function(teacher) {
+        $scope.curTeacher = teacher;
+        hideDropdown('teacherlist');
+    };
+    $scope.changeSubjectClass = function(curClass) {
+        $scope.curSubjectClass = curClass;
+        hideDropdown('subclasslist');
+    };
+    $scope.openSetSubjectWindow = function(subject) {
+        $scope.curSubjectClass= null;
+        $scope.curTeacher = null;
+        if (subject==null) {
+            $scope.subjectHeader = 'Add subject';
+            $scope.curSubjectID = null;
+            $scope.curSubjectName = null;
+            $scope.curSubjectLessons = null;
+        } else {
+            $scope.subjectHeader = "Edit subject";
+            $scope.curSubjectID = subject.subjectID;
+            $scope.curSubjectName = subject.name;
+            $scope.curSubjectLessons = subject.lessonCount;
+        }
+        toggleWindow('setSubjectWindow',true);
+    };
+    $scope.openDeleteSubjectWindow = function(subject) {
+        $scope.delSubject = subject;
+        toggleWindow('deleteSubjectWindow', true);
+    };
+    $scope.setSubject = function() {
+        if ($scope.curTeacher==null ||
+            $scope.curSubjectClass==null ||
+            $scope.curSubjectName==null ||
+            $scope.curSubjectLessons==null) {
+                $scope.message = "Fill all properties before apply";
+                showToast();
+                return;
+        }
+        var action = 'editSubject';
+        if ($scope.curSubjectID==null) action='addSubject';
+        var params = {
+            "subjectID":$scope.curSubjectID,
+            "name":$scope.curSubjectName,
+            "lessonCount":$scope.curSubjectLessons,
+            "classID":$scope.curSubjectClass.ID,
+            "teacherID":$scope.curTeacher.teacherID
+        };
+        console.log(params);
+        $http.post(action,params).success(function() {
+            toggleWindow('setSubjectWindow',false);
+            $scope.message = "Subject is saved";
+            $scope.getSubjects();
+        }).error(function() {
+            $scope.message = "Error: subject isn't saved";
+        });
+        showToast();
+    };
+    $scope.deleteSubject = function() {
+        var params = {
+            "subjectID":$scope.delSubject.subjectID
+        };
+        $http.post('deleteSubject',params).success(function() {
+            $scope.message = "Subject is deleted";
+            toggleWindow('deleteSubjectWindow', false);
+            $scope.getSubjects();
+        }).error(function() {
+            $scope.message = "Error: subject isn't deleted";
+        });
+        showToast();
+    };
     $scope.pageClass = 'page-app';
     if (role!='ADMIN') {
        LogOut.logout();
@@ -541,4 +638,7 @@ function showDropdown(id,x,y) {
     } else {
         document.getElementById(id).style.top = y;
     }
+}
+function hideAll() {
+    //Make it!!!
 }

@@ -55,11 +55,60 @@
         <h3>Tokyo</h3>
         <p>Tokyo is the capital of Japan.</p>
     </div>
-    <div id="subjects" class="tabcontent maintab">
-        <p>
-            Subjects
-            <button class="button" onclick="toggleWindow('addsubject', true)">Add</button>
-        </p>
+    <div id="subjects" class="tabcontent maintab" align="center">
+        <div class="window" style="display:block;">
+            <div class="formheader"><h5>Search filters</h5></div>
+            <div align="center">
+                <p>
+                <table class="nvis">
+                    <tr class="nvis">
+                        <td class="nvis">Subject:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="search.name"></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Class grade:</td>
+                        <td class="nvis"><input class="in shortin" type="text" maxlength="2" ng-model="search.classGrade"></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Class letter:</td>
+                        <td class="nvis"><input class="in shortin" type="text" maxlength="1" ng-model="search.classLetter"></td>
+                    </tr>
+                    <tr class="nvis">
+                        <td class="nvis">Teacher:</td>
+                        <td class="nvis"><input class="in shortin" type="text" ng-model="search.teacher"></td>
+                    </tr>
+                </table>
+                <br>
+                <button class="button" ng-click="resetSearch()">Reset</button>
+                </p>
+                <div style="height: 1px;"></div>
+            </div>
+        </div>
+        <div style="display: inline-block;">
+            <p>
+                <table>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Class</th>
+                        <th>Lessons</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tbody>
+                    <tr ng-repeat="subject in subjects | filter:search">
+                        <td>{{subject.name}}</td>
+                        <td>{{subject.teacher}}</td>
+                        <td>{{subject.classGrade}}-{{subject.classLetter}}</td>
+                        <td>{{subject.lessonCount}}</td>
+                        <td><button class="goto gototable" ng-click="openSetSubjectWindow(subject)">...</button></td>
+                        <td><button class="goto gototable" ng-click="openDeleteSubjectWindow(subject)">X</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="goto gotorow" ng-click="openSetSubjectWindow(null)">Add new</button><button class="goto gotorow" ng-click="getSubjects(curTeacher)">Refresh</button>
+            </p>
+        </div>
     </div>
 </div>
 <!-- Teacher set and delete windows-->
@@ -210,7 +259,7 @@
             <table class="nvis">
                 <tr class="nvis">
                     <td class="nvis">Class:</td>
-                    <td class="nvis"><div class="lightdropblock">{{curPupilClassName}}</div><button class="lightdropbutton" ng-click="showList($event)">v</button></td>
+                    <td class="nvis"><div class="in shortin" align="left"><button class="lightdropbutton" ng-click="showList($event)">v</button>{{curPupilClassName}}</div></td>
                 </tr>
                 <tr class="nvis">
                     <td class="nvis">Login:</td>
@@ -275,6 +324,78 @@
         </div>
     </div>
 </div>
+<!--Subject set and delete windows-->
+<div class="winlayer" align="center">
+    <div id="setSubjectWindow" class="window">
+        <div class="formheader">
+            <h5>{{subjectHeader}}</h5>
+            <button class="close" onclick="toggleWindow('setSubjectWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">Name:</td>
+                    <td class="nvis"><input class="in shortin" type="text" ng-model="curSubjectName"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Lessons:</td>
+                    <td class="nvis"><input class="in shortin" type="number" min="1" ng-model="curSubjectLessons"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Class:</td>
+                    <td class="nvis"><button class="lightdropbutton" ng-click="showSubjectClassList($event)">v</button>{{curSubjectClass.grade}}-{{curSubjectClass.letter}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Teacher:</td>
+                    <td class="nvis"><button class="lightdropbutton" ng-click="showTeacherList($event)">v</button>{{curTeacher.surname}} {{curTeacher.name}}</td>
+                </tr>
+            </table>
+            </p>
+            <button class="button" ng-click="setSubject()">Confirm</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+<div class="winlayer" align="center">
+    <div id="deleteSubjectWindow" class="window">
+        <div class="formheader">
+            <h5>Delete subject</h5>
+            <button class="close" onclick="toggleWindow('deleteSubjectWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">ID:</td>
+                    <td class="nvis">{{delSubject.subjectID}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Name:</td>
+                    <td class="nvis">{{delSubject.name}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Lessons:</td>
+                    <td class="nvis">{{delSubject.lessonCount}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Class:</td>
+                    <td class="nvis">{{delSubject.classGrade}}-{{delSubject.classLetter}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Teacher:</td>
+                    <td class="nvis">{{delSubject.teacher}}</td>
+                </tr>
+            </table>
+            <br>
+            Are you sure?
+            </p>
+            <button class="button minibutton" ng-click="deleteSubject()">Yes</button>
+            <button class="button minibutton" onclick="toggleWindow('deleteSubjectWindow',false)">No</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
 
 <div class="toastlayer" align="center">
     <div id="toast" class="toast" style="display: none;">
@@ -291,6 +412,16 @@
 <div id="lightclasslist" class="lightdropdown" style="width: auto;">
     <button class="lightdropitem" ng-click="changePupilClass(null)">Unassigned</button>
     <button ng-repeat="class in classes" class="lightdropitem" ng-click="changePupilClass(class)">
+        {{class.grade}}-{{class.letter}}
+    </button>
+</div>
+<div id="teacherlist" class="lightdropdown" style="width: auto;">
+    <button ng-repeat="teacher in teachers" class="lightdropitem" ng-click="changeTeacherAndClose(teacher)">
+        {{teacher.surname}} {{teacher.name}}
+    </button>
+</div>
+<div id="subclasslist" class="lightdropdown" style="width: auto;">
+    <button ng-repeat="class in classes" class="lightdropitem" ng-click="changeSubjectClass(class)">
         {{class.grade}}-{{class.letter}}
     </button>
 </div>
