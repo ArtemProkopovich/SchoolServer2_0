@@ -51,9 +51,30 @@
             <button class="goto gotorow" ng-click="openSetTeacherWindow(null)">Add new</button><button class="goto gotorow" ng-click="getTeachers()">Refresh</button>
         </div>
     </div>
-    <div id="schedule" class="tabcontent maintab">
-        <h3>Tokyo</h3>
-        <p>Tokyo is the capital of Japan.</p>
+    <div id="schedule" class="tabcontent maintab" align="center">
+        <div style="display: inline-block">
+            <table style="width: 100%">
+                <th class="chead" style="width:50%;" align="left"><button class="dropbutton" ng-click="showScheduleClassList($event)">v</button>{{curClass.grade}}-{{curClass.letter}}</th>
+                <th class="chead" style="width: 50%" align="left"><button class="dropbutton" ng-click="showDayList($event)">v</button>{{curDay.name}}</th>
+            </table>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Subject | Teacher</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <tbody>
+                <tr ng-repeat="lesson in daySchedule">
+                    <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timeRange}}</p></td>
+                    <td><p>{{lesson.subject}}<br> {{lesson.teacher}} {{lesson.auditorium}}</p></td>
+                    <td><button class="goto gototable" ng-click="openSetLessonWindow(lesson)">...</button></td>
+                    <td><button class="goto gototable" ng-click="deleteLesson(lesson)">X</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="goto gotorow" ng-click="openSetLessonWindow(null)">Add new</button><button class="goto gotorow" ng-click="getClassDaySchedule()">Refresh</button>
+        </div>
     </div>
     <div id="subjects" class="tabcontent maintab" align="center">
         <div class="window" style="display:block;">
@@ -396,6 +417,44 @@
         </div>
     </div>
 </div>
+<!--Lesson set window-->
+<div class="winlayer" align="center">
+    <div id="setLessonWindow" class="window">
+        <div class="formheader">
+            <h5>{{lessonHeader}}</h5>
+            <button class="close" onclick="toggleWindow('setLessonWindow', false)">X</button>
+        </div>
+        <div align="center">
+            <p>
+            <table class="nvis">
+                <tr class="nvis">
+                    <td class="nvis">Class:</td>
+                    <td class="nvis">{{curClass.grade}}-{{curClass.letter}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Day:</td>
+                    <td class="nvis">{{curDay.name}}</td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Subject:</td>
+                    <td class="nvis"><div class="in shortin" align="left"><button class="lightdropbutton" ng-click="showSubjectList($event)">v</button>{{curScheduleSubject.name}} {{curScheduleSubject.teacher}}</div></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Number:</td>
+                    <td class="nvis"><input class="in shortin" type="number" min="0" max="30" ng-model="curLessonNumber"/></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Auditorium:</td>
+                    <td class="nvis"><input class="in shortin" type="text" ng-model="curAuditorium"/></td>
+                </tr>
+            </table>
+            </p>
+            <button class="button" ng-click="setLesson()">Confirm</button>
+            <div style="height: 1px;"></div>
+        </div>
+    </div>
+</div>
+
 
 <div class="toastlayer" align="center">
     <div id="toast" class="toast" style="display: none;">
@@ -423,5 +482,25 @@
 <div id="subclasslist" class="lightdropdown" style="width: auto;">
     <button ng-repeat="class in classes" class="lightdropitem" ng-click="changeSubjectClass(class)">
         {{class.grade}}-{{class.letter}}
+    </button>
+</div>
+<!-- schedule dropdowns-->
+<div id="daylist" class="dropdown" style="width: auto;">
+    <button class="dropitem" ng-click="setDay(0)">Monday</button>
+    <button class="dropitem" ng-click="setDay(1)">Tuesday</button>
+    <button class="dropitem" ng-click="setDay(2)">Wednesday</button>
+    <button class="dropitem" ng-click="setDay(3)">Thursday</button>
+    <button class="dropitem" ng-click="setDay(4)">Friday</button>
+    <button class="dropitem" ng-click="setDay(5)">Saturday</button>
+    <button class="dropitem" ng-click="setDay(6)">Sunday</button>
+</div>
+<div id="scheduleclasslist" class="dropdown" style="width: auto">
+    <button ng-repeat="class in classes" class="dropitem" ng-click="setScheduleClass(class)">
+        {{class.grade}}-{{class.letter}}
+    </button>
+</div>
+<div id="subjectlist" class="lightdropdown" style="width: auto">
+    <button ng-repeat="subject in subjects" class="lightdropitem" ng-click="setLessonSubject(subject)">
+        {{subject.name}} {{subject.teacher}}
     </button>
 </div>

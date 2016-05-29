@@ -223,6 +223,16 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
             case 'subjects':
                 $scope.getSubjects();
                 break;
+            case 'schedule':
+                $scope.getClasses();
+                $scope.getClasses();
+                $scope.curClass = $scope.classes[0];
+                $scope.curDay = {
+                    name:'Monday',
+                    number:0
+                };
+                $scope.setDay(0);
+                break;
         }
         openAdminTab(event, tabName, tabIndex);
     };
@@ -542,6 +552,106 @@ schoolApp.controller('adminController', function($scope, LogOut, $location, $htt
             $scope.getSubjects();
         }).error(function() {
             $scope.message = "Error: subject isn't deleted";
+        });
+        showToast();
+    };
+
+    $scope.getSubjectsByClass = function() {
+        var params = {
+            "classID":$scope.curClass.ID
+        };
+        $http.post('getSubjectsByClass',params).then(function (response) {
+            $scope.subjects = response.data;
+        });
+    };
+    $scope.getClassDaySchedule = function() {
+        var params = {
+            "classID":$scope.curClass.ID,
+            "day":$scope.curDay.number
+        };
+        $http.post('getClassDaySchedule',params).then(function(response) {
+            $scope.lessons = response.data;
+        })
+    };
+    $scope.showDayList = function(event) {
+        showDropdown('daylist',event.x,event.y);
+    };
+    $scope.setDay = function(dayNum) {
+        $scope.curDay.number = dayNum;
+        switch (dayNum) {
+            case 0:$scope.curDay.name = 'Monday'; break;
+            case 1:$scope.curDay.name = 'Tuesday'; break;
+            case 2:$scope.curDay.name = 'Wednesday'; break;
+            case 3:$scope.curDay.name = 'Thursday'; break;
+            case 4:$scope.curDay.name = 'Friday'; break;
+            case 5:$scope.curDay.name = 'Saturday'; break;
+            case 6:$scope.curDay.name = 'Sunday'; break;
+        }
+        hideDropdown('daylist');
+        $scope.getClassDaySchedule();
+    };
+    $scope.showScheduleClassList = function(event) {
+        $scope.getClasses();
+        showDropdown('scheduleclasslist',event.x,event.y);
+    };
+    $scope.setScheduleClass = function(curClass) {
+        $scope.curClass = curClass;
+        $scope.getClassDaySchedule();
+        hideDropdown('scheduleclasslist');
+    };
+    $scope.deleteLesson = function(lesson) {
+        var params = {
+            "lessonID":lesson.lessonID
+        };
+        $http.post('deleteLesson',params).success(function() {
+            $scope.message = "Lesson is deleted";
+            $scope.getClassDaySchedule();
+        }).error(function() {
+            $scope.message = "Error: lesson isn't deleted";
+        });
+        showToast();
+    };
+    $scope.openSetLessonWindow = function(lesson) {
+        if (lesson==null) {
+            $scope.lessonHeader = 'Add lesson';
+            $scope.curLessonID = null;
+            $scope.curLessonNumber = null;
+            $scope.curAuditorium = null;
+        } else {
+            $scope.lessonHeader = 'Edit lesson';
+            $scope.curLessonID = lesson.lessonID;
+            $scope.curLessonNumber = lesson.number;
+            $scope.curAuditorium = lesson.auditorium;
+        }
+        $scope.curScheduleSubject = null;
+        toggleWindow('setLessonWindow',true);
+    };
+    $scope.showSubjectList = function(event) {
+        $scope.getSubjectsByClass();
+        showDropdown('subjectlist',event.x,event.y);
+    };
+    $scope.setLessonSubject = function(subject) {
+        $scope.curScheduleSubject = subject;
+        hideDropdown('subjectlist');
+    };
+    $scope.setLesson = function() {
+        var action = 'editLesson';
+        if ($scope.curLessonID==null) action='addLesson';
+        var params = {
+            "lessonID":$scope.curLessonID,
+            "day":$scope.curDay.number,
+            "classID":$scope.curClass.ID,
+            "number":$scope.curLessonNumber,
+            "auditorium":$scope.curAuditorium,
+            "subjectID":$scope.curScheduleSubject.subjectID
+        };
+        console.log(params);
+        $http.post(action,params).success(function() {
+            $scope.message = "Lesson is saved";
+            $scope.getClassDaySchedule();
+            toggleWindow('setLessonWindow',false);
+        }).error(function () {
+            $scope.message = "Error: lesson isn't saved";
         });
         showToast();
     };
