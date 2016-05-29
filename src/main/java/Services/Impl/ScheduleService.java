@@ -122,19 +122,24 @@ public class ScheduleService implements IScheduleService {
 
     public void UpdateLesson(Lesson lesson, int dayOfWeek) throws ServiceException {
         try {
-            Calendar startDate = new GregorianCalendar(2016, 04, 01);
-            startDate.setFirstDayOfWeek(Calendar.MONDAY);
-            while (startDate.get(Calendar.DAY_OF_WEEK) != DayOfWeekToCalendar(dayOfWeek))
-                startDate.add(Calendar.DAY_OF_MONTH, 1);
+            Lesson dbLesson = uof.getLessonDao().Select(lesson.getID());
+            List<Lesson> lessonList = uof.getLessonDao().GetSubjectLessons(dbLesson.getSubjectID());
+            Calendar startDate = new GregorianCalendar();
+            startDate.setTime(dbLesson.getDate());
             Calendar endDate = new GregorianCalendar(2017, 03, 30);
             while (startDate.before(endDate)) {
-                lesson.setDate(startDate.getTime());
-                lesson.setHomework("");
-                uof.getLessonDao().Update(lesson);
+                for (Lesson l : lessonList) {
+                    if (l.getDate().equals(startDate.getTime()) && l.getScheduleNumber() == dbLesson.getScheduleNumber()) {
+                        l.setHomework(lesson.getHomework());
+                        l.setRoom(lesson.getRoom());
+                        l.setScheduleNumber(lesson.getScheduleNumber());
+                        l.setSubjectID(lesson.getSubjectID());
+                        uof.getLessonDao().Update(l);
+                    }
+                }
                 startDate.add(Calendar.WEEK_OF_YEAR, 1);
             }
-        }
-        catch (DAOException ex) {
+        } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -148,7 +153,7 @@ public class ScheduleService implements IScheduleService {
             Calendar endDate = new GregorianCalendar(2017, 03, 30);
             while (startDate.before(endDate)) {
                 for (Lesson lesson : lessonList) {
-                    if (lesson.getDate().equals(startDate.getTime()))
+                    if (lesson.getDate().equals(startDate.getTime()) && lesson.getScheduleNumber() == dbLesson.getScheduleNumber())
                         uof.getLessonDao().Delete(lesson.getID());
                 }
                 startDate.add(Calendar.WEEK_OF_YEAR, 1);

@@ -206,7 +206,7 @@ public class SubjectDao implements ISubjectDao {
             cn = connection.getConnection();
             PreparedStatement st = cn.prepareStatement(DELETE_SUBJECT);
             st.setInt(1,id);
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException ex) {
             throw new DAOException(ex);

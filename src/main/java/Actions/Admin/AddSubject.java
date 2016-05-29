@@ -39,6 +39,8 @@ public class AddSubject extends ActionSupport {
         subject.setName(name);
     }
 
+    public void setLessonCount(int lessonCount){subject.setLessonCount(lessonCount);}
+
     public Subject getSubject() {
         return subject;
     }
