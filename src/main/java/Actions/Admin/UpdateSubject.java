@@ -10,7 +10,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * Created by Артем on 08.05.2016.
  */
 public class UpdateSubject extends ActionSupport {
-    public Subject subject;
+    public Subject subject = new Subject();
     private IScheduleService scheduleService = ServiceFactory.getScheduleService();
 
     public String execute() throws Exception {
@@ -34,6 +34,8 @@ public class UpdateSubject extends ActionSupport {
     public void setTeacherID(int teacherID) {
         subject.setTeacherID(teacherID);
     }
+
+    public void setLessonCount(int lessonCount){subject.setLessonCount(lessonCount);}
 
     public void setClassID(int classID) {
         subject.setClassID(classID);
