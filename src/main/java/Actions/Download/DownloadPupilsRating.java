@@ -24,12 +24,12 @@ public class DownloadPupilsRating extends ActionSupport {
                 return SUCCESS;
             }
             if (docType.equals("xls")) {
-                fileStream = printService.PrintXLSPupilWeekSchedule(classID);
+                fileStream = printService.PrintXLSPupilsRating(classID);
                 fileName = "Rating" + classID + ".xlsx";
                 return SUCCESS;
             }
             if (docType.equals("csv")) {
-                fileStream = printService.PrintCSVPupilWeekSchedule(classID);
+                fileStream = printService.PrintCSVPupilsRating(classID);
                 fileName = "Rating" + classID + ".csv";
                 return SUCCESS;
             }

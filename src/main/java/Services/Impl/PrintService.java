@@ -768,7 +768,7 @@ public class PrintService implements IPrintService {
                 List<ScheduleTeacherLesson> dayLessonList = new ArrayList<ScheduleTeacherLesson>();
                 List<Lesson> lessonList = uof.getLessonDao().GetTeacherDayLessons(teacher.getID(), startDate.getTime());
                 for (Lesson l : lessonList) {
-                    Subject subject = uof.getSubjectDao().Select(l.getID());
+                    Subject subject = uof.getSubjectDao().Select(l.getSubjectID());
                     Class cls = uof.getClassDao().Select(subject.getClassID());
                     ScheduleTeacherLesson stl = new ScheduleTeacherLesson();
                     stl.setLesson(l);
