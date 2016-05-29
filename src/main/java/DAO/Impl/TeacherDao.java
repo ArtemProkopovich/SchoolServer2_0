@@ -106,6 +106,7 @@ public class TeacherDao implements ITeacherDao {
             cn = connection.getConnection();
             PreparedStatement st;
             st=cn.prepareStatement(SELECT_TEACHER_CLASSES);
+            st.setInt(1, teacherID);
             ResultSet set = st.executeQuery();
             ArrayList<Class> result = new ArrayList<Class>();
             while (set.next()) {
