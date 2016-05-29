@@ -92,13 +92,9 @@ public class PrintService implements IPrintService {
     private String GetMarksList(List<Mark> list)
     {
         StringBuilder result = new StringBuilder();
-        for (int i=0;i<list.size()-1;i++)
+        for (int i=0;i<list.size();i++)
         {
             result.append(list.get(i).getMark()).append(",");
-        }
-        if (list.size()>0) {
-            result.delete(result.length() - 1, result.length() - 1);
-            result.append(".");
         }
         return result.toString();
     }
@@ -962,8 +958,14 @@ public class PrintService implements IPrintService {
                 List<SchedulePupilLesson> dayLessonList = new ArrayList<SchedulePupilLesson>();
                 List<Lesson> lessonList = uof.getLessonDao().GetPupilDayLessons(pupil.getID(), startDate.getTime());
                 for (Lesson l : lessonList) {
-                    Subject subject = uof.getSubjectDao().Select(l.getID());
+                    Subject subject = uof.getSubjectDao().Select(l.getSubjectID());
                     Teacher teacher = uof.getTeacherDao().Select(subject.getTeacherID());
+                    if (teacher==null)
+                    {
+                        teacher = new Teacher();
+                        teacher.setName("");
+                        teacher.setSurname("");
+                    }
                     SchedulePupilLesson spl = new SchedulePupilLesson();
                     spl.setLesson(l);
                     spl.setSubject(subject);
