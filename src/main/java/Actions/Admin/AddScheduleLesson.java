@@ -34,9 +34,9 @@ public class AddScheduleLesson extends ActionSupport {
 
     public void setSubjectID(int subjectID){lesson.setSubjectID(subjectID);}
 
-    public void setNumber(int number){lesson.setSubjectID(number);}
+    public void setNumber(int number){lesson.setScheduleNumber(number);}
 
-    public void setAuditorium(int auditorium){lesson.setSubjectID(auditorium);}
+    public void setAuditorium(int auditorium){lesson.setRoom(auditorium);}
 
     public int getDayOfWeek() {
         return day;
