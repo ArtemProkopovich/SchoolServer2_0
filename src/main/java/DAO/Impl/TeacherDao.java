@@ -28,8 +28,7 @@ public class TeacherDao implements ITeacherDao {
     private final String SELECT_ALL_TEACHERS = "SELECT * FROM teachers";
     private final String UPDATE_TEACHER = "UPDATE teachers SET surname=?, name=?, type=?, user_id=? WHERE teacher_id=?";
     private final String DELETE_TEACHER = "DELETE FROM teachers WHERE teacher_id=?";
-    private final String SELECT_TEACHER_CLASSES = "SELECT distinct * FROM classes JOIN subjects ON classes.class_id=subjects.class_id " +
-            "JOIN teachers ON teachers.teacher_id = subjects.teacher_id WHERE teachers.teacher_id=?";
+    private final String SELECT_TEACHER_CLASSES = "SELECT distinct classes.class_id, grade, letter FROM classes JOIN subjects ON classes.class_id=subjects.class_id JOIN teachers ON teachers.teacher_id = subjects.teacher_id WHERE teachers.teacher_id=?";
 
     private MySqlConnection connection;
 
