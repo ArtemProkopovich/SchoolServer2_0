@@ -10,6 +10,7 @@ import Entities.Teacher;
 public class ScheduleClassLesson {
     private int lessonID;
     private int number;
+    private String timeRange;
     private int auditorium;
     private int subjectID;
     private String subject;
@@ -21,11 +22,20 @@ public class ScheduleClassLesson {
         number = lesson.getScheduleNumber();
         auditorium = lesson.getRoom();
         subjectID = subject.getID();
+        timeRange = TimeOfLesson.NumberToTime(number);
         this.subject = subject.getName();
         if (teacher != null) {
             teacherID = teacher.getID();
             this.teacher = teacher.getSurname() + " " + teacher.getName();
         }
+    }
+
+    public String getTimeRange() {
+        return timeRange;
+    }
+
+    public void setTimeRange(String timeRange) {
+        this.timeRange = timeRange;
     }
 
     public int getLessonID() {
