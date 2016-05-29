@@ -127,6 +127,65 @@ schoolApp.controller('pupilController', function($scope, $location, LogOut, $htt
     $scope.getPupilDay();
 });
 schoolApp.controller('teacherController', function($scope, LogOut, $location, $http) {
+    var docType = 'csv';
+    var doc = 'TeacherSchedule';
+
+    $scope.setDoctype = function(type) {
+        docType = type;
+    };
+    $scope.getSubjectsByTeacher = function() {
+        var params = {
+            "teacherID":ID
+        };
+        $http.post('getSubjectsByTeacher',params).then(function(response) {
+            $scope.subjects = response.data;
+        });
+    };
+    $scope.getClassesByTeacher = function() {
+        var params = {
+            "teacherID":ID
+        };
+        $http.post('getTeacherClasses',params).then(function(response) {
+            $scope.classes = response.data;
+        });
+    };
+    $scope.openClassList = function(event) {
+        $scope.getClassesByTeacher();
+        showDropdown('classlist',event.x,event.y);
+    };
+    $scope.openSubjectList = function(event) {
+        $scope.getSubjectsByTeacher();
+        showDropdown('subjectlist',event.x,event.y);
+    };
+    $scope.setSubject = function(subject) {
+        $scope.curSubject = subject;
+        hideDropdown('subjectlist');
+    };
+    $scope.setClass = function(curClass) {
+        $scope.curClass = curClass;
+        hideDropdown('classlist');
+    };
+    $scope.openDoclist = function(event) {
+        showDropdown('doclist',event.x,event.y);
+    };
+    $scope.setDocument = function(document) {
+        doc = document;
+        switch (document) {
+            case 'Journal':$scope.doc = 'Journal'; break;
+            case 'TeacherSchedule':$scope.doc = 'Schedule'; break;
+            case 'PupilsRating':$scope.doc = 'Class rating'; break;
+        }
+        hideDropdown('doclist');
+    };
+    $scope.download = function() {
+        var url = 'download'+doc+'?docType='+docType+'&';
+        switch (doc) {
+            case 'TeacherSchedule': window.open(url+'teacherID='+ID); console.log(url+'teacherID='+ID);break;
+            case 'Journal': window.open(url+'subjectID='+$scope.curSubject.subjectID); console.log(url+'subjectID='+$scope.curSubject.subjectID); break;
+            case 'PupilsRating': window.open(url+'classID='+$scope.curClass.classID); console.log(url+'classID='+$scope.curClass.classID); break;
+        }
+
+    };
     $scope.logout = function() {
         LogOut.logout();
     };
@@ -216,6 +275,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
     if (role!='TEACHER') {
         LogOut.logout();
     }
+    $scope.doc = 'Schedule';
     $scope.firstname = firstname;
     $scope.lastname = lastname;
     $scope.teacherType = teacherType;

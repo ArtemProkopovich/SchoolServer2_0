@@ -34,7 +34,8 @@
 			<button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
 		</div>
 		<div align="center">
-			<div class="in shortin" align="left"><button class="lightdropbutton" ng-click="openDoclist($event)">v</button>{{doc}} </div>
+				<br>
+				<div class="in" style="display: inline-block" align="left"><button class="lightdropbutton" ng-click="openDoclist($event)">v</button>{{doc}} </div>
 			<p>
 				<input id="radioCSV" ng-click="setDoctype('csv')" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
 				<input id="radioXLS" ng-click="setDoctype('xls')" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS

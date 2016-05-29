@@ -3,7 +3,7 @@
 </div>
 <div class="vertcontainer" align="right">
     <button class="button" ng-click="logout()">Log out</button>
-    <button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
+    <button class="button" onclick="toggleWindow('schedwindow', true)">Load docs</button>
 </div>
 <div id="teacherDiv" class="scrollable">
     <div id="schedule" class="tabcontent maintab" style="animation: slideInLeft 1s both ease-in;">
@@ -77,18 +77,31 @@
 <div class="winlayer" align="center">
     <div id="schedwindow" class="window">
         <div class="formheader">
-            <h5>Choose format</h5>
+            <h5>Choose document and format</h5>
             <button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
         </div>
         <div align="center">
+            <br>
+            <div class="in" style="display: inline-block" align="left">Document: <button class="lightdropbutton" ng-click="openDoclist($event)">v</button>{{doc}} </div>
+            <div ng-show="doc=='Journal'">
+                <div class="in" style="display: inline-block" align="left">Subject: <button class="lightdropbutton" ng-click="openSubjectList($event)">v</button>{{curSubject.name}} {{curSubject.class}}</div>
+            </div>
+            <div ng-show="doc=='Class rating'">
+                <div class="in" style="display: inline-block" align="left">Class: <button class="lightdropbutton" ng-click="openClassList($event)">v</button>{{curClass.classGrade}}-{{curClass.classLetter}}</div>
+            </div>
             <p>
-                <input id="radioCSV" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
-                <input id="radioXLS" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
-                <input id="radioPDF" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
+                <input id="radioCSV" ng-click="setDoctype('csv')" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
+                <input id="radioXLS" ng-click="setDoctype('xls')" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
+                <input id="radioPDF" ng-click="setDoctype('pdf')" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
             </p>
-            <button class="button">Download</button><div style="height: 1px;"></div>
+            <button class="button" ng-click="download()">Download</button><div style="height: 1px;"></div>
         </div>
     </div>
+</div>
+<div id="doclist" class="lightdropdown" style="width: auto">
+    <button class="lightdropitem" ng-click="setDocument('TeacherSchedule')">Schedule</button>
+    <button class="lightdropitem" ng-click="setDocument('Journal')">Journal</button>
+    <button class="lightdropitem" ng-click="setDocument('PupilsRating')">Class rating</button>
 </div>
 <div class="toastlayer" align="center">
     <div id="toast" class="toast" style="display: none;">
@@ -108,5 +121,15 @@
     <button class="dropitem" ng-click="setMark(8)">8</button>
     <button class="dropitem" ng-click="setMark(9)">9</button>
     <button class="dropitem" ng-click="setMark(10)">10</button>
+</div>
+<div id="subjectlist" class="lightdropdown" style="width: 150px;">
+    <button ng-repeat="subject in subjects" class="lightdropitem" ng-click="setSubject(subject)">
+        {{subject.name}} {{subject.class}}
+    </button>
+</div>
+<div id="classlist" class="lightdropdown" style="width: 150px;">
+    <button ng-repeat="class in classes" class="lightdropitem" ng-click="setClass(class)">
+        {{class.classGrade}}-{{class.classLetter}}
+    </button>
 </div>
 
