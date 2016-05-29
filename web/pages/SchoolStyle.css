@@ -18,7 +18,7 @@ body {
 	overflow-y: hidden;
 	overflow-x: hidden;
 }
-h3 {
+h3, h4 {
 	font-family: UbuntuB;
 	margin: 5px 0 0;
 	padding: 0;

@@ -139,6 +139,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
         };
         $http.post('getSubjectsByTeacher',params).then(function(response) {
             $scope.subjects = response.data;
+            console.log(response.data);
         });
     };
     $scope.getClassesByTeacher = function() {
@@ -147,6 +148,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
         };
         $http.post('getTeacherClasses',params).then(function(response) {
             $scope.classes = response.data;
+            console.log(response.data);
         });
     };
     $scope.openClassList = function(event) {

@@ -3,11 +3,42 @@
 
 <div class="form" align="center">
 	<p>Please log in to continue</p>
-	<form name="LoginForm" ng-submit="submit()">
-		<input class="in formin" type="text" name="login" placeholder="Login" ng-model="login">
-		<input class="in formin" type="password" name="password" placeholder="Password" ng-model="password">
-		<input class="button" type="submit" name="commit" value="Go">
-	 </form>
+	<input class="in formin" type="text" name="login" placeholder="Login" ng-model="login">
+	<input class="in formin" type="password" name="password" placeholder="Password" ng-model="password">
+	<input class="button minibutton" type="submit" name="commit" value="Go" ng-click="submit()"><button class="button minibutton" onclick="toggleWindow('aboutWindow', true)">About</button>
+</div>
+<div class="winlayer" align="center">
+	<div id="aboutWindow" class="window">
+		<div class="formheader">
+			<h5>About School Server</h5>
+			<button class="close" onclick="toggleWindow('aboutWindow', false)">X</button>
+		</div>
+		<div align="center">
+			<h4>Developed by SPPTrueTeam, 2016.</h4>
+			<p>
+				Staff:
+				<br>
+				<table class="nvis">
+					<tr class="nvis">
+						<td class="nvis">Frontend dev:</td>
+						<td class="nvis">Shimanskey Eugene</td>
+					</tr>
+					<tr class="nvis">
+						<td class="nvis">Backend dev:</td>
+						<td class="nvis">Prokopovich Atrem</td>
+					</tr>
+					<tr class="nvis">
+						<td class="nvis">Test dev:</td>
+						<td class="nvis">Radkavets Kirill</td>
+					</tr>
+				</table>
+				<br>
+			</p>
+			<button class="button minibutton" onclick="window.open('https://github.com/SPPTrueTeam/SchoolServer2_0')">Github</button>
+			<button class="button minibutton" onclick="toggleWindow('aboutWindow',false)">Back</button>
+			<div style="height: 1px;"></div>
+		</div>
+	</div>
 </div>
 <div class="toastlayer" align="center">
 	<div id="toast" class="toast" style="display: none">

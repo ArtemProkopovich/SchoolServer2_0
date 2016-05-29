@@ -124,10 +124,10 @@
 </div>
 <div id="subjectlist" class="lightdropdown" style="width: 150px;">
     <button ng-repeat="subject in subjects" class="lightdropitem" ng-click="setSubject(subject)">
-        {{subject.name}} {{subject.class}}
+        {{subject.name}} {{subject.classGrade}}-{{subject.classLetter}}
     </button>
 </div>
-<div id="classlist" class="lightdropdown" style="width: 150px;">
+<div id="classlist" class="lightdropdown" style="width: auto;">
     <button ng-repeat="class in classes" class="lightdropitem" ng-click="setClass(class)">
         {{class.classGrade}}-{{class.classLetter}}
     </button>
