@@ -3,6 +3,7 @@ package DAO.Impl;
 import DAO.DAOException;
 import DAO.Interfacies.ITeacherDao;
 import DAO.MySqlConnection;
+import Entities.Class;
 import Entities.Subject;
 import Entities.Teacher;
 import Entities.User;
@@ -27,6 +28,8 @@ public class TeacherDao implements ITeacherDao {
     private final String SELECT_ALL_TEACHERS = "SELECT * FROM teachers";
     private final String UPDATE_TEACHER = "UPDATE teachers SET surname=?, name=?, type=?, user_id=? WHERE teacher_id=?";
     private final String DELETE_TEACHER = "DELETE FROM teachers WHERE teacher_id=?";
+    private final String SELECT_TEACHER_CLASSES = "SELECT distinct * FROM classes JOIN subjects ON classes.class_id=subjects.class_id " +
+            "JOIN teachers ON teachers.teacher_id = subjects.teacher_id WHERE teachers.teacher_id=?";
 
     private MySqlConnection connection;
 
@@ -87,6 +90,26 @@ public class TeacherDao implements ITeacherDao {
             ArrayList<Subject> result = new ArrayList<Subject>();
             while (set.next()) {
                 result.add(SubjectDao.ResultSetToSubject(set));
+            }
+            return result;
+        } catch (SQLException ex) {
+            throw new DAOException(ex);
+        } finally {
+            if (cn != null)
+                connection.closeConnection();
+        }
+    }
+
+    public List<Class> getTeacherClasses(int teacherID) throws DAOException {
+        Connection cn = null;
+        try {
+            cn = connection.getConnection();
+            PreparedStatement st;
+            st=cn.prepareStatement(SELECT_TEACHER_CLASSES);
+            ResultSet set = st.executeQuery();
+            ArrayList<Class> result = new ArrayList<Class>();
+            while (set.next()) {
+                result.add(ClassDao.ResultSetToClass(set));
             }
             return result;
         } catch (SQLException ex) {

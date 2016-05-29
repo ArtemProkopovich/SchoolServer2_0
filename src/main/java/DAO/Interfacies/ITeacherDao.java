@@ -4,6 +4,7 @@ import DAO.DAOException;
 import Entities.Subject;
 import Entities.Teacher;
 import Entities.User;
+import Entities.Class;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface ITeacherDao extends IDao<Teacher> {
     User GetUserByTeacherID(int teacherID) throws DAOException;
     List<Teacher> GetTeacherList() throws DAOException;
     List<Subject> GetTeacherSubjects(int teacherID) throws DAOException;
+    List<Class> getTeacherClasses(int teacherID) throws DAOException;
 }

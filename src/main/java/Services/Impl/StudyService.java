@@ -1,5 +1,6 @@
 package Services.Impl;
 
+import ActionEntities.ActionClass;
 import ActionEntities.LessonJournal;
 import DAO.DAOException;
 import DAO.Interfacies.IUnitOfWork;
@@ -71,6 +72,18 @@ public class StudyService implements IStudyService {
 
         }
         catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    public List<ActionClass> GetTeacherClasses(int teacherID) throws ServiceException {
+        try{
+            List<ActionClass> result = new ArrayList<ActionClass>();
+            List<Class> classList = uof.getTeacherDao().getTeacherClasses(teacherID);
+            for(Class c : classList)
+                result.add(new ActionClass(c));
+            return result;
+        }catch (DAOException ex) {
             throw new ServiceException(ex);
         }
     }

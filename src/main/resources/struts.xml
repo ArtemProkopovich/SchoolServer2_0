@@ -48,6 +48,17 @@
                 <param name="statusCode">500</param>
             </result>
         </action>
+        <action name ="getTeacherClasses" class="Actions.Teacher.GetTeacherClasses" method="execute">
+            <interceptor-ref name="json"/>
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">classList</param>
+            </result>
+            <result name="error" type="json">
+                <param name="statusCode">500</param>
+            </result>
+        </action>
         <action name ="setHomework" class="Actions.Teacher.UpdateLessonHomework" method="execute">
             <interceptor-ref name="json"/>
             <result name="success" type="json">
