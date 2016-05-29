@@ -67,7 +67,7 @@
                 <tbody>
                 <tr ng-repeat="lesson in lessons">
                     <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timeRange}}</p></td>
-                    <td><p>{{lesson.subject}}<br> {{lesson.teacher}} {{lesson.auditorium}}</p></td>
+                    <td><h3>{{lesson.subject}}</h3><p>{{lesson.teacher}} {{lesson.auditorium}}</p></td>
                     <td><button class="goto gototable" ng-click="openSetLessonWindow(lesson)">...</button></td>
                     <td><button class="goto gototable" ng-click="deleteLesson(lesson)">X</button></td>
                 </tr>

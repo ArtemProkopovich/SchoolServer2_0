@@ -246,6 +246,7 @@ schoolApp.controller('teacherController', function($scope, LogOut, $location, $h
     $scope.goToSchedule = function() {
         document.getElementById('lesson').style.animation = 'slideOutRight 1s both ease-in';
         document.getElementById('schedule').style.animation = 'slideInLeft 1s both ease-in';
+        hideDropdown('marklist');
     };
     $scope.goToLesson = function(lessonID) {
         $scope.loadLesson(lessonID);
@@ -832,5 +833,21 @@ function showDropdown(id,x,y) {
     }
 }
 function hideAll() {
-    //Make it!!!
+    toggleWindow('setTeacherWindow',false);
+    toggleWindow('deleteTeacherWindow',false);
+    toggleWindow('setSubjectWindow',false);
+    toggleWindow('deleteSubjectWindow',false);
+    toggleWindow('setPupilWindow',false);
+    toggleWindow('deletePupilWindow',false);
+    toggleWindow('setClassWindow',false);
+    toggleWindow('deleteClassWindow',false);
+    toggleWindow('setLessonWindow',false);
+
+    hideDropdown('classlist');
+    hideDropdown('lightclasslist');
+    hideDropdown("teacherlist");
+    hideDropdown("subclasslist");
+    hideDropdown("daylist");
+    hideDropdown("scheduleclasslist");
+    hideDropdown("subjectlist");
 }
