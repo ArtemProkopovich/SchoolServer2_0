@@ -3,7 +3,7 @@
 </div>
 <div class="vertcontainer" align="right">
 	<button class="button" ng-click="logout()">Log out</button>
-	<button class="button" onclick="toggleWindow('schedwindow', true)">Load schedule</button>
+	<button class="button" onclick="toggleWindow('schedwindow', true)">Load docs</button>
 </div>
 <div align="center">
 		<button class="navigate" ng-click="setYesterday()"><</button>
@@ -30,16 +30,21 @@
 <div class="winlayer" align="center">
 	<div id="schedwindow" class="window">
 		<div class="formheader">
-			<h5>Choose format</h5>
+			<h5>Choose document and format</h5>
 			<button class="close" onclick="toggleWindow('schedwindow', false)">X</button>
 		</div>
 		<div align="center">
+			<div class="in shortin" align="left"><button class="lightdropbutton" ng-click="openDoclist($event)">v</button>{{doc}} </div>
 			<p>
-				<input id="radioCSV" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
-				<input id="radioXLS" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
-				<input id="radioPDF" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
+				<input id="radioCSV" ng-click="setDoctype('csv')" type="radio" name="group1" class="regular-radio" checked/><label for="radioCSV"></label>CSV
+				<input id="radioXLS" ng-click="setDoctype('xls')" type="radio" name="group1" class="regular-radio"/><label for="radioXLS"></label>XLS
+				<input id="radioPDF" ng-click="setDoctype('pdf')" type="radio" name="group1" class="regular-radio"/><label for="radioPDF"></label>PDF
 			</p>
-			<button class="button">Download</button><div style="height: 1px;"></div>
+			<button class="button" ng-click="download()">Download</button><div style="height: 1px;"></div>
 		</div>
 	</div>
+</div>
+<div id="doclist" class="lightdropdown" style="width: auto">
+	<button class="lightdropitem" ng-click="setDocument('Schedule')">Schedule</button>
+	<button class="lightdropitem" ng-click="setDocument('Stats')">Stats</button>
 </div>

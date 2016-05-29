@@ -65,7 +65,7 @@
                     <th>Delete</th>
                 </tr>
                 <tbody>
-                <tr ng-repeat="lesson in daySchedule">
+                <tr ng-repeat="lesson in lessons">
                     <td align="center"><h3>{{lesson.number}}</h3><p>{{lesson.timeRange}}</p></td>
                     <td><p>{{lesson.subject}}<br> {{lesson.teacher}} {{lesson.auditorium}}</p></td>
                     <td><button class="goto gototable" ng-click="openSetLessonWindow(lesson)">...</button></td>
@@ -437,7 +437,11 @@
                 </tr>
                 <tr class="nvis">
                     <td class="nvis">Subject:</td>
-                    <td class="nvis"><div class="in shortin" align="left"><button class="lightdropbutton" ng-click="showSubjectList($event)">v</button>{{curScheduleSubject.name}} {{curScheduleSubject.teacher}}</div></td>
+                    <td class="nvis"><div class="in shortin" align="left"><button class="lightdropbutton" ng-click="showSubjectList($event)">v</button>{{curScheduleSubject.name}} </div></td>
+                </tr>
+                <tr class="nvis">
+                    <td class="nvis">Teacher:</td>
+                    <td class="nvis">{{curScheduleSubject.teacher}}</td>
                 </tr>
                 <tr class="nvis">
                     <td class="nvis">Number:</td>

@@ -73,6 +73,8 @@ schoolApp.controller('mainController', function($scope, $http, $location) {
     }
 });
 schoolApp.controller('pupilController', function($scope, $location, LogOut, $http) {
+    var docType = 'csv';
+
     $scope.logout = function() {
         LogOut.logout();
     };
@@ -95,10 +97,28 @@ schoolApp.controller('pupilController', function($scope, $location, LogOut, $htt
         $scope.day = getDayName(day)+', '+getDDMMYYY(day);
         $scope.getPupilDay();
     };
+    $scope.setDoctype = function(type) {
+        docType = type;
+    };
+    $scope.openDoclist = function(event) {
+        showDropdown('doclist',event.x,event.y);
+    };
+    $scope.setDocument = function(doc) {
+        $scope.doc = doc;
+        hideDropdown('doclist');
+    };
+    $scope.download = function() {
+        var data = {
+            pupilID: ID,
+            docType: docType
+        };
+        window.open('downloadPupil'+$scope.doc+'?docType='+data.docType+'&pupilID='+data.pupilID);
+    };
     $scope.pageClass = 'page-app';
     if (role!='PUPIL') {
         LogOut.logout();
     }
+    $scope.doc = 'Schedule';
     $scope.firstname = firstname;
     $scope.lastname = lastname;
     $scope.classGrade = classGrade;
