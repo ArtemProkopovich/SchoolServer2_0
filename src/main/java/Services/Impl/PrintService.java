@@ -247,7 +247,7 @@ public class PrintService implements IPrintService {
             AddPDFDocumentMeta(document, "Rating of pupils by: " + cls.getName()+" class.");
             AddPDFFirstPage(document, "Rating of pupils by:" + cls.getName()+" class.");
 
-            document.add(new Paragraph("Class: "+cls.getName()+".", redFont));
+            document.add(new Paragraph("Class: "+cls.getName()+".", subFont));
             document.add(new Paragraph(" "));
             PdfPTable table = new PdfPTable(subjects.size()+2);
             PdfPCell c1 = new PdfPCell(new Phrase("Pupil"));
@@ -405,45 +405,43 @@ public class PrintService implements IPrintService {
             PdfWriter.getInstance(document, stream);
             document.open();
             AddPDFDocumentMeta(document, "Subject journal table: " + subject.getName());
-            AddPDFFirstPage(document, "Subject journal table:" + subject.getName());
+            AddPDFFirstPage(document, "Subject journal table: " + subject.getName());
 
-            document.add(new Paragraph("Subject: "+subject.getName()+". Teacher: "+sjl.getTeacher().getSurname()+" "+sjl.getTeacher().getName()+". Class: "+sjl.getCls().getName()+".", redFont));
+            document.add(new Paragraph("Subject: "+subject.getName()+". Teacher: "+sjl.getTeacher().getSurname()+" "+sjl.getTeacher().getName()+". Class: "+sjl.getCls().getName()+".", subFont));
             document.add(new Paragraph(" "));
-            PdfPTable table = new PdfPTable(sjl.getLessonList().size()+1);
-            PdfPCell c1 = new PdfPCell(new Phrase("Pupil"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-            for (Lesson l : sjl.getLessonList())
-            {
-                c1 = new PdfPCell(new Phrase(df.format(l.getDate())));
+            for (int i=0;i<sjl.getLessonList().size()/10; i++) {
+                document.add(new Paragraph(" "));
+                PdfPTable table = new PdfPTable(11);
+                PdfPCell c1 = new PdfPCell(new Phrase("Pupil"));
                 c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(c1);
-            }
-            table.setHeaderRows(1);
-            for(int i=0;i<sjl.getPupilList().size();i++) {
-                table.addCell(String.valueOf(i+1)+". "+sjl.getPupilList().get(i).getSurname()+" "+sjl.getPupilList().get(i).getName());
-                for (Lesson l : sjl.getLessonList())
-                {
-                    Mark mark = null;
-                    for (Mark m: sjl.getMarksList().get(i))
-                    {
-                        if (m.getLessonID()==l.getID())
-                            mark = m;
-                    }
-                    if (mark!=null)
-                    {
-                        if (mark.getMark()>0)
-                            table.addCell(String.valueOf(mark.getMark()));
-                        else
-                            table.addCell("a");
-                    }
-                    else
-                        table.addCell("");
+
+                DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+                for (Lesson l : sjl.getLessonList().subList(i*10,i*10+10)) {
+                    c1 = new PdfPCell(new Phrase(df.format(l.getDate())));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
                 }
+                table.setHeaderRows(1);
+                for (int j = 0; j < sjl.getPupilList().size(); j++) {
+                    table.addCell(String.valueOf(j + 1) + ". " + sjl.getPupilList().get(j).getSurname() + " " + sjl.getPupilList().get(j).getName());
+                    for (Lesson l : sjl.getLessonList().subList(i*10,i*10+10)) {
+                        Mark mark = null;
+                        for (Mark m : sjl.getMarksList().get(j)) {
+                            if (m.getLessonID() == l.getID())
+                                mark = m;
+                        }
+                        if (mark != null) {
+                            if (mark.getMark() > 0)
+                                table.addCell(String.valueOf(mark.getMark()));
+                            else
+                                table.addCell("a");
+                        } else
+                            table.addCell("");
+                    }
+                }
+                document.add(table);
             }
-            document.add(table);
             document.close();
             return new FileInputStream("sjl.pdf");
 
@@ -610,7 +608,7 @@ public class PrintService implements IPrintService {
             int i=1;
             for (List<ScheduleTeacherLesson> stlList:weekScheduleList) {
                 DayOfWeek dof =  DayOfWeek.of(i);
-                document.add(new Paragraph(i+". "+ dof.toString(),redFont));
+                document.add(new Paragraph(i+". "+ dof.toString(),subFont));
                 PdfPTable table = new PdfPTable(4);
                 PdfPCell c1 = new PdfPCell(new Phrase("Number of lesson"));
                 c1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -627,7 +625,7 @@ public class PrintService implements IPrintService {
                 table.setHeaderRows(1);
                 for (ScheduleTeacherLesson stl:stlList)
                 {
-                    table.addCell(String.valueOf(stl.getLesson().getID()));
+                    table.addCell(String.valueOf(stl.getLesson().getScheduleNumber()));
                     table.addCell(stl.getSubject().getName());
                     table.addCell(stl.getCls().getName());
                     table.addCell(String.valueOf(stl.getLesson().getRoom()));
@@ -662,9 +660,6 @@ public class PrintService implements IPrintService {
 
             int dayIndex=1;
             int rowIndex=0;
-            for(int i=0;i<4;i++) {
-                sheet.autoSizeColumn(i);
-            }
             for(List<ScheduleTeacherLesson> spl:weekScheduleList)
             {
                 DayOfWeek dof = DayOfWeek.of(dayIndex);
@@ -697,6 +692,10 @@ public class PrintService implements IPrintService {
                 }
                 dayIndex++;
                 rowIndex++;
+            }
+
+            for(int i=0;i<4;i++) {
+                sheet.autoSizeColumn(i);
             }
 
             book.write(new FileOutputStream("tws.xlsx"));
@@ -800,7 +799,7 @@ public class PrintService implements IPrintService {
             int i=1;
             for (List<SchedulePupilLesson> stlList:weekScheduleList) {
                 DayOfWeek dof =  DayOfWeek.of(i);
-                document.add(new Paragraph(i+". "+ dof.toString(),redFont));
+                document.add(new Paragraph(i+". "+ dof.toString(),subFont));
                 PdfPTable table = new PdfPTable(4);
                 PdfPCell c1 = new PdfPCell(new Phrase("Number of lesson"));
                 c1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -817,7 +816,7 @@ public class PrintService implements IPrintService {
                 table.setHeaderRows(1);
                 for (SchedulePupilLesson stl:stlList)
                 {
-                    table.addCell(String.valueOf(stl.getLesson().getID()));
+                    table.addCell(String.valueOf(stl.getLesson().getScheduleNumber()));
                     table.addCell(stl.getSubject().getName());
                     table.addCell(stl.getTeacher().getSurname()+" "+stl.getTeacher().getName());
                     table.addCell(String.valueOf(stl.getLesson().getRoom()));
@@ -898,9 +897,6 @@ public class PrintService implements IPrintService {
 
             int dayIndex=1;
             int rowIndex=0;
-            for(int i=0;i<4;i++) {
-                sheet.autoSizeColumn(i);
-            }
             for(List<SchedulePupilLesson> spl:weekScheduleList)
             {
                 DayOfWeek dof = DayOfWeek.of(dayIndex);
@@ -933,6 +929,10 @@ public class PrintService implements IPrintService {
                 }
                 dayIndex++;
                 rowIndex++;
+            }
+
+            for(int i=0;i<4;i++) {
+                sheet.autoSizeColumn(i);
             }
 
             book.write(new FileOutputStream("pws.xlsx"));
@@ -1003,7 +1003,7 @@ public class PrintService implements IPrintService {
     private void AddPDFFirstPage(Document document, String docTitle) throws DocumentException{
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
-        preface.add(new Paragraph("Title of the document", catFont));
+        preface.add(new Paragraph(docTitle, catFont));
         addEmptyLine(preface, 1);
         preface.add(new Paragraph("Report generated by: " + "SPPTrueTeam"+ ", " + new Date(), smallBold));
         document.add(preface);

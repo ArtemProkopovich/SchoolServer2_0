@@ -12,7 +12,7 @@ public class ServiceFactory {
 
     private ServiceFactory() {}
 
-    private static MySqlConnection connection = new MySqlConnection("jdbc:mysql://localhost:3306/school_test_db?useSSL=true", "root", "root");
+    private static MySqlConnection connection = new MySqlConnection("jdbc:mysql://localhost:3306/school_db?useSSL=true", "root", "root");
 
     public static IPrintService getPrintService() {
         return new PrintService(new UnitOfWork(connection));

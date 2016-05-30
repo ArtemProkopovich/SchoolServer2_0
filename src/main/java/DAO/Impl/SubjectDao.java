@@ -17,10 +17,7 @@ import java.util.List;
  */
 public class SubjectDao implements ISubjectDao {
 
-    private final String SELECT_PUPILS_BY_SUBJECT ="SELECT * FROM subjects " +
-            "JOIN classes ON subjects.subject_id=classes.class_id " +
-            "JOIN pupils ON pupils.class_id=classes.class_id "+
-            "WHERE subject_id = ?";
+    private final String SELECT_PUPILS_BY_SUBJECT ="SELECT * FROM subjects JOIN pupils ON pupils.class_id=subjects.class_id WHERE subject_id = ? ORDER BY surname";
     private final String SELECT_TEACHER_BY_SUBJECT ="SELECT * FROM subjects " +
             "JOIN teachers ON subjects.teacher_id=teachers.teacher_id " +
             "WHERE subject_id = ?";

@@ -25,10 +25,10 @@ public class TeacherDao implements ITeacherDao {
     private final String SELECT_USER_BY_TEACHER_ID = "SELECT * FROM users JOIN teachers ON users.user_id=teachers.user_id WHERE teacher_id = ?";
     private final String INSERT_TEACHER = "INSERT INTO `teachers` (`surname`, `name`, `type`, `user_id`) VALUES (?, ?, ?, ?)";
     private final String SELECT_TEACHER = "SELECT * FROM teachers WHERE teacher_id=?";
-    private final String SELECT_ALL_TEACHERS = "SELECT * FROM teachers";
+    private final String SELECT_ALL_TEACHERS = "SELECT * FROM teachers ORDER BY surname";
     private final String UPDATE_TEACHER = "UPDATE teachers SET surname=?, name=?, type=?, user_id=? WHERE teacher_id=?";
     private final String DELETE_TEACHER = "DELETE FROM teachers WHERE teacher_id=?";
-    private final String SELECT_TEACHER_CLASSES = "SELECT distinct classes.class_id, grade, letter FROM classes JOIN subjects ON classes.class_id=subjects.class_id JOIN teachers ON teachers.teacher_id = subjects.teacher_id WHERE teachers.teacher_id=?";
+    private final String SELECT_TEACHER_CLASSES = "SELECT distinct classes.class_id, grade, letter FROM classes JOIN subjects ON classes.class_id=subjects.class_id JOIN teachers ON teachers.teacher_id = subjects.teacher_id WHERE teachers.teacher_id=? ORDER BY grade";
 
     private MySqlConnection connection;
 

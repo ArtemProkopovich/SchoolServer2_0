@@ -25,7 +25,7 @@ public class ClassDao implements IClassDao {
     private final String SELECT_CLASS="SELECT * FROM classes WHERE class_id=?";
     private final String SELECT_ALL_CLASSES = "SELECT * FROM classes";
     private final String DELETE_CLASS="DELETE FROM classes WHERE class_id=?";
-    private final String SELECT_CLASS_SUBJECTS = "SELECT * FROM subjects WHERE class_id=?";
+    private final String SELECT_CLASS_SUBJECTS = "SELECT * FROM subjects WHERE class_id=? ORDER BY name";
     private final String SELECT_SUBJECT_WITH_NULL_CLASS = "SELECT * FROM subjects WHERE class_id IS NULL";
     private final String SELECT_PUPIL_WITH_NULL_CLASS = "SELECT * FROM pupils WHERE class_id IS NULL ORDER BY surname";
     private final String SELECT_PUPILS_BY_CLASS = "SELECT * FROM pupils WHERE class_id=? ORDER BY surname";

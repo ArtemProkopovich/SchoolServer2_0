@@ -32,14 +32,14 @@ public class LessonDao implements ILessonDao {
     private final String SELECT_PUPIL_DAY_LESSONS="SELECT * FROM pupils " +
             "JOIN subjects ON subjects.class_id=pupils.class_id " +
             "JOIN lessons ON lessons.subject_id=subjects.subject_id " +
-            "WHERE pupils.pupil_id=? && lessons.date=?";
+            "WHERE pupils.pupil_id=? && lessons.date=? ORDER BY schedule_number";
     private final String SELECT_TEACHER_DAY_LESSONS="SELECT * FROM teachers " +
             "JOIN subjects ON subjects.teacher_id=teachers.teacher_id " +
             "JOIN lessons ON lessons.subject_id=subjects.subject_id " +
-            "WHERE teachers.teacher_id=? && lessons.date=?";
+            "WHERE teachers.teacher_id=? && lessons.date=? ORDER BY schedule_number";
     private final String SELECT_CLASS_DAY_LESSONS = "SELECT * FROM subjects " +
             "JOIN lessons ON lessons.subject_id=subjects.subject_id " +
-            "WHERE subjects.class_id=? && lessons.date=?";
+            "WHERE subjects.class_id=? && lessons.date=? ORDER BY schedule_number";
 
     private MySqlConnection connection;
     public LessonDao(MySqlConnection connection){
