@@ -50,30 +50,19 @@ public class ScheduleServiceTest {
     }
 
     @Test
-    public void createScheduleForDay() throws Exception {
-        List<Lesson> lessonList = new ArrayList<Lesson>();
-        Lesson lesson = new Lesson();
-        lesson.setRoom(100);
-        lesson.setScheduleNumber(1);
-        lesson.setSubjectID(1);
-        lessonList.add(lesson);
-        //service.CreateScheduleForDay(lessonList,1);
-    }
-
-    @Test
     public void getClassDayLessons() throws Exception {
-        /*List<ScheduleClassLesson> lessonList = service.GetClassDayLessons(1, 0);
+        List<ScheduleClassLesson> lessonList = service.GetClassDayLessons(1, 0);
         Assert.assertNotNull(lessonList);
-        Assert.assertTrue(lessonList.size() > 0);*/
+        Assert.assertTrue(lessonList.size() > 0);
     }
 
     @Test
     public void addLesson() throws Exception {
-        /*Lesson l = new Lesson();
+        Lesson l = new Lesson();
         l.setSubjectID(4);
         l.setRoom(100);
         l.setScheduleNumber(3);
-        service.AddLesson(l, 1);*/
+        service.AddLesson(l, 1);
     }
 
     @Test

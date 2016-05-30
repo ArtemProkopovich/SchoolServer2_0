@@ -23,7 +23,7 @@ public class PrintServiceTest {
         service = new PrintService(uof);
     }
 
-    /*@Test
+    @Test
     public void printPDFAchivementStatistics() throws Exception {
         InputStream stream =  service.PrintPDFAchivementStatistics(1);
         Assert.assertNotNull(stream);
@@ -45,9 +45,9 @@ public class PrintServiceTest {
     public void printPDFPupilWeekSchedule() throws Exception {
         InputStream stream =  service.PrintPDFPupilWeekSchedule(1);
         Assert.assertNotNull(stream);
-    }*/
+    }
 
-    /*@Test
+    @Test
     public void printXLSAchivementStatistics() throws Exception {
         InputStream stream =  service.PrintXLSAchivementStatistics(1);
         Assert.assertNotNull(stream);
@@ -69,7 +69,7 @@ public class PrintServiceTest {
     public void printXLSPupilWeekSchedule() throws Exception {
         InputStream stream = service.PrintXLSPupilWeekSchedule(1);
         Assert.assertNotNull(stream);
-    }*/
+    }
 
     @Test
     public void printCSVAchivementStatistics() throws Exception {
@@ -77,7 +77,7 @@ public class PrintServiceTest {
         Assert.assertNotNull(stream);
     }
 
-    /*@Test
+    @Test
     public void printCSVSubjectList() throws Exception {
         InputStream stream =  service.PrintCSVSubjectList(1);
         Assert.assertNotNull(stream);
@@ -93,7 +93,7 @@ public class PrintServiceTest {
     public void printCSVPupilWeekSchedule() throws Exception {
         InputStream stream =  service.PrintCSVPupilWeekSchedule(1);
         Assert.assertNotNull(stream);
-    }*/
+    }
 
     @Test
     public void printPDFPupilsRating() throws Exception {
