@@ -178,7 +178,7 @@ public class ScheduleService implements IScheduleService {
                 spl.setLesson(l);
                 spl.setSubject(uof.getSubjectDao().Select(l.getSubjectID()));
                 spl.setTeacher(uof.getTeacherDao().Select(spl.getSubject().getTeacherID()));
-                Mark mark = uof.getMarkDao().GetPupilLessonMark(pupilID, l.getID());
+                Mark mark = uof.getMarkDao().GetPupilLessonMark(l.getID(), pupilID);
                 resultList.add(new PupilDayLesson(spl, mark));
             }
             return resultList;
